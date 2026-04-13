@@ -74,18 +74,11 @@ body.data-saver *{animation:none!important;transition:none!important}
 .rarity-common{color:#aaa}.rarity-uncommon{color:#20d060}.rarity-rare{color:var(--rare)}
 .rarity-epic{color:var(--epic)}.rarity-legendary{color:var(--legendary)}.rarity-mythical{color:var(--mythical)}.rarity-honored{color:var(--honored)}
 
-/* VFX LAYER */
-#vfx-layer{position:absolute;inset:0;pointer-events:none;z-index:20;overflow:hidden;border-radius:8px}
-.vfx-el{position:absolute;border-radius:50%;pointer-events:none}
-@keyframes vfx-burst{0%{transform:translate(-50%,-50%) scale(0);opacity:.9}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
-@keyframes vfx-slash{0%{transform:translateX(-120%) skewX(-20deg);opacity:1}100%{transform:translateX(120%) skewX(-20deg);opacity:0}}
-@keyframes vfx-rise{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-70px) scale(1.5);opacity:0}}
-@keyframes vfx-flash{0%,100%{opacity:0}20%,60%{opacity:.7}40%,80%{opacity:.2}}
+/* VFX */
 @keyframes vfx-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
-@keyframes vfx-spin{0%{transform:translate(-50%,-50%) rotate(0) scale(0);opacity:1}100%{transform:translate(-50%,-50%) rotate(360deg) scale(2);opacity:0}}
-@keyframes vfx-lightning{0%{opacity:0;transform:scaleY(0)}30%{opacity:1;transform:scaleY(1)}60%{opacity:.5;transform:scaleY(1)}100%{opacity:0;transform:scaleY(1)}}
 @keyframes vfx-float{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-50px);opacity:0}}
 .combat-arena{position:relative}
+#vfx-canvas{position:absolute;inset:0;pointer-events:none;z-index:20;border-radius:8px}
 
 /* COMBAT */
 #combat-tab{gap:0;flex-direction:column;padding:10px;overflow-y:auto}
@@ -296,7 +289,7 @@ body.data-saver *{animation:none!important;transition:none!important}
 <div id="tab-combat" class="tab-content active" style="flex-direction:column">
   <div id="combat-tab">
     <div class="combat-arena-wrap" id="combat-arena">
-      <div id="vfx-layer"></div>
+      <canvas id="vfx-canvas" style="position:absolute;inset:0;pointer-events:none;z-index:20;border-radius:8px;width:100%;height:100%"></canvas>
       <div class="fighter-box" id="player-fighter">
         <div class="fighter-avatar" id="player-avatar">🏴‍☠️</div>
         <div class="fighter-name" id="player-name-display">Pirate</div>
@@ -1053,94 +1046,701 @@ function showToast(msg){
   toastTimer=setTimeout(()=>{t.style.opacity='0';},2200);
 }
 
-// ===================== VFX =====================
-function playVFX(effectKey){
-  if(!G.settings.abilityFX||G.settings.dataSaver) return;
-  const layer=document.getElementById('vfx-layer');
-  if(!layer) return;
-  layer.innerHTML='';
+// ===================== CANVAS VFX ENGINE =====================
+let _vfxRAF=null;
+const _vfxParticles=[];
 
-  const vfxConfigs={
-    punch:()=>{
-      const b=mk('div','vfx-el',{width:'80px',height:'80px',background:'radial-gradient(circle,rgba(255,80,80,.9),transparent)',left:'60%',top:'30%',animation:'vfx-burst .5s ease forwards'});
-      layer.appendChild(b);
-      shakeEl('enemy-fighter');
-    },
-    kick:()=>{
-      const s=mk('div','',{position:'absolute',width:'100%',height:'8px',background:'linear-gradient(90deg,transparent,rgba(80,120,255,.8),transparent)',top:'45%',animation:'vfx-slash .4s ease forwards'});
-      layer.appendChild(s);
-      shakeEl('enemy-fighter');
-    },
-    rubber:()=>{
-      const s=mk('div','',{position:'absolute',width:'100%',height:'10px',background:'linear-gradient(90deg,transparent,rgba(255,200,80,.9) 40%,rgba(255,200,80,.9) 60%,transparent)',top:'40%',animation:'vfx-slash .35s ease forwards'});
-      layer.appendChild(s);
-      spawnParticles(layer,'#ffc840',6);
-      shakeEl('enemy-fighter');
-    },
-    haki:()=>{
-      const b=mk('div','vfx-el',{width:'120px',height:'120px',background:'radial-gradient(circle,rgba(20,20,20,.9),rgba(80,80,200,.6),transparent)',left:'55%',top:'20%',animation:'vfx-burst .6s ease forwards'});
-      layer.appendChild(b);
-      addFlash(layer,'rgba(0,0,0,.5)');
-      shakeEl('enemy-fighter');
-    },
-    steam:()=>{
-      for(let i=0;i<8;i++){
-        setTimeout(()=>{
-          const p=mk('div','vfx-el',{width:'20px',height:'20px',background:`rgba(255,${80+i*20},80,.8)`,left:(45+Math.random()*25)+'%',top:(30+Math.random()*30)+'%',animation:'vfx-rise .7s ease forwards'});
-          layer.appendChild(p);
-        },i*60);
-      }
-      shakeEl('enemy-fighter');
-    },
-    giant:()=>{
-      const b=mk('div','vfx-el',{width:'200px',height:'200px',background:'radial-gradient(circle,rgba(255,140,60,.7),transparent)',left:'40%',top:'10%',animation:'vfx-burst .7s ease forwards'});
-      layer.appendChild(b);
-      addFlash(layer,'rgba(255,100,30,.3)');
-      shakeEl('combat-arena');
-    },
-    fire:()=>{
-      for(let i=0;i<10;i++){
-        setTimeout(()=>{
-          const hue=20+Math.random()*30;
-          const p=mk('div','vfx-el',{width:'24px',height:'24px',background:`hsl(${hue},100%,55%)`,left:(40+Math.random()*30)+'%',top:(20+Math.random()*40)+'%',animation:'vfx-rise .8s ease forwards'});
-          layer.appendChild(p);
-        },i*50);
-      }
-      addFlash(layer,'rgba(255,80,0,.4)');
-      shakeEl('enemy-fighter');
-    },
-    thunder:()=>{
-      const l=mk('div','',{position:'absolute',width:'6px',height:'100%',background:'linear-gradient(180deg,rgba(200,200,255,0),rgba(180,140,255,.9),rgba(200,200,255,0))',left:'50%',top:'0',animation:'vfx-lightning .5s ease forwards'});
-      layer.appendChild(l);
-      addFlash(layer,'rgba(180,100,255,.35)');
-    },
-    boundman:()=>{
-      const b=mk('div','vfx-el',{width:'160px',height:'160px',background:'radial-gradient(circle,rgba(255,200,40,.8),rgba(200,120,20,.4),transparent)',left:'45%',top:'15%',animation:'vfx-spin .6s ease forwards'});
-      layer.appendChild(b);
-      addFlash(layer,'rgba(255,180,0,.3)');
-      shakeEl('combat-arena');
-    },
-    explosion:()=>{
-      for(let i=0;i<12;i++){
-        const angle=i*30, dist=60+Math.random()*40;
-        const cx=Math.cos(angle*Math.PI/180)*dist;
-        const cy=Math.sin(angle*Math.PI/180)*dist;
-        const p=mk('div','vfx-el',{width:'18px',height:'18px',background:`hsl(${Math.random()*60},100%,60%)`,left:`calc(50% + ${cx}px)`,top:`calc(40% + ${cy}px)`,animation:'vfx-burst .6s ease forwards'});
-        layer.appendChild(p);
-      }
-      addFlash(layer,'rgba(255,200,50,.6)');
-      shakeEl('combat-arena');
-      shakeEl('enemy-fighter');
-    },
-  };
-  const fn=vfxConfigs[effectKey];
-  if(fn) fn();
-  setTimeout(()=>{layer.innerHTML='';},900);
+function getCanvas(){
+  const c=document.getElementById('vfx-canvas');
+  if(!c)return null;
+  const wrap=document.getElementById('combat-arena');
+  if(wrap){c.width=wrap.offsetWidth||600;c.height=wrap.offsetHeight||160;}
+  return c;
 }
-function mk(tag,cls,styles){const el=document.createElement(tag);if(cls)el.className=cls;Object.assign(el.style,styles);return el;}
-function addFlash(layer,color){const f=mk('div','',{position:'absolute',inset:'0',background:color,animation:'vfx-flash .4s ease forwards',borderRadius:'8px'});layer.appendChild(f);}
-function spawnParticles(layer,color,count){for(let i=0;i<count;i++){const p=mk('div','vfx-el',{width:'10px',height:'10px',background:color,left:(30+Math.random()*50)+'%',top:(20+Math.random()*50)+'%',animation:`vfx-burst ${.4+Math.random()*.3}s ease ${Math.random()*.2}s forwards`});layer.appendChild(p);}}
-function shakeEl(id){const el=document.getElementById(id);if(!el)return;el.style.animation='vfx-shake .4s ease';setTimeout(()=>{el.style.animation='';},450);}
+
+function shakeEl(id){
+  const el=document.getElementById(id);if(!el)return;
+  el.style.animation='vfx-shake .4s ease';
+  setTimeout(()=>{el.style.animation='';},450);
+}
+
+/* ── Particle class ── */
+class VFXParticle{
+  constructor(x,y,opts={}){
+    this.x=x;this.y=y;
+    this.vx=opts.vx||(Math.random()-0.5)*opts.speed||0;
+    this.vy=opts.vy||(Math.random()-0.5)*opts.speed||0;
+    this.r=opts.r||6;this.maxR=this.r;
+    this.color=opts.color||'#fff';
+    this.alpha=1;this.decay=opts.decay||0.025;
+    this.gravity=opts.gravity||0;
+    this.shrink=opts.shrink||0.96;
+    this.shape=opts.shape||'circle';
+    this.rotation=Math.random()*Math.PI*2;
+    this.spin=opts.spin||(Math.random()-0.5)*0.15;
+    this.life=1;
+  }
+  update(){
+    this.x+=this.vx;this.y+=this.vy;
+    this.vy+=this.gravity;
+    this.r*=this.shrink;
+    this.alpha-=this.decay;
+    this.rotation+=this.spin;
+    this.life=this.alpha;
+  }
+  draw(ctx){
+    if(this.alpha<=0)return;
+    ctx.save();
+    ctx.globalAlpha=Math.max(0,this.alpha);
+    ctx.translate(this.x,this.y);
+    ctx.rotate(this.rotation);
+    if(this.shape==='circle'){
+      ctx.beginPath();ctx.arc(0,0,Math.max(0,this.r),0,Math.PI*2);
+      ctx.fillStyle=this.color;ctx.fill();
+    }else if(this.shape==='star'){
+      ctx.beginPath();
+      for(let i=0;i<5;i++){
+        const a=i*Math.PI*2/5-Math.PI/2;
+        const ai=a+Math.PI/5;
+        if(i===0)ctx.moveTo(Math.cos(a)*this.r,Math.sin(a)*this.r);
+        else ctx.lineTo(Math.cos(a)*this.r,Math.sin(a)*this.r);
+        ctx.lineTo(Math.cos(ai)*this.r*.4,Math.sin(ai)*this.r*.4);
+      }
+      ctx.closePath();ctx.fillStyle=this.color;ctx.fill();
+    }else if(this.shape==='slash'){
+      ctx.beginPath();ctx.moveTo(-this.r,0);ctx.lineTo(this.r,0);
+      ctx.lineWidth=4;ctx.strokeStyle=this.color;ctx.stroke();
+    }else if(this.shape==='shard'){
+      ctx.beginPath();ctx.moveTo(0,-this.r);ctx.lineTo(this.r*.4,this.r);ctx.lineTo(-this.r*.4,this.r);
+      ctx.closePath();ctx.fillStyle=this.color;ctx.fill();
+    }
+    ctx.restore();
+  }
+}
+
+/* ── Main loop ── */
+function vfxLoop(){
+  const canvas=getCanvas();if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let i=_vfxParticles.length-1;i>=0;i--){
+    _vfxParticles[i].update();
+    _vfxParticles[i].draw(ctx);
+    if(_vfxParticles[i].alpha<=0||_vfxParticles[i].r<0.3)_vfxParticles.splice(i,1);
+  }
+  if(_vfxParticles.length>0)_vfxRAF=requestAnimationFrame(vfxLoop);
+  else{ctx.clearRect(0,0,canvas.width,canvas.height);_vfxRAF=null;}
+}
+
+function startVFXLoop(){
+  if(_vfxRAF)return;
+  _vfxRAF=requestAnimationFrame(vfxLoop);
+}
+
+/* ── Spawn helpers ── */
+function burst(x,y,count,color,opts={}){
+  for(let i=0;i<count;i++){
+    const angle=Math.random()*Math.PI*2;
+    const speed=(opts.minSpeed||2)+(Math.random()*(opts.maxSpeed||5));
+    _vfxParticles.push(new VFXParticle(x,y,{
+      vx:Math.cos(angle)*speed, vy:Math.sin(angle)*speed,
+      r:opts.r||(3+Math.random()*5), color, decay:opts.decay||0.025,
+      gravity:opts.gravity||0.05, shape:opts.shape||'circle', shrink:opts.shrink||0.96,
+    }));
+  }
+  startVFXLoop();
+}
+
+function ring(x,y,count,color,radius,opts={}){
+  for(let i=0;i<count;i++){
+    const angle=(i/count)*Math.PI*2;
+    _vfxParticles.push(new VFXParticle(
+      x+Math.cos(angle)*radius, y+Math.sin(angle)*radius,{
+      vx:Math.cos(angle)*(opts.speed||1.5), vy:Math.sin(angle)*(opts.speed||1.5),
+      r:opts.r||4, color, decay:opts.decay||0.03, gravity:0, shrink:opts.shrink||0.98,
+    }));
+  }
+  startVFXLoop();
+}
+
+function beam(x1,y1,x2,y2,color,width,frames){
+  const canvas=getCanvas();if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  let t=0;
+  function drawBeam(){
+    const alpha=1-(t/frames);
+    ctx.save();ctx.globalAlpha=alpha;
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);
+    ctx.lineWidth=width*(1-t/frames*0.5);ctx.strokeStyle=color;
+    ctx.shadowBlur=20;ctx.shadowColor=color;ctx.stroke();
+    ctx.restore();
+    t++;if(t<frames)requestAnimationFrame(drawBeam);
+  }
+  requestAnimationFrame(drawBeam);
+}
+
+function screenFlash(color,frames){
+  const canvas=getCanvas();if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  let t=0;
+  function drawFlash(){
+    ctx.save();
+    ctx.globalAlpha=Math.max(0,0.5*(1-t/frames));
+    ctx.fillStyle=color;ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.restore();
+    t++;if(t<frames)requestAnimationFrame(drawFlash);
+  }
+  requestAnimationFrame(drawFlash);
+}
+
+function drawRings(cx,cy,color,count,frames){
+  const canvas=getCanvas();if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  let t=0;
+  function draw(){
+    const prog=t/frames;
+    ctx.save();
+    for(let i=0;i<count;i++){
+      const pOff=i/count;
+      const r=(prog-pOff)*Math.max(canvas.width,canvas.height)*0.6;
+      if(r<0){continue;}
+      const a=Math.max(0,0.7*(1-(prog-pOff)*2));
+      ctx.globalAlpha=a;
+      ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);
+      ctx.lineWidth=4*(1-prog);ctx.strokeStyle=color;ctx.stroke();
+    }
+    ctx.restore();
+    t++;if(t<frames)requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+/* ── Lightning bolt drawer ── */
+function drawLightning(x1,y1,x2,y2,ctx,color,width,roughness){
+  const pts=[[x1,y1]];
+  let cx=x1,cy=y1;
+  const steps=8;
+  const dx=(x2-x1)/steps, dy=(y2-y1)/steps;
+  for(let i=1;i<steps;i++){
+    cx+=dx+(Math.random()-0.5)*roughness;
+    cy+=dy+(Math.random()-0.5)*roughness;
+    pts.push([cx,cy]);
+  }
+  pts.push([x2,y2]);
+  ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);
+  pts.slice(1).forEach(p=>ctx.lineTo(p[0],p[1]));
+  ctx.lineWidth=width;ctx.strokeStyle=color;
+  ctx.shadowBlur=15;ctx.shadowColor=color;ctx.stroke();
+}
+
+/* ── Named VFX effects ── */
+function playVFX(effectKey, opts={}){
+  if(!G.settings.abilityFX||G.settings.dataSaver)return;
+  const canvas=getCanvas();if(!canvas)return;
+  const W=canvas.width, H=canvas.height;
+  const ctx=canvas.getContext('2d');
+  const ex=W*0.72, ey=H*0.45; // enemy zone centre
+
+  switch(effectKey){
+
+    /* ── PHYSICAL ── */
+    case'punch':{
+      screenFlash('rgba(255,80,50,0.35)',8);
+      burst(ex,ey,20,'#ff6040',{minSpeed:3,maxSpeed:9,r:5,gravity:0.08,decay:0.03});
+      burst(ex,ey,8,'#fff',{minSpeed:1,maxSpeed:4,r:3,decay:0.06,shape:'star'});
+      drawRings(ex,ey,'#ff6040',2,18);
+      shakeEl('enemy-fighter');
+      break;}
+
+    case'kick':{
+      const y=ey;
+      // animated slash sweep
+      let t=0,frames=14;
+      (function swipe(){
+        ctx.save();ctx.globalAlpha=1-t/frames;
+        ctx.beginPath();
+        ctx.moveTo(W*0.1,y-15+t*4);ctx.quadraticCurveTo(W*0.5,y-20,W*0.92,y+10-t*3);
+        ctx.lineWidth=8-t*.4;ctx.strokeStyle=`hsl(${220+t*3},90%,65%)`;
+        ctx.shadowBlur=12;ctx.shadowColor='#80a0ff';ctx.stroke();
+        ctx.restore();
+        t++;if(t<frames)requestAnimationFrame(swipe);
+      })();
+      burst(ex,ey,12,'#80a0ff',{minSpeed:2,maxSpeed:7,r:4,gravity:0.04});
+      shakeEl('enemy-fighter');
+      break;}
+
+    /* ── RUBBER ── */
+    case'rubber':case'gomu_pistol':{
+      // Stretched arm projectile
+      let t=0,frames=18;
+      (function drawArm(){
+        ctx.clearRect(0,0,W,H);
+        ctx.save();
+        const prog=Math.min(1,t/10);
+        const startX=W*0.28, startY=ey;
+        const endX=startX+(ex-startX)*prog, endY=ey;
+        ctx.beginPath();ctx.moveTo(startX,startY);
+        ctx.bezierCurveTo(startX+(endX-startX)*0.3,startY-20,startX+(endX-startX)*0.7,startY+20,endX,endY);
+        ctx.lineWidth=10*(1-prog*0.5);ctx.strokeStyle='#f0c040';
+        ctx.shadowBlur=8;ctx.shadowColor='#f0c040';ctx.stroke();
+        // Fist circle at end
+        ctx.beginPath();ctx.arc(endX,endY,8*(1-prog*0.3),0,Math.PI*2);
+        ctx.fillStyle='#f08020';ctx.fill();
+        ctx.restore();
+        t++;
+        if(t<frames)requestAnimationFrame(drawArm);
+        else{ctx.clearRect(0,0,W,H);burst(ex,ey,16,'#f0c040',{minSpeed:3,maxSpeed:8,gravity:0.06});screenFlash('rgba(240,192,64,0.2)',6);}
+      })();
+      shakeEl('enemy-fighter');
+      break;}
+
+    case'gomu_bazooka':{
+      let t=0,frames=20;
+      (function drawBoth(){
+        ctx.clearRect(0,0,W,H);
+        ctx.save();
+        const prog=Math.min(1,t/12);
+        const sx=W*0.28,sy=ey;
+        [-12,12].forEach(off=>{
+          ctx.beginPath();ctx.moveTo(sx,sy+off);
+          ctx.quadraticCurveTo(W*0.5,sy+off*1.3,ex,ey+off*.5);
+          ctx.lineWidth=12*(1-prog*.4);ctx.strokeStyle='#f08020';ctx.shadowBlur=10;ctx.shadowColor='#ff6000';ctx.stroke();
+        });
+        ctx.restore();
+        t++;
+        if(t<frames)requestAnimationFrame(drawBoth);
+        else{ctx.clearRect(0,0,W,H);burst(ex,ey,28,'#ff8020',{minSpeed:4,maxSpeed:11,r:6,gravity:0.07,shape:'star'});screenFlash('rgba(255,120,0,0.4)',8);shakeEl('combat-arena');}
+      })();
+      break;}
+
+    case'gear2':{
+      // Steam + speed lines
+      screenFlash('rgba(255,60,60,0.3)',6);
+      for(let i=0;i<6;i++){
+        burst(W*0.32+i*10,H*0.3+i*8,4,'rgba(255,80,80,.8)',{minSpeed:1,maxSpeed:3,r:12,decay:0.02,gravity:-0.08,shrink:1.02});
+      }
+      // Speed lines left→right
+      let t=0;(function lines(){
+        ctx.save();ctx.globalAlpha=Math.max(0,.8-t*.1);
+        ctx.strokeStyle='rgba(255,80,80,0.7)';ctx.lineWidth=2;
+        for(let i=0;i<8;i++){const y2=H*.2+i*(H*.6/7);ctx.beginPath();ctx.moveTo(0,y2);ctx.lineTo(W,y2);ctx.stroke();}
+        ctx.restore();t++;if(t<8)requestAnimationFrame(lines);
+      })();
+      burst(ex,ey,18,'#ff4040',{minSpeed:3,maxSpeed:9,r:4,gravity:.05});
+      break;}
+
+    case'giant':case'gear3':{
+      screenFlash('rgba(255,140,0,0.5)',12);
+      burst(ex,ey,35,'#ff8000',{minSpeed:4,maxSpeed:13,r:8,gravity:.06,decay:.02,shape:'star'});
+      burst(ex,ey,15,'#ffffff',{minSpeed:2,maxSpeed:7,r:4,decay:.04});
+      drawRings(ex,ey,'#ff8000',3,22);
+      shakeEl('combat-arena');
+      break;}
+
+    case'boundman':case'gear4':{
+      // Spiral vortex
+      let t=0,frames=30;
+      (function vortex(){
+        ctx.save();ctx.globalAlpha=Math.max(0,1-t/frames);
+        const r=(t/frames)*Math.min(W,H)*.4;
+        ctx.beginPath();ctx.arc(ex,ey,r,0,Math.PI*2);
+        ctx.lineWidth=6*(1-t/frames)+2;ctx.strokeStyle=`hsl(${40+t*6},100%,55%)`;
+        ctx.shadowBlur=15;ctx.shadowColor='#f0c040';ctx.stroke();
+        ctx.restore();
+        t++;if(t<frames)requestAnimationFrame(vortex);
+      })();
+      burst(ex,ey,30,'#f0c040',{minSpeed:3,maxSpeed:12,r:6,gravity:.04,decay:.02,shape:'star'});
+      screenFlash('rgba(255,200,0,0.35)',10);
+      shakeEl('combat-arena');
+      break;}
+
+    case'explosion':case'king_kong':{
+      screenFlash('rgba(255,220,50,0.7)',15);
+      for(let ring=0;ring<3;ring++){
+        setTimeout(()=>{
+          burst(ex,ey,25,'#ff8000',{minSpeed:5+ring*3,maxSpeed:14+ring*3,r:7,gravity:.05,decay:.02});
+          burst(ex,ey,10,'#ffffff',{minSpeed:2,maxSpeed:5,r:3,decay:.05,shape:'star'});
+          drawRings(ex,ey,`hsl(${30+ring*20},100%,60%)`,1,12);
+        },ring*80);
+      }
+      shakeEl('combat-arena');
+      shakeEl('enemy-fighter');
+      break;}
+
+    /* ── HAKI ── */
+    case'haki':case'haki_strike':{
+      screenFlash('rgba(0,0,0,0.6)',10);
+      burst(ex,ey,20,'#2020c0',{minSpeed:3,maxSpeed:9,r:5,decay:.03});
+      burst(ex,ey,8,'rgba(0,0,0,0.9)',{minSpeed:2,maxSpeed:6,r:8,decay:.025,shape:'circle'});
+      // Dark rings
+      drawRings(ex,ey,'#1a1a80',3,20);
+      shakeEl('enemy-fighter');
+      break;}
+
+    case'thunder':case'conquerors':{
+      const canvas2=getCanvas();
+      let t=0;
+      (function bolt(){
+        ctx.clearRect(0,0,W,H);
+        ctx.save();ctx.globalAlpha=1-t*.12;
+        // main bolt
+        drawLightning(ex,0,ex,H,ctx,'#c060ff',8,40);
+        drawLightning(ex,0,ex+30,H*0.6,ctx,'#e080ff',4,30);
+        ctx.restore();
+        screenFlash('rgba(150,50,255,0.4)',4);
+        t++;if(t<8)requestAnimationFrame(bolt);
+        else{
+          ctx.clearRect(0,0,W,H);
+          burst(ex,ey,20,'#c060ff',{minSpeed:3,maxSpeed:8,r:5,decay:.03,shape:'star'});
+          shakeEl('enemy-fighter');
+        }
+      })();
+      break;}
+
+    /* ── FIRE ── */
+    case'fire':case'fire_fist':{
+      screenFlash('rgba(255,80,0,0.4)',10);
+      for(let i=0;i<20;i++){
+        setTimeout(()=>{
+          const hue=10+Math.random()*30;
+          _vfxParticles.push(new VFXParticle(
+            ex+(Math.random()-0.5)*40, ey+(Math.random()-0.5)*20,{
+            vx:(Math.random()-0.5)*4, vy:-2-Math.random()*4,
+            r:6+Math.random()*8, color:`hsl(${hue},100%,55%)`,
+            decay:.025, gravity:-0.05, shrink:.97
+          }));
+        },i*30);
+      }
+      startVFXLoop();
+      drawRings(ex,ey,'#ff4400',2,18);
+      shakeEl('enemy-fighter');
+      break;}
+
+    case'magma_fist':{
+      screenFlash('rgba(200,40,0,0.5)',12);
+      for(let i=0;i<25;i++){
+        const hue=Math.random()<0.5?10:200;
+        _vfxParticles.push(new VFXParticle(
+          ex+(Math.random()-0.5)*50, ey+(Math.random()-0.5)*30,{
+          vx:(Math.random()-0.5)*5, vy:-1-Math.random()*5,
+          r:8+Math.random()*10, color:`hsl(${hue*10+10},100%,40%)`,
+          decay:.02, gravity:0.08, shrink:.97
+        }));
+      }
+      startVFXLoop();
+      drawRings(ex,ey,'#cc3300',3,22);
+      shakeEl('combat-arena');
+      break;}
+
+    case'red_hawk':{
+      // Haki arm on fire
+      screenFlash('rgba(255,50,0,0.45)',8);
+      let t=0;
+      (function flameArm(){
+        ctx.clearRect(0,0,W,H);
+        ctx.save();
+        const prog=Math.min(1,t/10);
+        ctx.beginPath();
+        ctx.moveTo(W*0.28,ey);ctx.lineTo(W*0.28+(ex-W*0.28)*prog,ey);
+        const g=ctx.createLinearGradient(W*0.28,ey,ex,ey);
+        g.addColorStop(0,'#000');g.addColorStop(.4,'#ff4400');g.addColorStop(1,'#ffcc00');
+        ctx.lineWidth=14*(1-prog*0.4);ctx.strokeStyle=g;
+        ctx.shadowBlur=20;ctx.shadowColor='#ff4400';ctx.stroke();
+        ctx.restore();
+        t++;if(t<18)requestAnimationFrame(flameArm);
+        else{ctx.clearRect(0,0,W,H);burst(ex,ey,28,'#ff4400',{minSpeed:3,maxSpeed:10,r:6,gravity:-.05,decay:.025});}
+      })();
+      shakeEl('enemy-fighter');
+      break;}
+
+    /* ── ICE ── */
+    case'ice_shard':case'pheasant_beak':{
+      screenFlash('rgba(100,200,255,0.35)',8);
+      for(let i=0;i<18;i++){
+        const angle=-Math.PI/2+(Math.random()-0.5)*Math.PI;
+        const speed=4+Math.random()*7;
+        _vfxParticles.push(new VFXParticle(ex,ey,{
+          vx:Math.cos(angle)*speed, vy:Math.sin(angle)*speed,
+          r:4+Math.random()*8, color:`hsl(${190+Math.random()*30},80%,${70+Math.random()*20}%)`,
+          decay:.025, gravity:.06, shape:'shard'
+        }));
+      }
+      startVFXLoop();
+      drawRings(ex,ey,'#80e0ff',2,16);
+      shakeEl('enemy-fighter');
+      break;}
+
+    case'ice_age':{
+      screenFlash('rgba(80,180,255,0.5)',14);
+      // spreading ice wave
+      let t=0,frames=28;
+      (function iceWave(){
+        ctx.save();
+        const r=(t/frames)*W*.8;
+        ctx.globalAlpha=Math.max(0,.6*(1-t/frames));
+        ctx.beginPath();ctx.arc(ex,ey,r,0,Math.PI*2);
+        ctx.fillStyle='rgba(100,200,255,0.15)';ctx.fill();
+        ctx.lineWidth=3;ctx.strokeStyle='#80e0ff';ctx.stroke();
+        ctx.restore();
+        t++;if(t<frames)requestAnimationFrame(iceWave);
+      })();
+      burst(ex,ey,30,'#80e0ff',{minSpeed:2,maxSpeed:8,r:5,gravity:.03,decay:.02,shape:'shard'});
+      shakeEl('combat-arena');
+      break;}
+
+    /* ── LIGHTNING ── */
+    case'el_thor':{
+      // Massive pillar from sky
+      screenFlash('rgba(255,255,100,0.6)',10);
+      let t=0;
+      (function pillar(){
+        ctx.clearRect(0,0,W,H);
+        ctx.save();ctx.globalAlpha=1-t*.1;
+        for(let i=0;i<4;i++)drawLightning(ex+(i-2)*15,0,ex+(i-2)*10,H,ctx,`hsl(${50+i*10},100%,65%)`,6-i,50);
+        ctx.restore();
+        t++;if(t<10)requestAnimationFrame(pillar);
+        else{ctx.clearRect(0,0,W,H);burst(ex,ey,25,'#ffff60',{minSpeed:4,maxSpeed:10,r:5,shape:'star',decay:.03});}
+      })();
+      shakeEl('combat-arena');
+      break;}
+
+    case'raigo':{
+      // Gigantic lightning orb
+      screenFlash('rgba(255,255,0,0.7)',16);
+      let t=0,frames=30;
+      (function orb(){
+        ctx.save();
+        const r=Math.min(W,H)*.35*(1-t/frames);
+        ctx.globalAlpha=1-t/frames;
+        ctx.beginPath();ctx.arc(ex,ey,r,0,Math.PI*2);
+        const g=ctx.createRadialGradient(ex,ey,0,ex,ey,r);
+        g.addColorStop(0,'rgba(255,255,200,.9)');g.addColorStop(.5,'rgba(255,255,0,.6)');g.addColorStop(1,'transparent');
+        ctx.fillStyle=g;ctx.fill();
+        ctx.restore();
+        for(let i=0;i<3;i++)drawLightning(ex,ey,ex+(Math.random()-.5)*W*.6,ey+(Math.random()-.5)*H*.8,ctx,'#ffff60',3,25);
+        t++;if(t<frames)requestAnimationFrame(orb);
+      })();
+      burst(ex,ey,40,'#ffff00',{minSpeed:5,maxSpeed:14,r:6,shape:'star',decay:.02,gravity:.03});
+      shakeEl('combat-arena');
+      break;}
+
+    /* ── DARKNESS ── */
+    case'black_hole':{
+      screenFlash('rgba(0,0,0,0.7)',12);
+      let t=0,frames=28;
+      (function hole(){
+        ctx.save();
+        const r=Math.min(W,H)*.3*(t/frames);
+        // pull-in vortex
+        for(let i=0;i<20;i++){
+          const angle=Math.random()*Math.PI*2;
+          const dist=r*.8+Math.random()*r*.5;
+          const px=ex+Math.cos(angle)*dist, py=ey+Math.sin(angle)*dist;
+          ctx.beginPath();ctx.moveTo(px,py);
+          ctx.lineTo(ex+Math.cos(angle)*r*.2,ey+Math.sin(angle)*r*.2);
+          ctx.lineWidth=1.5;ctx.globalAlpha=0.5*(1-t/frames);ctx.strokeStyle='#6020d0';ctx.stroke();
+        }
+        ctx.globalAlpha=0.9;
+        ctx.beginPath();ctx.arc(ex,ey,r*.3,0,Math.PI*2);
+        const g=ctx.createRadialGradient(ex,ey,0,ex,ey,r*.3);
+        g.addColorStop(0,'#000');g.addColorStop(1,'rgba(60,0,120,0)');
+        ctx.fillStyle=g;ctx.fill();
+        ctx.restore();
+        t++;if(t<frames)requestAnimationFrame(hole);
+      })();
+      shakeEl('combat-arena');
+      break;}
+
+    case'maelstrom':{
+      screenFlash('rgba(20,0,40,0.6)',10);
+      burst(ex,ey,30,'#6020a0',{minSpeed:4,maxSpeed:12,r:6,decay:.025,shape:'circle'});
+      drawRings(ex,ey,'#6020a0',4,24);
+      shakeEl('combat-arena');
+      break;}
+
+    /* ── SAND ── */
+    case'sand_tomb':{
+      screenFlash('rgba(180,140,60,0.4)',8);
+      for(let i=0;i<22;i++){
+        _vfxParticles.push(new VFXParticle(
+          ex+(Math.random()-0.5)*60, ey+(Math.random()-0.5)*40,{
+          vx:(Math.random()-0.5)*3, vy:-1-Math.random()*3,
+          r:5+Math.random()*8, color:`hsl(${35+Math.random()*20},60%,${45+Math.random()*20}%)`,
+          decay:.03, gravity:.04, shrink:.97
+        }));
+      }
+      startVFXLoop();
+      drawRings(ex,ey,'#c8a030',2,16);
+      shakeEl('enemy-fighter');
+      break;}
+
+    case'sables':{
+      // Sand tornado
+      screenFlash('rgba(200,160,60,0.45)',12);
+      let t=0,frames=30;
+      (function tornado(){
+        ctx.save();ctx.globalAlpha=Math.max(0,.8-t/frames*.7);
+        for(let i=0;i<10;i++){
+          const angle=t*.3+i*(Math.PI*2/10);
+          const r=15+t*2.5, rx=r*.4;
+          ctx.beginPath();
+          ctx.ellipse(ex+Math.cos(angle)*rx,ey+Math.sin(angle*.7)*r*.4,4,4,angle,0,Math.PI*2);
+          ctx.fillStyle=`hsl(${35+i*5},60%,50%)`;ctx.fill();
+        }
+        ctx.restore();
+        t++;if(t<frames)requestAnimationFrame(tornado);
+      })();
+      burst(ex,ey,25,'#c8a030',{minSpeed:3,maxSpeed:9,r:5,gravity:.03});
+      shakeEl('combat-arena');
+      break;}
+
+    /* ── STRING ── */
+    case'god_thread':case'thousand_fleur':{
+      screenFlash('rgba(200,150,220,0.35)',8);
+      // strings from all directions to center
+      let t=0,frames=20;
+      (function strings(){
+        ctx.save();ctx.globalAlpha=Math.max(0,1-t/frames);
+        for(let i=0;i<12;i++){
+          const angle=(i/12)*Math.PI*2;
+          const r=W*.5;
+          const sx=ex+Math.cos(angle)*r, sy=ey+Math.sin(angle)*r;
+          const prog=t/frames;
+          ctx.beginPath();
+          ctx.moveTo(sx,sy);
+          ctx.lineTo(sx+(ex-sx)*prog, sy+(ey-sy)*prog);
+          ctx.lineWidth=2;ctx.strokeStyle='#e080ff';
+          ctx.shadowBlur=6;ctx.shadowColor='#e080ff';ctx.stroke();
+        }
+        ctx.restore();
+        t++;if(t<frames)requestAnimationFrame(strings);
+        else burst(ex,ey,20,'#e080ff',{minSpeed:3,maxSpeed:8,r:4,shape:'star',decay:.03});
+      })();
+      shakeEl('enemy-fighter');
+      break;}
+
+    /* ── TREMOR / QUAKE ── */
+    case'seaquake':{
+      // screen crack + concentric quake rings
+      screenFlash('rgba(100,200,255,0.5)',10);
+      let t=0,frames=35;
+      (function quake(){
+        ctx.save();ctx.globalAlpha=Math.max(0,1-t/frames);
+        const r=(t/frames)*Math.max(W,H)*1.2;
+        ctx.beginPath();ctx.arc(ex,ey,r,0,Math.PI*2);
+        ctx.lineWidth=5*(1-t/frames)+1;ctx.strokeStyle='rgba(100,200,255,0.7)';
+        ctx.shadowBlur=10;ctx.shadowColor='#64c8ff';ctx.stroke();
+        // secondary
+        if(t>5){ctx.beginPath();ctx.arc(ex,ey,r*.6,0,Math.PI*2);ctx.lineWidth=3;ctx.strokeStyle='rgba(100,200,255,0.4)';ctx.stroke();}
+        ctx.restore();
+        t++;if(t<frames)requestAnimationFrame(quake);
+      })();
+      burst(ex,ey,40,'#80c0ff',{minSpeed:5,maxSpeed:15,r:6,gravity:.03,decay:.02,shape:'shard'});
+      shakeEl('combat-arena');
+      shakeEl('enemy-fighter');
+      break;}
+
+    /* ── PHOENIX ── */
+    case'blue_flames':case'phoenix_brand':{
+      screenFlash('rgba(50,100,255,0.4)',10);
+      for(let i=0;i<22;i++){
+        _vfxParticles.push(new VFXParticle(
+          ex+(Math.random()-0.5)*50, ey+(Math.random()-0.5)*30,{
+          vx:(Math.random()-0.5)*3, vy:-2-Math.random()*5,
+          r:6+Math.random()*10, color:`hsl(${200+Math.random()*40},100%,${60+Math.random()*20}%)`,
+          decay:.025, gravity:-.03, shrink:.97
+        }));
+      }
+      startVFXLoop();
+      drawRings(ex,ey,'#4080ff',2,18);
+      break;}
+
+    /* ── DRAGON ── */
+    case'boro_breath':case'blast_breath':{
+      screenFlash('rgba(0,80,255,0.4)',10);
+      let t=0,frames=22;
+      (function breath(){
+        ctx.clearRect(0,0,W,H);
+        ctx.save();
+        const prog=t/frames;
+        const grd=ctx.createLinearGradient(W*0.2,ey,ex,ey);
+        grd.addColorStop(0,'rgba(0,100,255,0.9)');
+        grd.addColorStop(.5,'rgba(0,200,100,0.7)');
+        grd.addColorStop(1,'rgba(255,255,100,0.3)');
+        ctx.beginPath();
+        ctx.moveTo(W*.2,ey-5);ctx.lineTo(ex,ey-30*prog);
+        ctx.lineTo(ex,ey+30*prog);ctx.lineTo(W*.2,ey+5);
+        ctx.closePath();ctx.fillStyle=grd;ctx.fill();
+        ctx.restore();
+        t++;if(t<frames)requestAnimationFrame(breath);
+        else{ctx.clearRect(0,0,W,H);burst(ex,ey,30,'#00c864',{minSpeed:4,maxSpeed:12,r:6,gravity:.04});}
+      })();
+      shakeEl('enemy-fighter');
+      break;}
+
+    /* ── OP-OP (ROOM) ── */
+    case'shambles':case'gamma_knife':{
+      screenFlash('rgba(100,0,200,0.35)',8);
+      let t=0,frames=24;
+      (function room(){
+        ctx.save();
+        const r=Math.min(W,H)*.4*(1-t/frames*.5);
+        ctx.globalAlpha=Math.max(0,.6*(1-t/frames*.8));
+        ctx.beginPath();ctx.arc(ex,ey,r,0,Math.PI*2);
+        ctx.lineWidth=3;ctx.strokeStyle='#8040ff';
+        ctx.shadowBlur=15;ctx.shadowColor='#8040ff';ctx.stroke();
+        // rotating marks
+        for(let i=0;i<8;i++){
+          const a=t*.12+i*Math.PI*.25;
+          ctx.beginPath();ctx.moveTo(ex+Math.cos(a)*r*.6,ey+Math.sin(a)*r*.6);
+          ctx.lineTo(ex+Math.cos(a)*r*.95,ey+Math.sin(a)*r*.95);
+          ctx.lineWidth=2;ctx.strokeStyle='#c080ff';ctx.stroke();
+        }
+        ctx.restore();
+        t++;if(t<frames)requestAnimationFrame(room);
+        else burst(ex,ey,20,'#8040ff',{minSpeed:3,maxSpeed:8,r:4,shape:'star',decay:.03});
+      })();
+      shakeEl('enemy-fighter');
+      break;}
+
+    /* ── SMOKE ── */
+    case'smoke_cloud':{
+      for(let i=0;i<15;i++){
+        _vfxParticles.push(new VFXParticle(
+          ex+(Math.random()-0.5)*60, ey+(Math.random()-0.5)*40,{
+          vx:(Math.random()-0.5)*2, vy:-0.5-Math.random()*2,
+          r:15+Math.random()*20, color:`rgba(${150+Math.random()*60},${150+Math.random()*60},${150+Math.random()*60},0.6)`,
+          decay:.015, gravity:-.01, shrink:1.005
+        }));
+      }
+      startVFXLoop();
+      break;}
+
+    /* ── GENERIC BUFF ── */
+    case'thunder':case'buff_aura':{
+      ring(W*.5,H*.5,20,'#f0c040',Math.min(W,H)*.3,{speed:.5,r:5,decay:.02});
+      ring(W*.5,H*.5,16,'#ffffff',Math.min(W,H)*.2,{speed:.3,r:3,decay:.025});
+      screenFlash('rgba(255,200,50,0.25)',8);
+      break;}
+
+    /* ── DEFAULT ── */
+    default:{
+      burst(ex,ey,15,'#e8eaf2',{minSpeed:2,maxSpeed:6,r:4,decay:.04});
+      shakeEl('enemy-fighter');
+    }
+  }
+}
+
+function spawnDmgPopup(dmg,crit,heal=false){
+  const arena=document.getElementById('combat-arena');
+  if(!arena||!G.settings.abilityFX||G.settings.dataSaver)return;
+  const d=document.createElement('div');
+  d.className='dmg-popup';
+  d.textContent=(heal?'💚 +':crit?'💥 CRIT! ':'')+fmt(dmg);
+  d.style.cssText=`color:${heal?'#40e060':crit?'#ffe040':'#ff5050'};font-size:${crit?'17px':heal?'15px':'13px'};left:${50+Math.random()*25}%;top:${10+Math.random()*25}%;text-shadow:0 2px 6px rgba(0,0,0,.8);`;
+  arena.appendChild(d);
+  setTimeout(()=>d.remove(),950);
+}
 
 function spawnDmgPopup(dmg,crit){
   const arena=document.getElementById('combat-arena');
@@ -1208,9 +1808,202 @@ function renderCombat(){
   document.getElementById('player-name-display').textContent=G.playerName;
 }
 
+// ===================== DF SKILL SETS =====================
+// Each fruit category maps to unique skills with canvas VFX keys
+const DF_SKILL_SETS = {
+  // ── RUBBER / NIKA ──────────────────────────────
+  rubber:{
+    label:"Gomu Gomu / Nika",
+    color:"#f0c040",
+    skills:[
+      {name:"Pistol",      icon:"🤜", dmg:3.0,  effect:"gomu_pistol",   buff:false, desc:"300% — Stretching arm snap."},
+      {name:"Bazooka",     icon:"✊✊",dmg:6.0,  effect:"gomu_bazooka",  buff:false, desc:"600% — Both fists combined."},
+      {name:"Elephant Gun",icon:"🐘", dmg:8.0,  effect:"gear3",         buff:false, desc:"800% — Bone-balloon giant arm."},
+      {name:"Gear 2nd",    icon:"💨", dmg:4.5,  effect:"gear2",         buff:false, desc:"450% — Blood-pump speed burst."},
+      {name:"Gear 4 Bound",icon:"🌀", dmg:9.0,  effect:"boundman",      buff:false, desc:"900% — Boundman activation."},
+      {name:"King Kong Gun",icon:"💥",dmg:14.0, effect:"explosion",     buff:false, desc:"1400% — Ultimate Gear 4 strike."},
+      {name:"Gear 5 / Nika",icon:"☀️",dmg:18.0, effect:"explosion",    buff:false, desc:"1800% — Sun God form. Cartoonish reality."},
+    ]
+  },
+  // ── FIRE ──────────────────────────────────────
+  fire:{
+    label:"Mera Mera no Mi",
+    color:"#ff4400",
+    skills:[
+      {name:"Fire Fist",      icon:"🔥", dmg:4.0,  effect:"fire_fist",  buff:false, desc:"400% — Ace's blazing punch."},
+      {name:"Firefly",        icon:"🪲", dmg:2.5,  effect:"fire",       buff:false, desc:"250% — Scattered flame shots."},
+      {name:"Flame Mirror",   icon:"🪞", dmg:6.0,  effect:"fire_fist",  buff:false, desc:"600% — Wall of fire."},
+      {name:"Kaen Sei-Oken",  icon:"🌠", dmg:9.0,  effect:"red_hawk",   buff:false, desc:"900% — Ultimate flame commandment."},
+    ]
+  },
+  // ── MAGMA ─────────────────────────────────────
+  magma:{
+    label:"Magu Magu no Mi",
+    color:"#cc3300",
+    skills:[
+      {name:"Great Eruption", icon:"🌋", dmg:5.0,  effect:"magma_fist",  buff:false, desc:"500% — Magma fist eruption."},
+      {name:"Ryusei Kazan",   icon:"🪨", dmg:8.0,  effect:"magma_fist",  buff:false, desc:"800% — Volcanic meteorite rain."},
+      {name:"Meigo",          icon:"💀", dmg:6.0,  effect:"fire_fist",   buff:false, desc:"600% — Absolute Justice strike. Ignores DEF."},
+      {name:"Great Eruption+",icon:"🌋💥",dmg:12.0,effect:"magma_fist",  buff:false, desc:"1200% — The killing blow of Marineford."},
+    ]
+  },
+  // ── ICE ───────────────────────────────────────
+  ice:{
+    label:"Hie Hie no Mi",
+    color:"#80e0ff",
+    skills:[
+      {name:"Ice Saber",      icon:"🗡️", dmg:3.5,  effect:"ice_shard",  buff:false, desc:"350% — Frozen sword slash."},
+      {name:"Pheasant Beak",  icon:"🐦‍❄️",dmg:5.0,  effect:"pheasant_beak",buff:false,desc:"500% — Ice pheasant charge."},
+      {name:"Ice Block",      icon:"🧊", dmg:4.0,  effect:"ice_shard",  buff:false, desc:"400% — Impaling ice pillars."},
+      {name:"Ice Age",        icon:"🌊", dmg:11.0, effect:"ice_age",    buff:false, desc:"1100% — Freeze the entire ocean."},
+    ]
+  },
+  // ── LIGHTNING ─────────────────────────────────
+  lightning:{
+    label:"Goro Goro no Mi",
+    color:"#ffe040",
+    skills:[
+      {name:"Lightning Ray",  icon:"⚡", dmg:3.5,  effect:"el_thor",    buff:false, desc:"350% — Direct lightning bolt."},
+      {name:"El Thor",        icon:"🌩️", dmg:6.0,  effect:"el_thor",    buff:false, desc:"600% — Massive pillar strike."},
+      {name:"200M Volt",      icon:"⚡⚡",dmg:8.0, effect:"el_thor",    buff:false, desc:"800% — 200 million volt discharge."},
+      {name:"Raigo",          icon:"☁️", dmg:15.0, effect:"raigo",      buff:false, desc:"1500% — God's divine judgment."},
+    ]
+  },
+  // ── DARKNESS ──────────────────────────────────
+  darkness:{
+    label:"Yami Yami no Mi",
+    color:"#6020a0",
+    skills:[
+      {name:"Black Hole",     icon:"🌑", dmg:5.0,  effect:"black_hole", buff:false, desc:"500% — Absorbs everything into darkness."},
+      {name:"Maelstrom",      icon:"🌀", dmg:3.5,  effect:"maelstrom",  buff:false, desc:"350% — Gravitational collapse."},
+      {name:"Liberation",     icon:"💀", dmg:8.0,  effect:"maelstrom",  buff:false, desc:"800% — Unleash all absorbed matter."},
+      {name:"Dark Quake",     icon:"🖤", dmg:12.0, effect:"seaquake",   buff:false, desc:"1200% — Darkness + Tremor. Blackbeard ultimate."},
+    ]
+  },
+  // ── SAND ──────────────────────────────────────
+  sand:{
+    label:"Suna Suna no Mi",
+    color:"#c8962a",
+    skills:[
+      {name:"Sand Tomb",      icon:"🏜️", dmg:3.0,  effect:"sand_tomb",  buff:false, desc:"300% — Burial in sand."},
+      {name:"Desert Spada",   icon:"🗡️", dmg:5.0,  effect:"sand_tomb",  buff:false, desc:"500% — Sand blade that slices ground."},
+      {name:"Ground Secco",   icon:"🌵", dmg:4.0,  effect:"sand_tomb",  buff:false, desc:"400% — Dehydrate the battlefield."},
+      {name:"Sables Pesado",  icon:"🌪️", dmg:10.0, effect:"sables",     buff:false, desc:"1000% — Massive sand storm."},
+    ]
+  },
+  // ── SMOKE ─────────────────────────────────────
+  smoke:{
+    label:"Moku Moku no Mi",
+    color:"#a0a0a0",
+    skills:[
+      {name:"Smoke Ring",     icon:"💨", dmg:2.5,  effect:"smoke_cloud", buff:false, desc:"250% — Smoke binding."},
+      {name:"White Blow",     icon:"🌫️", dmg:4.0,  effect:"smoke_cloud", buff:false, desc:"400% — Compressed smoke punch."},
+      {name:"Smoke Screen",   icon:"💨", dmg:0,    effect:"buff_aura",   buff:true,  desc:"BUFF — Smoke cover, +20% dodge."},
+      {name:"Fog Cloud",      icon:"🌁", dmg:7.0,  effect:"smoke_cloud", buff:false, desc:"700% — Suffocating fog cover."},
+    ]
+  },
+  // ── STRING ────────────────────────────────────
+  string:{
+    label:"Ito Ito no Mi",
+    color:"#e080ff",
+    skills:[
+      {name:"Thousand Fleur", icon:"🌸", dmg:4.0,  effect:"thousand_fleur",buff:false, desc:"400% — Thousands of razor strings."},
+      {name:"God Thread",     icon:"🕸️", dmg:6.0,  effect:"god_thread",  buff:false, desc:"600% — Unbreakable thread cage."},
+      {name:"Torikago Buff",  icon:"🐦", dmg:0,    effect:"buff_aura",   buff:true,  desc:"BUFF — Birdcage, +30% ATK."},
+      {name:"Parasitic String",icon:"🧶",dmg:9.0,  effect:"god_thread",  buff:false, desc:"900% — Full body string control."},
+    ]
+  },
+  // ── TREMOR ────────────────────────────────────
+  tremor:{
+    label:"Gura Gura no Mi",
+    color:"#60a0ff",
+    skills:[
+      {name:"Shockwave Fist", icon:"👊", dmg:6.0,  effect:"seaquake",   buff:false, desc:"600% — Vibrating fist shockwave."},
+      {name:"Quake Bubbles",  icon:"🫧", dmg:8.0,  effect:"seaquake",   buff:false, desc:"800% — Seismic spheres."},
+      {name:"Seaquake",       icon:"🌊", dmg:12.0, effect:"seaquake",   buff:false, desc:"1200% — Ocean-splitting quake."},
+      {name:"Island Quake",   icon:"🏝️", dmg:18.0, effect:"seaquake",   buff:false, desc:"1800% — Whitebeard's ultimate."},
+    ]
+  },
+  // ── PHOENIX ───────────────────────────────────
+  phoenix:{
+    label:"Tori Tori no Mi — Phoenix",
+    color:"#4080ff",
+    skills:[
+      {name:"Phoenix Brand",  icon:"🔵", dmg:5.0,  effect:"phoenix_brand",buff:false, desc:"500% — Blue flame strike."},
+      {name:"Blue Flames",    icon:"💙", dmg:0,    effect:"blue_flames", buff:true,  desc:"HEAL — Regenerate 15% Max HP with blue fire."},
+      {name:"Rebirth Flames", icon:"🦅", dmg:7.0,  effect:"phoenix_brand",buff:false, desc:"700% — Immolating dive."},
+      {name:"Zanka no Tachi", icon:"⚔️", dmg:12.0, effect:"blue_flames", buff:false, desc:"1200% — Phoenix body slam."},
+    ]
+  },
+  // ── DRAGON ────────────────────────────────────
+  dragon:{
+    label:"Uo Uo no Mi — Azure Dragon",
+    color:"#4040e0",
+    skills:[
+      {name:"Boro Breath",    icon:"🌬️", dmg:8.0,  effect:"boro_breath",buff:false, desc:"800% — Explosive flame breath."},
+      {name:"Blast Breath",   icon:"💨", dmg:10.0, effect:"blast_breath",buff:false, desc:"1000% — Pressurised breath."},
+      {name:"Thunder Bagua",  icon:"⚡", dmg:15.0, effect:"el_thor",    buff:false, desc:"1500% — Lightning club swing."},
+      {name:"Dragon Twister", icon:"🌀", dmg:18.0, effect:"sables",     buff:false, desc:"1800% — Kaido's ultimate."},
+    ]
+  },
+  // ── OP-OP ─────────────────────────────────────
+  opop:{
+    label:"Ope Ope no Mi",
+    color:"#8040ff",
+    skills:[
+      {name:"Shambles",       icon:"🔄", dmg:3.0,  effect:"shambles",   buff:false, desc:"300% — Swap positions in the Room."},
+      {name:"Counter Shock",  icon:"⚡", dmg:5.0,  effect:"gamma_knife",buff:false, desc:"500% — Electric discharge."},
+      {name:"Gamma Knife",    icon:"🔪", dmg:8.0,  effect:"gamma_knife",buff:false, desc:"800% — Internal organ destruction."},
+      {name:"Mes",            icon:"✂️", dmg:6.0,  effect:"shambles",   buff:false, desc:"600% — Extracts soul from body."},
+    ]
+  },
+  // ── TREMOR-DARKNESS (Blackbeard dual) ─────────
+  dual_tremor_dark:{
+    label:"Dual Fruit — Blackbeard",
+    color:"#4030c0",
+    skills:[
+      {name:"Black Hole",     icon:"🌑", dmg:5.0,  effect:"black_hole", buff:false, desc:"500%"},
+      {name:"Seaquake",       icon:"🌊", dmg:10.0, effect:"seaquake",   buff:false, desc:"1000%"},
+      {name:"Dark Quake",     icon:"🖤", dmg:14.0, effect:"maelstrom",  buff:false, desc:"1400% — Dual-fruit devastation."},
+      {name:"Liberation",     icon:"💀", dmg:18.0, effect:"explosion",  buff:false, desc:"1800% — Everything destroyed."},
+    ]
+  },
+};
+
+// Map DF fruit name → skill set key
+function getDFSkillKey(dfName){
+  if(!dfName) return null;
+  const n=dfName.toLowerCase();
+  if(n.includes('nika')||n.includes('gomu'))return'rubber';
+  if(n.includes('mera')||n.includes('flame'))return'fire';
+  if(n.includes('magu')||n.includes('magma'))return'magma';
+  if(n.includes('hie')||n.includes('ice'))return'ice';
+  if(n.includes('goro')||n.includes('rumble'))return'lightning';
+  if(n.includes('yami')||n.includes('dark'))return'darkness';
+  if(n.includes('suna')||n.includes('sand'))return'sand';
+  if(n.includes('moku')||n.includes('smoke'))return'smoke';
+  if(n.includes('ito')||n.includes('string'))return'string';
+  if(n.includes('gura')||n.includes('tremor'))return'tremor';
+  if(n.includes('phoenix')||n.includes('tori'))return'phoenix';
+  if(n.includes('seiryu')||n.includes('dragon'))return'dragon';
+  if(n.includes('ope'))return'opop';
+  if(n.includes('blackbeard')||n.includes('dual'))return'dual_tremor_dark';
+  return null;
+}
+
+// Heal from Phoenix blue flames
+function phoenixHeal(){
+  const healAmt=Math.floor(G.maxHp*.15);
+  G.combat.playerHp=Math.min(G.combat.playerMaxHp,G.combat.playerHp+healAmt);
+  addLog(`💙 Blue Flames! Healed ${fmt(healAmt)} HP.`,"log-heal");
+  spawnDmgPopup(healAmt,false,true);
+  renderCombat();
+}
+
 function renderSkills(){
   const grid=document.getElementById('skills-grid');if(!grid)return;
   let html='';
+  // ── Base story skills ──
   G.skills.forEach((sk,idx)=>{
     if(sk.unlocked){
       if(sk.buff){
@@ -1229,49 +2022,147 @@ function renderSkills(){
     }else{
       html+=`<div class="skill-card locked-skill" title="Unlock: clear ${sk.unlockArc} arc">
         <div class="skill-name">🔒 ${sk.name}</div>
-        <div class="skill-effect" style="color:var(--text3);font-size:8px">Clear ${(sk.unlockArc||'').replace('_',' ')}</div></div>`;
+        <div class="skill-effect" style="color:var(--text3);font-size:8px">Clear ${(sk.unlockArc||'').replace(/_/g,' ')}</div></div>`;
     }
   });
+
+  // ── Devil Fruit skills ──
+  const dfKey=getDFSkillKey(G.abilities.df?.name);
+  const dfRarity=G.abilities.df?.rarity||'common';
+  const rarityOrder=["common","uncommon","rare","epic","legendary","mythical","honored"];
+  const dfTier=rarityOrder.indexOf(dfRarity);
+  if(dfKey && dfTier>=1){ // only show DF skills if fruit is uncommon+
+    const set=DF_SKILL_SETS[dfKey];
+    if(set){
+      // number of DF skills unlocked scales with rarity tier
+      const maxSkills=Math.min(set.skills.length, dfTier+1);
+      html+=`<div style="grid-column:1/-1;font-size:9px;color:${set.color};font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:3px 0 1px;border-top:1px solid ${set.color}44;margin-top:2px">
+        ${set.label} Skills</div>`;
+      set.skills.slice(0,maxSkills).forEach((sk,idx)=>{
+        if(sk.buff){
+          html+=`<div class="skill-card" style="border-color:${set.color}44" onclick="useDFSkill(${idx})">
+            <div class="skill-name" style="color:${set.color}">${sk.icon} ${sk.name}</div>
+            <span class="skill-type type-buff">✦ Buff</span>
+            <div class="skill-dmg" style="color:var(--blue)">BUFF</div>
+            <div class="skill-effect">${sk.desc}</div></div>`;
+        }else{
+          html+=`<div class="skill-card" style="border-color:${set.color}44" onclick="useDFSkill(${idx})">
+            <div class="skill-name" style="color:${set.color}">${sk.icon} ${sk.name}</div>
+            <span class="skill-type type-dmg">✕ Damage</span>
+            <div class="skill-dmg">${Math.floor(sk.dmg*100)}% DMG</div>
+            <div class="skill-effect">${sk.desc}</div></div>`;
+        }
+      });
+      if(dfTier<set.skills.length){
+        html+=`<div class="skill-card locked-skill" style="border-color:${set.color}22">
+          <div class="skill-name" style="color:${set.color}88">🔒 +${set.skills.length-maxSkills} more</div>
+          <div class="skill-effect">Roll higher rarity DF</div></div>`;
+      }
+    }
+  }else if(dfKey && dfTier===0){
+    html+=`<div style="grid-column:1/-1;font-size:9px;color:var(--text3);padding:3px 0;border-top:1px solid var(--border);margin-top:2px">
+      🍎 Reroll your DF to Uncommon+ to unlock fruit skills</div>`;
+  }
+
   html+=`<div class="skill-card flee-card" onclick="fleeBattle()">
     <div style="font-size:20px;margin-bottom:3px">🏃</div><div class="skill-name">FLEE</div></div>`;
   grid.innerHTML=html;
 }
+
+function useDFSkill(idx){
+  if(!G.combat.active){addLog("❌ No battle active!","log-system");return;}
+  const c=G.combat;
+  if(!c.playerTurn){addLog("❌ Not your turn!","log-system");return;}
+  const dfKey=getDFSkillKey(G.abilities.df?.name);
+  if(!dfKey)return;
+  const set=DF_SKILL_SETS[dfKey];
+  if(!set)return;
+  const sk=set.skills[idx];if(!sk)return;
+
+  playVFX(sk.effect);
+
+  if(sk.buff){
+    // Special: Phoenix heal
+    if(sk.effect==='blue_flames'&&dfKey==='phoenix'){
+      c.buffActive=true;c.buffTurns=3;
+      phoenixHeal();
+      addLog(`✦ ${sk.name} — Blue Flames regenerate HP!`,"log-heal");
+    }else{
+      c.buffActive=true;c.buffTurns=3;
+      addLog(`✦ ${sk.name} activated! +25% DMG for 3 turns.`,"log-buff");
+    }
+  }else{
+    const dfMult=G.abilities.df?.dmgMult||1.0;
+    const fsMult=G.abilities.fs?.dmgMult||1.0;
+    const ohCrit=G.abilities.oh?.crit||0;
+    let dmg=Math.floor(G.atk*sk.dmg*dfMult*fsMult*(c.buffActive?1.25:1));
+    dmg=Math.floor(dmg*(0.85+rng()*.3));
+    const isCrit=rng()<ohCrit;
+    if(isCrit)dmg=Math.floor(dmg*1.5);
+    c.enemyHp-=dmg;
+    spawnDmgPopup(dmg,isCrit);
+    addLog(`${sk.icon} ${sk.name}: ${fmt(dmg)} DMG${isCrit?' 💥CRIT':''}!`,"log-dmg");
+    if(c.buffTurns>0){c.buffTurns--;if(c.buffTurns===0)c.buffActive=false;}
+    G.mastery.gomu.xp+=3;
+    if(G.mastery.gomu.xp>=G.mastery.gomu.maxXp){G.mastery.gomu.xp=0;G.mastery.gomu.lv++;G.mastery.gomu.maxXp=Math.floor(G.mastery.gomu.maxXp*1.5);}
+  }
+  renderCombat();
+  if(c.enemyHp<=0){onEnemyDefeated();return;}
+  c.playerTurn=false;
+  setTimeout(()=>{
+    const ohDodge=G.abilities.oh?.dodge||0;
+    if(rng()<ohDodge){addLog(`👁️ Observation Haki! Dodged!`,"log-buff");c.playerTurn=true;renderCombat();updateHeader();return;}
+    let eDmg=Math.floor(c.enemyAtk*(0.85+rng()*.3));
+    c.playerHp-=eDmg;
+    addLog(`👹 ${c.enemyName}: ${fmt(eDmg)} DMG!`,"log-dmg");
+    if(c.playerHp<=0){
+      addLog("💀 You were defeated!","log-system");
+      c.playerHp=Math.floor(G.maxHp*.3);
+      c.active=false;G.currentStoryEnemy=null;
+      document.getElementById('battle-passives').style.display="none";
+    }
+    c.playerTurn=true;renderCombat();updateHeader();
+  },800);
+}
+// Maps old effect names to new canvas VFX keys
+const VFX_KEY_MAP={
+  punch:'punch',kick:'kick',rubber:'rubber',haki:'haki',haki_coat:'haki',
+  steam:'gear2',speed_burst:'gear2',giant_fist:'gear3',giant:'gear3',
+  flame_burst:'red_hawk',fire:'fire_fist',conquerors:'conquerors',thunder:'conquerors',
+  boundman:'boundman',king_kong:'explosion',rubber_stretch:'gomu_pistol',
+};
 
 function useSkill(idx){
   if(!G.combat.active){addLog("❌ No battle active!","log-system");return;}
   const sk=G.skills[idx];if(!sk||!sk.unlocked)return;
   const c=G.combat;
   if(!c.playerTurn){addLog("❌ Not your turn!","log-system");return;}
-
-  // VFX
-  playVFX(sk.effect);
-
+  const vfxKey=VFX_KEY_MAP[sk.effect]||sk.effect||'punch';
+  playVFX(vfxKey);
   if(sk.buff){
     c.buffActive=true;c.buffTurns=3;
     addLog(`✦ ${sk.name} activated! +25% DMG for 3 turns.`,"log-buff");
   }else{
-    // Get DF multiplier from equipped ability
     const dfMult=G.abilities.df?.dmgMult||1.0;
     const fsMult=G.abilities.fs?.dmgMult||1.0;
     const ohCrit=G.abilities.oh?.crit||0;
     let dmg=Math.floor(G.atk*sk.dmg*dfMult*fsMult*(c.buffActive?1.25:1));
     dmg=Math.floor(dmg*(0.85+rng()*0.3));
     const isCrit=rng()<ohCrit;
-    if(isCrit) dmg=Math.floor(dmg*1.5);
+    if(isCrit)dmg=Math.floor(dmg*1.5);
     c.enemyHp-=dmg;
     spawnDmgPopup(dmg,isCrit);
     addLog(`${sk.icon} ${sk.name}: ${fmt(dmg)} DMG${isCrit?' 💥CRIT':''}!`,"log-dmg");
     if(c.buffTurns>0){c.buffTurns--;if(c.buffTurns===0)c.buffActive=false;}
-    // Mastery XP
-    G.mastery.gomu.xp+=2;if(G.mastery.gomu.xp>=G.mastery.gomu.maxXp){G.mastery.gomu.xp=0;G.mastery.gomu.lv++;G.mastery.gomu.maxXp=Math.floor(G.mastery.gomu.maxXp*1.5);}
+    G.mastery.gomu.xp+=2;
+    if(G.mastery.gomu.xp>=G.mastery.gomu.maxXp){G.mastery.gomu.xp=0;G.mastery.gomu.lv++;G.mastery.gomu.maxXp=Math.floor(G.mastery.gomu.maxXp*1.5);}
   }
   renderCombat();
   if(c.enemyHp<=0){onEnemyDefeated();return;}
   c.playerTurn=false;
   setTimeout(()=>{
-    // Observation Haki dodge
     const ohDodge=G.abilities.oh?.dodge||0;
-    if(rng()<ohDodge){addLog(`👁️ Observation Haki! You dodged the attack!`,"log-buff");c.playerTurn=true;renderCombat();updateHeader();return;}
+    if(rng()<ohDodge){addLog(`👁️ Observation Haki! You dodged!`,"log-buff");c.playerTurn=true;renderCombat();updateHeader();return;}
     let eDmg=Math.floor(c.enemyAtk*(0.85+rng()*0.3));
     c.playerHp-=eDmg;
     addLog(`👹 ${c.enemyName}: ${fmt(eDmg)} DMG!`,"log-dmg");
@@ -1826,6 +2717,14 @@ function init(){
   Object.entries(sm).forEach(([k,id])=>{const btn=document.getElementById(id);if(btn){btn.textContent=G.settings[k]?"ON":"OFF";btn.className=`toggle-btn toggle-${G.settings[k]?"on":"off"}`;}});
   renderSkills();renderCombat();renderCrew();renderChar();renderHome();renderTrain();renderDig();renderBossTab();
   updateHeader();updatePlayerAlliesDisplay();syncScrollDisplays();
+  // Size canvas to arena on load and resize
+  function resizeCanvas(){
+    const canvas=document.getElementById('vfx-canvas');
+    const wrap=document.getElementById('combat-arena');
+    if(canvas&&wrap){canvas.width=wrap.offsetWidth;canvas.height=wrap.offsetHeight;}
+  }
+  resizeCanvas();
+  window.addEventListener('resize',resizeCanvas);
   setInterval(gameTick,200);
   setInterval(tickSaveTimer,1000);
 }
