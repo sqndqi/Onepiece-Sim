@@ -278,7 +278,11 @@ body.data-saver *{animation:none!important;transition:none!important}
   </div>
   <div style="display:flex;gap:5px;align-items:center">
     <span class="owner-badge" id="owner-badge">⚓ CAPTAIN</span>
-    <div style="font-size:10px;color:var(--text3);text-align:right">Scrolls<br><span class="gold" id="hdr-scrolls">0</span></div>
+    <div style="font-size:10px;color:var(--text3);text-align:right">
+      <span id="hdr-username" style="color:var(--cyan);font-weight:700"></span>
+      <br>📜 <span class="gold" id="hdr-scrolls">0</span>
+    </div>
+    <div class="hdr-btn" onclick="logOut()" style="font-size:10px">🚪 Logout</div>
   </div>
 </div>
 
@@ -610,13 +614,56 @@ body.data-saver *{animation:none!important;transition:none!important}
       <button class="btn btn-red btn-sm" onclick="wipeData()">WIPE</button>
     </div>
     <div id="owner-panel" style="display:none;margin-top:10px">
-      <div style="background:linear-gradient(135deg,#1a1000,#2a1800);border:2px solid var(--gold);border-radius:8px;padding:12px">
-        <div style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin-bottom:7px">⚓ CAPTAIN PANEL</div>
-        <div style="display:flex;gap:5px;flex-wrap:wrap">
+      <div style="background:linear-gradient(135deg,#1a1000,#2a1800);border:2px solid var(--gold);border-radius:8px;padding:14px">
+        <div style="font-family:'Cinzel',serif;font-size:14px;color:var(--gold);margin-bottom:10px">⚓ CAPTAIN PANEL</div>
+        <div style="font-size:10px;color:var(--text3);margin-bottom:8px">Give to yourself:</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px">
           <button class="btn btn-gold btn-sm" onclick="ownerGiveBelis()">+ 1B Belis</button>
           <button class="btn btn-purple btn-sm" onclick="ownerGiveScrolls()">+ 100 Scrolls</button>
           <button class="btn btn-blue btn-sm" onclick="ownerMaxStats()">Max Stats</button>
         </div>
+        <div style="font-size:10px;color:var(--text3);margin-bottom:6px">📬 Gift to a player by username:</div>
+        <div style="display:flex;gap:5px;margin-bottom:6px">
+          <input id="admin-target-user" placeholder="username" style="flex:1;background:var(--bg4);border:1px solid var(--border2);color:var(--text);padding:4px 8px;border-radius:4px;font-family:'Rajdhani',sans-serif;font-size:12px">
+          <button class="btn btn-gray btn-sm" onclick="adminLookupUser()">Look up</button>
+        </div>
+        <div id="admin-user-info" style="font-size:10px;color:var(--text3);margin-bottom:8px"></div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">
+          <button class="btn btn-gold btn-sm" onclick="adminGiveItem('belis',100000)">+100K Belis</button>
+          <button class="btn btn-purple btn-sm" onclick="adminGiveItem('scrolls',20)">+20 Scrolls</button>
+          <button class="btn btn-blue btn-sm" onclick="adminGiveItem('scrolls',100)">+100 Scrolls</button>
+          <button class="btn btn-red btn-sm" onclick="adminGiveItem('wipe',0)">Wipe User</button>
+        </div>
+        <div style="font-size:10px;color:var(--text3);margin-bottom:6px">🍎 Give Devil Fruit to user:</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">
+          <select id="admin-df-pick" style="flex:1;background:var(--bg4);border:1px solid var(--border2);color:var(--text);padding:4px;border-radius:4px;font-size:11px;font-family:'Rajdhani',sans-serif">
+            <option value="">-- Select DF --</option>
+            <option value="mera">Mera Mera no Mi (Flame-Flame)</option>
+            <option value="hie">Hie Hie no Mi (Ice-Ice)</option>
+            <option value="goro">Goro Goro no Mi (Lightning)</option>
+            <option value="magu">Magu Magu no Mi (Magma)</option>
+            <option value="yami">Yami Yami no Mi (Darkness)</option>
+            <option value="gura">Gura Gura no Mi (Tremor)</option>
+            <option value="ope">Ope Ope no Mi (Op-Op)</option>
+            <option value="nika">Hito Hito Nika (Sun God)</option>
+            <option value="dragon">Uo Uo Seiryu (Dragon)</option>
+            <option value="phoenix">Tori Tori Phoenix</option>
+            <option value="suna">Suna Suna no Mi (Sand)</option>
+            <option value="ito">Ito Ito no Mi (String)</option>
+          </select>
+          <select id="admin-df-rarity" style="background:var(--bg4);border:1px solid var(--border2);color:var(--text);padding:4px;border-radius:4px;font-size:11px;font-family:'Rajdhani',sans-serif">
+            <option value="uncommon">Uncommon</option>
+            <option value="rare">Rare</option>
+            <option value="epic">Epic</option>
+            <option value="legendary">Legendary</option>
+            <option value="mythical">Mythical</option>
+            <option value="honored">Honored</option>
+          </select>
+          <button class="btn btn-purple btn-sm" onclick="adminGiveDF()">Gift DF</button>
+        </div>
+        <div style="font-size:10px;color:var(--text3);margin-bottom:6px">👤 All registered users:</div>
+        <div id="admin-user-list" style="font-size:10px;color:var(--text2);max-height:100px;overflow-y:auto;background:var(--bg4);border-radius:4px;padding:6px"></div>
+        <button class="btn btn-gray btn-sm" style="margin-top:6px;width:100%" onclick="adminRefreshUserList()">🔄 Refresh User List</button>
       </div>
     </div>
   </div>
@@ -779,16 +826,16 @@ const G = {
   mastery:{gomu:{lv:1,xp:0,maxXp:100}, sword:{lv:1,xp:0,maxXp:100}},
 
   skills:[
-    {name:"Basic Punch", icon:"👊", dmg:1.0, effect:"punch",   buff:false, unlocked:true,  unlockArc:null,        desc:"100% DMG — Solid straight punch."},
-    {name:"Basic Kick",  icon:"🦵", dmg:1.5, effect:"kick",    buff:false, unlocked:true,  unlockArc:null,        desc:"150% DMG — Powerful kick."},
-    {name:"Gomu Pistol", icon:"🤜", dmg:3.0, effect:"rubber",  buff:false, unlocked:false, unlockArc:"east_blue", desc:"300% DMG — Rubber arm stretch."},
-    {name:"Haki Strike", icon:"⚫", dmg:2.5, effect:"haki",    buff:false, unlocked:false, unlockArc:"alabasta",  desc:"250% DMG — Armament coated fist."},
-    {name:"Gear Second",  icon:"💨", dmg:4.0, effect:"steam",   buff:false, unlocked:false, unlockArc:"water7",   desc:"400% DMG — Blood pump speed."},
-    {name:"Gear Third",   icon:"✊", dmg:5.5, effect:"giant",   buff:false, unlocked:false, unlockArc:"thriller", desc:"550% DMG — Bone balloon giant."},
-    {name:"Red Hawk",     icon:"🔥", dmg:6.5, effect:"fire",    buff:false, unlocked:false, unlockArc:"marineford",desc:"650% DMG — Flame-coated Haki fist."},
-    {name:"Haki Burst",   icon:"👑", dmg:0,   effect:"thunder", buff:true,  unlocked:false, unlockArc:"fishman",  desc:"BUFF — +25% DMG, 3 turns. Conqueror's Haki."},
-    {name:"Gear Fourth",  icon:"🌀", dmg:8.0, effect:"boundman",buff:false, unlocked:false, unlockArc:"dressrosa",desc:"800% DMG — Boundman activation."},
-    {name:"King Kong Gun",icon:"💥", dmg:12.0,effect:"explosion",buff:false,unlocked:false, unlockArc:"wano",     desc:"1200% DMG — The ultimate blow."},
+    {name:"Basic Punch",      icon:"👊", dmg:1.0,  effect:"punch",    buff:false, unlocked:true,  unlockArc:null,          desc:"100% DMG — A solid straight punch."},
+    {name:"Basic Kick",       icon:"🦵", dmg:1.5,  effect:"kick",     buff:false, unlocked:true,  unlockArc:null,          desc:"150% DMG — A powerful kick to the gut."},
+    {name:"Power Combo",      icon:"💢", dmg:2.8,  effect:"punch",    buff:false, unlocked:false, unlockArc:"east_blue",   desc:"280% DMG — Rapid punch-kick combo."},
+    {name:"Haki Strike",      icon:"⚫", dmg:3.5,  effect:"haki",     buff:false, unlocked:false, unlockArc:"alabasta",    desc:"350% DMG — Armament Haki-coated fist. Breaks defenses."},
+    {name:"Flash Step",       icon:"💨", dmg:4.5,  effect:"gear2",    buff:false, unlocked:false, unlockArc:"water7",      desc:"450% DMG — Explosive speed dash strike."},
+    {name:"Heavy Smash",      icon:"✊", dmg:6.0,  effect:"giant",    buff:false, unlocked:false, unlockArc:"thriller",    desc:"600% DMG — Devastating overhead smash."},
+    {name:"Haki Barrage",     icon:"🌑", dmg:7.5,  effect:"haki",     buff:false, unlocked:false, unlockArc:"marineford",  desc:"750% DMG — Sustained Armament Haki strikes."},
+    {name:"Conqueror's Aura", icon:"👑", dmg:0,    effect:"thunder",  buff:true,  unlocked:false, unlockArc:"fishman",     desc:"BUFF — Conqueror's Haki erupts. +30% DMG for 3 turns."},
+    {name:"Supreme Strike",   icon:"💥", dmg:10.0, effect:"explosion",buff:false, unlocked:false, unlockArc:"dressrosa",   desc:"1000% DMG — A devastating all-out blow."},
+    {name:"World Shaker",     icon:"🌊", dmg:15.0, effect:"seaquake", buff:false, unlocked:false, unlockArc:"wano",        desc:"1500% DMG — A ground-splitting shockwave attack."},
   ],
 
   storyArcs:[
@@ -1019,6 +1066,7 @@ function tickSaveTimer(){
 
 // ===================== SAVE / LOAD =====================
 function saveGame(){
+  const username=localStorage.getItem('op_current_user');
   const save={
     belis:G.belis, bountyGrade:G.bountyGrade, scrolls:G.scrolls,
     level:G.level, xp:G.xp, maxXp:G.maxXp,
@@ -1048,36 +1096,17 @@ function saveGame(){
     eventProgress:G.eventProgress||{},
     leaderboard:G.leaderboard||[],
   };
-  try{localStorage.setItem('opIncremental_v3',JSON.stringify(save));showToast("💾 Saved!");}
-  catch(e){console.error("Save failed:",e);}
+  try{
+    // Per-user save (primary)
+    if(username)localStorage.setItem('op_save_'+username,JSON.stringify(save));
+    // Legacy fallback
+    localStorage.setItem('opIncremental_v3',JSON.stringify(save));
+    const t=document.getElementById('save-timer');if(t)t.textContent='✓';
+    setTimeout(()=>{const t2=document.getElementById('save-timer');if(t2)t2.textContent='60s';},1000);
+  }catch(e){console.error("Save failed:",e);}
 }
 function loadGame(){
-  try{
-    const raw=localStorage.getItem('opIncremental_v3');
-    if(!raw) return;
-    const s=JSON.parse(raw);
-    const fields=['belis','bountyGrade','scrolls','level','xp','maxXp','hp','maxHp','atk','luck','hakiXp','maxHakiXp','hakiTraining','xpTraining','voyageCount','prestigeCount','digExcavated','playerName'];
-    fields.forEach(f=>{if(s[f]!==undefined)G[f]=s[f];});
-    if(s.mastery) G.mastery=s.mastery;
-    if(s.stats) G.stats=s.stats;
-    if(s.awakened) G.awakened=s.awakened;
-    if(s.unlockedTitles) G.unlockedTitles=s.unlockedTitles;
-    if(s.storage) G.storage=s.storage;
-    if(s.skillTreeLevels){G.skillTreeLevels=s.skillTreeLevels;applySkillTreeBonuses();}
-    if(s.activeVow!==undefined) G.activeVow=s.activeVow;
-    if(s.eventProgress) G.eventProgress=s.eventProgress;
-    if(s.leaderboard) G.leaderboard=s.leaderboard;
-    if(s.skills) s.skills.forEach((u,i)=>{if(G.skills[i])G.skills[i].unlocked=u;});
-    if(s.arcs) s.arcs.forEach((a,i)=>{if(!G.storyArcs[i])return;G.storyArcs[i].unlocked=a.unlocked;G.storyArcs[i].cleared=a.cleared;a.chapters.forEach((c,j)=>{if(G.storyArcs[i].chapters[j])G.storyArcs[i].chapters[j].cleared=c;});});
-    if(s.bosses) s.bosses.forEach((b,i)=>{if(G.bosses[i])G.bosses[i].cleared=b;});
-    if(s.crew) G.crew=s.crew;
-    if(s.equipment) G.equipment=s.equipment;
-    if(s.jobs) s.jobs.forEach(sj=>{const j=G.jobs.find(x=>x.id===sj.id);if(j){j.active=sj.active;j.locked=sj.locked;}});
-    if(s.upgrades) s.upgrades.forEach((lvl,i)=>{if(G.upgrades[i])G.upgrades[i].level=lvl;});
-    if(s.digUpgrades) s.digUpgrades.forEach((du,i)=>{if(G.digUpgrades[i]){G.digUpgrades[i].level=du.level;G.digUpgrades[i].cost=du.cost;G.digUpgrades[i].unlocked=du.unlocked;}});
-    if(s.abilities) G.abilities=Object.assign(G.abilities,s.abilities);
-    if(s.settings) G.settings=Object.assign(G.settings,s.settings);
-  }catch(e){console.error("Load failed:",e);}
+  // No-op: loading is handled by finishLogin/loadGameFromData in auth section
 }
 
 let toastTimer=null;
@@ -2177,9 +2206,10 @@ function useDFSkill(idx){
 // Maps old effect names to new canvas VFX keys
 const VFX_KEY_MAP={
   punch:'punch',kick:'kick',rubber:'rubber',haki:'haki',haki_coat:'haki',
-  steam:'gear2',speed_burst:'gear2',giant_fist:'gear3',giant:'gear3',
+  steam:'gear2',speed_burst:'gear2',giant_fist:'giant',giant:'giant',
   flame_burst:'red_hawk',fire:'fire_fist',conquerors:'conquerors',thunder:'conquerors',
   boundman:'boundman',king_kong:'explosion',rubber_stretch:'gomu_pistol',
+  seaquake:'seaquake',explosion:'explosion',
 };
 
 function useSkill(idx){
@@ -2788,7 +2818,14 @@ function openCodes(){
   if(r){if(r.belis)G.belis+=r.belis;if(r.scrolls)G.scrolls+=r.scrolls;updateHeader();syncScrollDisplays();alert(`✅ Code redeemed! +${r.belis?fmt(r.belis)+' Belis ':''}${r.scrolls?r.scrolls+' Scrolls':''}`);saveGame();}
   else alert("❌ Invalid or expired code.");
 }
-function wipeData(){if(confirm("⚠️ WIPE ALL DATA? This cannot be undone!")){localStorage.removeItem('opIncremental_v3');localStorage.removeItem('opIncremental_v4');location.reload();}}
+function wipeData(){
+  if(confirm("⚠️ WIPE ALL DATA FOR THIS ACCOUNT? This cannot be undone!")){
+    const un=localStorage.getItem('op_current_user');
+    if(un){localStorage.removeItem('op_save_'+un);localStorage.removeItem('op_current_user');}
+    localStorage.removeItem('opIncremental_v3');
+    location.reload();
+  }
+}
 function ownerGiveBelis(){G.belis+=1000000000;updateHeader();showToast("💰 1B Belis!");}
 function ownerGiveScrolls(){G.scrolls+=100;syncScrollDisplays();showToast("📜 100 Scrolls!");}
 function ownerMaxStats(){G.atk=999999999;G.maxHp=999999999;G.hp=G.maxHp;G.combat.playerHp=G.hp;updateHeader();showToast("⚡ Stats maxed!");}
@@ -3782,15 +3819,8 @@ function gameTick(){
 
 // ===================== INIT =====================
 function init(){
-  loadGame();
-  if(!G.bountyGrade||G.bountyGrade<1){
-    const name=prompt("What is your pirate name?","Monkey D. Luffy");
-    if(name&&name.trim())G.playerName=name.trim();
-  }
-  document.body.classList.toggle("data-saver",G.settings.dataSaver);
-  document.getElementById('player-name-display').textContent=G.playerName;
-  G.isOwner=G.playerName.toLowerCase()==="naellllv"||G.playerName.toLowerCase()==="captain";
-  if(G.isOwner){document.getElementById('owner-badge').style.display="inline-block";document.getElementById('owner-panel').style.display="block";}
+  // AUTH FIRST — show login screen, load after
+  showLoginScreen();
   // Sync settings toggles
   const sm={dataSaver:"toggle-datasaver",abilityFX:"toggle-fx",sounds:"toggle-sounds",autoClose:"toggle-autoclose"};
   Object.entries(sm).forEach(([k,id])=>{const btn=document.getElementById(id);if(btn){btn.textContent=G.settings[k]?"ON":"OFF";btn.className=`toggle-btn toggle-${G.settings[k]?"on":"off"}`;}});
@@ -3849,5 +3879,425 @@ document.addEventListener('DOMContentLoaded',init);
 .lb-rank{font-family:'Cinzel',serif;font-size:14px;font-weight:700;width:28px;text-align:center;flex-shrink:0}
 </style>
 
+
+<!-- ========== LOGIN SCREEN ========== -->
+<div id="login-screen" style="display:flex;position:fixed;inset:0;background:linear-gradient(135deg,#060810,#0d1220,#060810);z-index:1000;flex-direction:column;align-items:center;justify-content:center;padding:20px">
+  <div style="max-width:380px;width:100%">
+    <!-- Logo -->
+    <div style="text-align:center;margin-bottom:28px">
+      <div style="font-size:48px;margin-bottom:8px">🏴‍☠️</div>
+      <div style="font-family:'Cinzel',serif;font-size:24px;font-weight:900;color:var(--gold);text-shadow:0 0 30px rgba(240,192,64,.5);letter-spacing:2px">ONE PIECE</div>
+      <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--text3);letter-spacing:4px;margin-top:2px">INCREMENTAL</div>
+    </div>
+
+    <!-- Login form -->
+    <div id="login-form" style="background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:22px">
+      <div id="login-tabs" style="display:flex;gap:0;margin-bottom:16px;border-radius:6px;overflow:hidden;border:1px solid var(--border2)">
+        <button id="tab-login-btn" class="btn" style="flex:1;padding:8px;border-radius:0;background:var(--gold);color:#000;font-size:12px" onclick="switchAuthTab('login')">⚓ Login</button>
+        <button id="tab-register-btn" class="btn" style="flex:1;padding:8px;border-radius:0;background:var(--bg3);color:var(--text3);font-size:12px" onclick="switchAuthTab('register')">📝 Register</button>
+      </div>
+
+      <!-- Login panel -->
+      <div id="auth-login-panel">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Welcome back, pirate. Enter your credentials.</div>
+        <input id="login-username" type="text" placeholder="Username" maxlength="20"
+          style="width:100%;background:var(--bg4);border:1px solid var(--border2);color:var(--text);padding:9px 12px;border-radius:6px;font-family:'Rajdhani',sans-serif;font-size:13px;margin-bottom:8px;box-sizing:border-box">
+        <input id="login-password" type="password" placeholder="Password" maxlength="40"
+          style="width:100%;background:var(--bg4);border:1px solid var(--border2);color:var(--text);padding:9px 12px;border-radius:6px;font-family:'Rajdhani',sans-serif;font-size:13px;margin-bottom:14px;box-sizing:border-box">
+        <button class="btn btn-gold btn-xl" onclick="doLogin()">⚓ Set Sail</button>
+        <div id="login-error" style="color:var(--red);font-size:11px;margin-top:8px;text-align:center"></div>
+      </div>
+
+      <!-- Register panel -->
+      <div id="auth-register-panel" style="display:none">
+        <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Create your unique pirate identity.</div>
+        <input id="reg-username" type="text" placeholder="Choose a username (3-20 chars)" maxlength="20"
+          style="width:100%;background:var(--bg4);border:1px solid var(--border2);color:var(--text);padding:9px 12px;border-radius:6px;font-family:'Rajdhani',sans-serif;font-size:13px;margin-bottom:8px;box-sizing:border-box">
+        <input id="reg-password" type="password" placeholder="Choose a password (6+ chars)" maxlength="40"
+          style="width:100%;background:var(--bg4);border:1px solid var(--border2);color:var(--text);padding:9px 12px;border-radius:6px;font-family:'Rajdhani',sans-serif;font-size:13px;margin-bottom:8px;box-sizing:border-box">
+        <input id="reg-password2" type="password" placeholder="Confirm password" maxlength="40"
+          style="width:100%;background:var(--bg4);border:1px solid var(--border2);color:var(--text);padding:9px 12px;border-radius:6px;font-family:'Rajdhani',sans-serif;font-size:13px;margin-bottom:14px;box-sizing:border-box">
+        <button class="btn btn-green btn-xl" onclick="doRegister()">📝 Join the Crew</button>
+        <div id="reg-error" style="color:var(--red);font-size:11px;margin-top:8px;text-align:center"></div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:12px;font-size:10px;color:var(--text3)">
+      All data saved locally on this device only.
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================== AUTH / ACCOUNT SYSTEM =====================
+// Storage keys:
+//   op_accounts         → {username: {passwordHash, createdAt, lastLogin}}
+//   op_save_{username}  → full game save for that user
+//   op_current_user     → currently logged-in username (session)
+
+const OWNER_NAMES = ['naellllv', 'naellllv2', 'captain'];
+
+function hashPassword(pw) {
+  // Simple deterministic hash (not crypto-secure, but fine for a browser game)
+  let h = 0;
+  for (let i = 0; i < pw.length; i++) {
+    h = (Math.imul(31, h) + pw.charCodeAt(i)) | 0;
+  }
+  return h.toString(36) + pw.length.toString(36);
+}
+
+function getAccounts() {
+  try { return JSON.parse(localStorage.getItem('op_accounts') || '{}'); }
+  catch(e) { return {}; }
+}
+function saveAccounts(accs) {
+  localStorage.setItem('op_accounts', JSON.stringify(accs));
+}
+function getUserSave(username) {
+  try { return JSON.parse(localStorage.getItem('op_save_' + username) || 'null'); }
+  catch(e) { return null; }
+}
+function setUserSave(username, data) {
+  localStorage.setItem('op_save_' + username, JSON.stringify(data));
+}
+
+function showLoginScreen() {
+  document.getElementById('login-screen').style.display = 'flex';
+  // Check auto-login from session
+  const cur = localStorage.getItem('op_current_user');
+  if (cur && getAccounts()[cur]) {
+    finishLogin(cur);
+  }
+}
+
+function switchAuthTab(tab) {
+  const loginPanel = document.getElementById('auth-login-panel');
+  const regPanel = document.getElementById('auth-register-panel');
+  const loginBtn = document.getElementById('tab-login-btn');
+  const regBtn = document.getElementById('tab-register-btn');
+  if (tab === 'login') {
+    loginPanel.style.display = '';
+    regPanel.style.display = 'none';
+    loginBtn.style.background = 'var(--gold)';
+    loginBtn.style.color = '#000';
+    regBtn.style.background = 'var(--bg3)';
+    regBtn.style.color = 'var(--text3)';
+  } else {
+    loginPanel.style.display = 'none';
+    regPanel.style.display = '';
+    regBtn.style.background = 'var(--gold)';
+    regBtn.style.color = '#000';
+    loginBtn.style.background = 'var(--bg3)';
+    loginBtn.style.color = 'var(--text3)';
+  }
+}
+
+// Enter key on login fields
+document.addEventListener('DOMContentLoaded', () => {
+  const loginFields = ['login-username', 'login-password'];
+  loginFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  });
+  const regFields = ['reg-username', 'reg-password', 'reg-password2'];
+  regFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') doRegister(); });
+  });
+});
+
+function doLogin() {
+  const username = (document.getElementById('login-username').value || '').trim().toLowerCase();
+  const password = document.getElementById('login-password').value || '';
+  const errEl = document.getElementById('login-error');
+  errEl.textContent = '';
+  if (!username) { errEl.textContent = 'Enter your username.'; return; }
+  if (!password) { errEl.textContent = 'Enter your password.'; return; }
+  const accounts = getAccounts();
+  if (!accounts[username]) {
+    errEl.textContent = '❌ Username not found. Register first.';
+    return;
+  }
+  if (accounts[username].passwordHash !== hashPassword(password)) {
+    errEl.textContent = '❌ Wrong password.';
+    return;
+  }
+  finishLogin(username);
+}
+
+function doRegister() {
+  const username = (document.getElementById('reg-username').value || '').trim().toLowerCase();
+  const password = document.getElementById('reg-password').value || '';
+  const password2 = document.getElementById('reg-password2').value || '';
+  const errEl = document.getElementById('reg-error');
+  errEl.textContent = '';
+  if (username.length < 3) { errEl.textContent = '❌ Username must be at least 3 characters.'; return; }
+  if (username.length > 20) { errEl.textContent = '❌ Username too long (max 20).'; return; }
+  if (!/^[a-z0-9_]+$/.test(username)) { errEl.textContent = '❌ Only letters, numbers, and underscores allowed.'; return; }
+  if (password.length < 6) { errEl.textContent = '❌ Password must be at least 6 characters.'; return; }
+  if (password !== password2) { errEl.textContent = '❌ Passwords do not match.'; return; }
+  const accounts = getAccounts();
+  if (accounts[username]) { errEl.textContent = '❌ Username already taken. Choose another.'; return; }
+  // Register
+  accounts[username] = {
+    passwordHash: hashPassword(password),
+    createdAt: Date.now(),
+    lastLogin: Date.now(),
+  };
+  saveAccounts(accounts);
+  finishLogin(username);
+}
+
+function finishLogin(username) {
+  // Update last login
+  const accounts = getAccounts();
+  if (accounts[username]) {
+    accounts[username].lastLogin = Date.now();
+    saveAccounts(accounts);
+  }
+  localStorage.setItem('op_current_user', username);
+  G.playerName = username;
+  // Load this user's save
+  const existingSave = getUserSave(username);
+  if (existingSave) {
+    loadGameFromData(existingSave);
+  }
+  // Check for any pending admin gifts
+  applyPendingGifts(username);
+  // Hide login screen
+  document.getElementById('login-screen').style.display = 'none';
+  // Continue init
+  continueInit();
+}
+
+function logOut() {
+  saveGame();
+  localStorage.removeItem('op_current_user');
+  location.reload();
+}
+
+function applyPendingGifts(username) {
+  const giftKey = 'op_gift_' + username;
+  try {
+    const gifts = JSON.parse(localStorage.getItem(giftKey) || '[]');
+    if (!gifts.length) return;
+    gifts.forEach(gift => {
+      if (gift.type === 'belis') G.belis += gift.amount;
+      else if (gift.type === 'scrolls') G.scrolls += gift.amount;
+      else if (gift.type === 'df') {
+        // Set their DF ability
+        const dfData = gift.dfData;
+        if (dfData) G.abilities.df = dfData;
+      }
+    });
+    localStorage.removeItem(giftKey);
+    if (gifts.length) {
+      setTimeout(() => showToast(`🎁 You received ${gifts.length} gift(s) from the Captain!`), 1500);
+    }
+  } catch(e) {}
+}
+
+// ===================== ADMIN SYSTEM =====================
+function isOwner() {
+  return OWNER_NAMES.includes(G.playerName.toLowerCase());
+}
+
+function adminLookupUser() {
+  const target = (document.getElementById('admin-target-user').value || '').trim().toLowerCase();
+  const infoEl = document.getElementById('admin-user-info');
+  if (!target) { infoEl.textContent = 'Enter a username.'; return; }
+  const accounts = getAccounts();
+  if (!accounts[target]) {
+    infoEl.innerHTML = `<span style="color:var(--red)">❌ User "${target}" not found.</span>`;
+    return;
+  }
+  const save = getUserSave(target);
+  const acc = accounts[target];
+  infoEl.innerHTML = `<span style="color:var(--green)">✅ Found:</span> ${target} | 
+    Lv.${save?.level||1} | Bounty: ${save?.bountyGrade?Math.floor(save.bountyGrade):'0'} | 
+    Belis: ${save?.belis?Math.floor(save.belis):'0'} | Scrolls: ${save?.scrolls||0} |
+    Joined: ${new Date(acc.createdAt).toLocaleDateString()}`;
+}
+
+function adminGiveItem(type, amount) {
+  const target = (document.getElementById('admin-target-user').value || '').trim().toLowerCase();
+  if (!target) { showToast('Enter a target username first!'); return; }
+  const accounts = getAccounts();
+  if (!accounts[target]) { showToast('User not found!'); return; }
+  // Queue a gift
+  const giftKey = 'op_gift_' + target;
+  try {
+    const gifts = JSON.parse(localStorage.getItem(giftKey) || '[]');
+    if (type === 'wipe') {
+      if (!confirm(`WIPE all data for ${target}? Cannot be undone!`)) return;
+      localStorage.removeItem('op_save_' + target);
+      showToast(`🗑️ Wiped ${target}'s save.`);
+      return;
+    }
+    gifts.push({ type, amount });
+    localStorage.setItem(giftKey, JSON.stringify(gifts));
+    showToast(`✅ Queued ${type === 'belis' ? '+'+amount+' Belis' : '+'+amount+' Scrolls'} for ${target}. They'll get it on next login.`);
+  } catch(e) { showToast('Error: ' + e.message); }
+}
+
+function adminGiveDF() {
+  const target = (document.getElementById('admin-target-user').value || '').trim().toLowerCase();
+  const dfKey = document.getElementById('admin-df-pick').value;
+  const rarity = document.getElementById('admin-df-rarity').value;
+  if (!target) { showToast('Enter a target username first!'); return; }
+  if (!dfKey) { showToast('Select a Devil Fruit!'); return; }
+  const accounts = getAccounts();
+  if (!accounts[target]) { showToast('User not found!'); return; }
+  // Build DF data from pools
+  const pool = DF_POOL[rarity];
+  // find by keyword match
+  const keyMap = {
+    mera:'Mera', hie:'Hie', goro:'Goro', magu:'Magu', yami:'Yami',
+    gura:'Gura', ope:'Ope', nika:'Nika', dragon:'Seiryu', phoenix:'Phoenix',
+    suna:'Suna', ito:'Ito'
+  };
+  const keyword = keyMap[dfKey] || '';
+  let dfEntry = pool?.find(f => f.name.includes(keyword));
+  if (!dfEntry && pool) dfEntry = pool[Math.floor(Math.random() * pool.length)];
+  if (!dfEntry) { showToast('DF not found in that rarity!'); return; }
+  const dfData = { ...dfEntry, rarity, type: 'DEVIL FRUIT', badge: 'DF', rerolls: 0 };
+  const giftKey2 = 'op_gift_' + target;
+  try {
+    const gifts = JSON.parse(localStorage.getItem(giftKey2) || '[]');
+    gifts.push({ type: 'df', dfData });
+    localStorage.setItem(giftKey2, JSON.stringify(gifts));
+    showToast(`✅ Queued ${rarity.toUpperCase()} ${dfEntry.name} for ${target}!`);
+  } catch(e) { showToast('Error: ' + e.message); }
+}
+
+function adminRefreshUserList() {
+  const el = document.getElementById('admin-user-list');
+  if (!el) return;
+  const accounts = getAccounts();
+  const entries = Object.entries(accounts);
+  if (!entries.length) { el.textContent = 'No users registered yet.'; return; }
+  el.innerHTML = entries.map(([name, acc]) => {
+    const save = getUserSave(name);
+    return `<div style="padding:2px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between">
+      <span style="color:${OWNER_NAMES.includes(name)?'var(--gold)':'var(--text)'}">${name}${OWNER_NAMES.includes(name)?' 👑':''}</span>
+      <span style="color:var(--text3)">Lv.${save?.level||1} | ${new Date(acc.lastLogin).toLocaleDateString()}</span>
+    </div>`;
+  }).join('');
+}
+
+// ===================== SAVE/LOAD per-user =====================
+// Wrap saveGame to also write to user-keyed slot
+const _origSaveGame = saveGame;
+function saveGame() {
+  const username = localStorage.getItem('op_current_user');
+  const save = buildSaveObject();
+  if (username) setUserSave(username, save);
+  // Also write to legacy key for compatibility
+  try { localStorage.setItem('opIncremental_v3', JSON.stringify(save)); } catch(e){}
+  const t=document.getElementById('save-timer');if(t)t.textContent='✓';
+  setTimeout(()=>{const t2=document.getElementById('save-timer');if(t2)t2.textContent='60s';},1000);
+}
+
+function buildSaveObject() {
+  return {
+    belis:G.belis, bountyGrade:G.bountyGrade, scrolls:G.scrolls,
+    level:G.level, xp:G.xp, maxXp:G.maxXp,
+    hp:G.hp, maxHp:G.maxHp, atk:G.atk, luck:G.luck,
+    hakiXp:G.hakiXp, maxHakiXp:G.maxHakiXp, hakiTraining:G.hakiTraining,
+    xpTraining:G.xpTraining,
+    voyageCount:G.voyageCount, prestigeCount:G.prestigeCount,
+    digExcavated:G.digExcavated,
+    mastery:G.mastery,
+    skills:G.skills.map(s=>s.unlocked),
+    arcs:G.storyArcs.map(a=>({unlocked:a.unlocked,cleared:a.cleared,chapters:a.chapters.map(c=>c.cleared)})),
+    bosses:G.bosses.map(b=>b.cleared),
+    crew:{equipped:G.crew.equipped,collection:G.crew.collection},
+    equipment:G.equipment,
+    jobs:G.jobs.map(j=>({id:j.id,active:j.active,locked:j.locked})),
+    upgrades:G.upgrades.map(u=>u.level),
+    digUpgrades:G.digUpgrades.map(u=>({level:u.level,cost:u.cost,unlocked:u.unlocked})),
+    abilities:G.abilities,
+    settings:G.settings,
+    playerName:G.playerName,
+    stats:G.stats,
+    awakened:G.awakened,
+    unlockedTitles:G.unlockedTitles,
+    storage:G.storage||[],
+    skillTreeLevels:G.skillTreeLevels||{},
+    activeVow:G.activeVow||null,
+    eventProgress:G.eventProgress||{},
+    leaderboard:G.leaderboard||[],
+  };
+}
+
+function loadGameFromData(s) {
+  if (!s) return;
+  const fields=['belis','bountyGrade','scrolls','level','xp','maxXp','hp','maxHp','atk','luck','hakiXp','maxHakiXp','hakiTraining','xpTraining','voyageCount','prestigeCount','digExcavated','playerName'];
+  fields.forEach(f=>{if(s[f]!==undefined)G[f]=s[f];});
+  if(s.mastery) G.mastery=s.mastery;
+  if(s.stats) G.stats=s.stats;
+  if(s.awakened) G.awakened=s.awakened;
+  if(s.unlockedTitles) G.unlockedTitles=s.unlockedTitles;
+  if(s.storage) G.storage=s.storage;
+  if(s.skillTreeLevels){G.skillTreeLevels=s.skillTreeLevels;applySkillTreeBonuses();}
+  if(s.activeVow!==undefined) G.activeVow=s.activeVow;
+  if(s.eventProgress) G.eventProgress=s.eventProgress;
+  if(s.leaderboard) G.leaderboard=s.leaderboard;
+  if(s.skills) s.skills.forEach((u,i)=>{if(G.skills[i])G.skills[i].unlocked=u;});
+  if(s.arcs) s.arcs.forEach((a,i)=>{if(!G.storyArcs[i])return;G.storyArcs[i].unlocked=a.unlocked;G.storyArcs[i].cleared=a.cleared;a.chapters.forEach((c,j)=>{if(G.storyArcs[i].chapters[j])G.storyArcs[i].chapters[j].cleared=c;});});
+  if(s.bosses) s.bosses.forEach((b,i)=>{if(G.bosses[i])G.bosses[i].cleared=b;});
+  if(s.crew) G.crew=s.crew;
+  if(s.equipment) G.equipment=s.equipment;
+  if(s.jobs) s.jobs.forEach(sj=>{const j=G.jobs.find(x=>x.id===sj.id);if(j){j.active=sj.active;j.locked=sj.locked;}});
+  if(s.upgrades) s.upgrades.forEach((lvl,i)=>{if(G.upgrades[i])G.upgrades[i].level=lvl;});
+  if(s.digUpgrades) s.digUpgrades.forEach((du,i)=>{if(G.digUpgrades[i]){G.digUpgrades[i].level=du.level;G.digUpgrades[i].cost=du.cost;G.digUpgrades[i].unlocked=du.unlocked;}});
+  if(s.abilities) G.abilities=Object.assign(G.abilities,s.abilities);
+  if(s.settings) G.settings=Object.assign(G.settings,s.settings);
+}
+
+function continueInit() {
+  document.body.classList.toggle("data-saver", G.settings.dataSaver);
+  document.getElementById('player-name-display').textContent = G.playerName;
+  const hdruEl = document.getElementById('hdr-username');
+  if(hdruEl) hdruEl.textContent = G.playerName;
+  G.isOwner = isOwner();
+  if (G.isOwner) {
+    document.getElementById('owner-badge').style.display = "inline-block";
+    document.getElementById('owner-panel').style.display = "block";
+    adminRefreshUserList();
+  }
+  // Sync settings toggles
+  const sm={dataSaver:"toggle-datasaver",abilityFX:"toggle-fx",sounds:"toggle-sounds",autoClose:"toggle-autoclose"};
+  Object.entries(sm).forEach(([k,id])=>{const btn=document.getElementById(id);if(btn){btn.textContent=G.settings[k]?"ON":"OFF";btn.className=`toggle-btn toggle-${G.settings[k]?"on":"off"}`;}});
+  renderSkills();renderCombat();renderCrew();renderChar();renderHome();renderTrain();renderDig();renderBossTab();
+  renderRaidTab();renderModesTab();renderTitlesTab();renderEventTab();
+  if(!G.stats) G.stats={wins:0,losses:0,crits:0,maxCombo:0,raidsCleared:0,infiniteBest:0};
+  if(!G.unlockedTitles) G.unlockedTitles=[];
+  updateHeader();updatePlayerAlliesDisplay();syncScrollDisplays();
+  checkTitles();
+  function resizeCanvas(){
+    const canvas=document.getElementById('vfx-canvas');
+    const wrap=document.getElementById('combat-arena');
+    if(canvas&&wrap){canvas.width=wrap.offsetWidth;canvas.height=wrap.offsetHeight;}
+  }
+  resizeCanvas();
+  window.addEventListener('resize',resizeCanvas);
+  setInterval(gameTick,200);
+  setInterval(tickSaveTimer,1000);
+}
+
+// Add logout button to header
+function addLogoutBtn() {
+  const hdr = document.getElementById('header');
+  if (!hdr || document.getElementById('logout-btn')) return;
+  const btn = document.createElement('div');
+  btn.id = 'logout-btn';
+  btn.className = 'hdr-btn';
+  btn.textContent = '🚪 Logout';
+  btn.onclick = logOut;
+  hdr.querySelector('div:last-child').appendChild(btn);
+}
+
+</script>
 </body>
 </html>
