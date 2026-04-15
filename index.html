@@ -20,7 +20,7 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;fo
 body.data-saver *{animation:none!important;transition:none!important}
 
 /* HEADER */
-#header{background:linear-gradient(135deg,#0d111a,#111828);border-bottom:1px solid var(--border2);padding:4px 10px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:10}
+#header{background:linear-gradient(135deg,#080d16,#0e1422);border-bottom:1px solid var(--border2);padding:5px 10px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:10;box-shadow:0 2px 10px rgba(0,0,0,.5)}
 .hdr-stat{display:flex;flex-direction:column;align-items:center;min-width:90px}
 .hdr-stat .label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
 .hdr-stat .value{font-size:12px;font-weight:700;font-family:'Cinzel',serif}
@@ -78,34 +78,66 @@ body.data-saver *{animation:none!important;transition:none!important}
 @keyframes vfx-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 @keyframes vfx-float{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-50px);opacity:0}}
 .combat-arena{position:relative}
-#vfx-canvas{position:absolute;inset:0;pointer-events:none;z-index:20;border-radius:8px}
+#vfx-canvas{position:absolute;inset:0;pointer-events:none;z-index:20;border-radius:10px}
 
 /* COMBAT */
-#combat-tab{gap:0;flex-direction:column;padding:10px;overflow-y:auto}
-.combat-arena-wrap{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;position:relative}
-.fighter-box{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;flex:1;text-align:center;transition:.3s}
-.fighter-box.taking-hit{animation:vfx-shake .4s ease}
-.fighter-avatar{width:56px;height:56px;border-radius:50%;background:var(--bg4);border:2px solid var(--border2);margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:26px}
-.fighter-name{font-weight:700;font-size:14px;margin-bottom:3px}
-.fighter-hp{font-size:11px;color:var(--text2);margin-bottom:5px}
-.fighter-atk{font-size:11px;color:var(--red);font-weight:700}
-.vs-badge{font-family:'Cinzel',serif;font-size:18px;font-weight:900;color:var(--gold);text-shadow:0 0 20px rgba(240,192,64,.5);flex-shrink:0}
-.combat-log{background:#080b12;border:1px solid var(--border);border-radius:6px;padding:8px;min-height:45px;font-size:11px;color:var(--text2);margin-bottom:8px;max-height:75px;overflow-y:auto}
-.log-line{padding:2px 0;border-bottom:1px solid #1a2030}.log-line:last-child{border:none}
-.log-dmg{color:var(--red)}.log-heal{color:var(--green)}.log-buff{color:var(--blue)}.log-system{color:var(--gold)}
-.skills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
-.skill-card{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:7px;cursor:pointer;transition:.15s;text-align:center}
-.skill-card:hover:not(.locked-skill){border-color:var(--blue);transform:translateY(-1px)}
-.skill-card.flee-card{border-color:var(--red2)}.skill-card.flee-card:hover{border-color:var(--red)}
-.skill-card.locked-skill{opacity:.35;cursor:not-allowed}
-.skill-card .skill-name{font-size:10px;font-weight:700;margin-bottom:3px;line-height:1.2}
-.skill-card .skill-type{font-size:9px;padding:1px 4px;border-radius:2px;display:inline-block;margin-bottom:2px}
+#combat-tab{gap:0;flex-direction:column;padding:8px;overflow-y:auto}
+.combat-arena-wrap{display:flex;align-items:stretch;justify-content:space-between;gap:8px;margin-bottom:8px;position:relative;min-height:130px}
+.fighter-box{background:linear-gradient(160deg,var(--bg3),var(--bg4));border:1px solid var(--border2);border-radius:10px;padding:12px;flex:1;text-align:center;transition:.3s;position:relative;overflow:hidden}
+.fighter-box::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.3));pointer-events:none}
+.fighter-box.taking-hit{animation:vfx-shake .4s ease;border-color:var(--red)!important}
+.fighter-box.player-box{border-color:var(--blue2)}
+.fighter-box.enemy-box{border-color:var(--red2)}
+.fighter-avatar{width:60px;height:60px;border-radius:50%;background:var(--bg4);border:2px solid var(--border2);margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:28px;position:relative;z-index:1;box-shadow:0 0 12px rgba(0,0,0,.5)}
+.fighter-name{font-weight:700;font-size:13px;margin-bottom:4px;position:relative;z-index:1}
+.fighter-hp{font-size:10px;color:var(--text2);margin-bottom:5px;position:relative;z-index:1}
+.hp-bar-wrap{height:8px;background:#1a2030;border-radius:4px;overflow:hidden;margin-bottom:3px}
+.hp-bar{height:100%;border-radius:4px;transition:width .4s ease}
+.hp-bar-player{background:linear-gradient(90deg,#20a040,#40e060);box-shadow:0 0 6px rgba(40,220,80,.4)}
+.hp-bar-enemy{background:linear-gradient(90deg,#a02020,#e04040);box-shadow:0 0 6px rgba(220,40,40,.4)}
+.fighter-atk{font-size:10px;color:var(--red);font-weight:700;position:relative;z-index:1}
+.vs-badge{font-family:'Cinzel',serif;font-size:20px;font-weight:900;color:var(--gold);text-shadow:0 0 20px rgba(240,192,64,.6);flex-shrink:0;display:flex;align-items:center;writing-mode:vertical-rl;letter-spacing:4px}
+.combat-log{background:#060910;border:1px solid var(--border);border-radius:6px;padding:6px 8px;font-size:11px;color:var(--text2);margin-bottom:6px;max-height:68px;overflow-y:auto}
+.log-line{padding:2px 0;border-bottom:1px solid #111828;display:flex;align-items:baseline;gap:4px}.log-line:last-child{border:none}
+.log-time{font-size:9px;color:var(--text3);flex-shrink:0}
+.log-dmg{color:var(--red)}.log-heal{color:var(--green)}.log-buff{color:var(--blue)}.log-system{color:var(--gold)}.log-crit{color:#ffe040;font-weight:700}
+.skills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.skill-card{background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:7px 5px;cursor:pointer;transition:.15s;text-align:center;position:relative;overflow:hidden}
+.skill-card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent);pointer-events:none}
+.skill-card:hover:not(.locked-skill){border-color:var(--blue);transform:translateY(-2px);box-shadow:0 4px 12px rgba(58,143,239,.2)}
+.skill-card:active:not(.locked-skill){transform:scale(.96)}
+.skill-card.flee-card{border-color:var(--red2)}.skill-card.flee-card:hover{border-color:var(--red);box-shadow:0 4px 12px rgba(232,64,64,.2)}
+.skill-card.locked-skill{opacity:.3;cursor:not-allowed}
+.skill-card.df-skill-card{border-color:rgba(144,68,232,.4)!important}
+.skill-card .skill-name{font-size:10px;font-weight:700;margin-bottom:2px;line-height:1.2}
+.skill-card .skill-type{font-size:8px;padding:1px 4px;border-radius:2px;display:inline-block;margin-bottom:2px}
 .type-dmg{background:#2a1020;color:var(--red);border:1px solid var(--red2)}
 .type-buff{background:#102030;color:var(--blue);border:1px solid var(--blue2)}
+.type-heal{background:#102010;color:var(--green);border:1px solid var(--green2)}
 .skill-card .skill-dmg{font-size:10px;font-weight:700;color:var(--gold)}
-.skill-card .skill-effect{font-size:8px;color:var(--text3)}
+.skill-card .skill-effect{font-size:8px;color:var(--text3);line-height:1.3}
 /* DMG POPUP */
 .dmg-popup{position:absolute;font-family:'Cinzel',serif;font-weight:700;pointer-events:none;z-index:30;white-space:nowrap;animation:vfx-float .9s ease forwards}
+/* TURN INDICATOR */
+.turn-indicator{font-size:10px;padding:2px 8px;border-radius:10px;display:inline-block;font-weight:700}
+.turn-player{background:rgba(58,143,239,.15);color:var(--blue);border:1px solid var(--blue2)}
+.turn-enemy{background:rgba(232,64,64,.15);color:var(--red);border:1px solid var(--red2)}
+/* NOTIFICATION TOAST */
+#notif-stack{position:fixed;top:50px;right:10px;z-index:300;display:flex;flex-direction:column;gap:4px;pointer-events:none}
+.notif-toast{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:7px 12px;font-size:11px;font-weight:700;color:var(--text);animation:notifSlide .3s ease,notifFade .3s ease 2.7s forwards;max-width:220px;box-shadow:0 4px 12px rgba(0,0,0,.5)}
+@keyframes notifSlide{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes notifFade{from{opacity:1}to{opacity:0}}
+/* STAT CHANGE INDICATOR */
+.stat-up{color:var(--green)!important;animation:statPulse .6s ease}
+.stat-down{color:var(--red)!important;animation:statPulse .6s ease}
+@keyframes statPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+/* ENEMY LEVEL BADGE */
+.enemy-level-badge{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.7);border:1px solid var(--border2);border-radius:3px;font-size:9px;color:var(--text3);padding:1px 4px;z-index:2}
+/* POWER BAR */
+.power-bar-wrap{height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;margin:3px 0}
+.power-bar{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--cyan),#60f0ff);transition:width .5s}
+/* ACTIVE VOW DISPLAY */
+.vow-banner{background:linear-gradient(90deg,rgba(58,143,239,.1),transparent);border-left:3px solid var(--blue);padding:4px 8px;font-size:10px;color:var(--blue);margin-bottom:5px;border-radius:0 4px 4px 0}
 
 /* CREW */
 #crew-tab{gap:8px;padding:10px;overflow-y:auto;flex-wrap:wrap;align-content:flex-start}
@@ -271,7 +303,7 @@ body.data-saver *{animation:none!important;transition:none!important}
     <div class="save-indicator" id="save-indicator">Auto-save<br><span id="save-timer">60s</span></div>
   </div>
   <div class="hdr-center">
-    <div class="hdr-stat hdr-bounty"><span class="label">Bounty</span><span class="value" id="hdr-bounty">0</span></div>
+    <div class="hdr-stat hdr-bounty"><span class="label">Bounty</span><span class="value" id="hdr-bounty">0</span><span style="font-size:8px;color:var(--red);opacity:.7;display:block" id="hdr-rank-label">Rookie</span></div>
     <div class="hdr-stat hdr-belis"><span class="label">Belis 💰</span><span class="value" id="hdr-belis">0</span></div>
     <div class="hdr-stat hdr-power"><span class="label">Power ⚡</span><span class="value" id="hdr-power">0</span></div>
     <div class="hdr-stat hdr-train"><span class="label">Training</span><span class="value" id="hdr-train">Idle</span></div>
@@ -287,48 +319,69 @@ body.data-saver *{animation:none!important;transition:none!important}
 </div>
 
 <!-- MAIN -->
+<div id="notif-stack"></div>
 <div id="main">
 
 <!-- COMBAT TAB -->
 <div id="tab-combat" class="tab-content active" style="flex-direction:column">
   <div id="combat-tab">
+    <!-- Arena -->
     <div class="combat-arena-wrap" id="combat-arena">
-      <canvas id="vfx-canvas" style="position:absolute;inset:0;pointer-events:none;z-index:20;border-radius:8px;width:100%;height:100%"></canvas>
-      <div class="fighter-box" id="player-fighter">
-        <div class="fighter-avatar" id="player-avatar">🏴‍☠️</div>
-        <div class="fighter-name" id="player-name-display">Pirate</div>
+      <canvas id="vfx-canvas" style="position:absolute;inset:0;pointer-events:none;z-index:20;border-radius:10px;width:100%;height:100%"></canvas>
+
+      <!-- Player Side -->
+      <div class="fighter-box player-box" id="player-fighter">
+        <div class="fighter-avatar" id="player-avatar" style="border-color:var(--blue2);box-shadow:0 0 10px rgba(58,143,239,.3)">🏴‍☠️</div>
+        <div class="fighter-name" id="player-name-display" style="color:var(--blue)">Pirate</div>
         <div class="fighter-hp">
-          <div id="player-hp-text" style="margin-bottom:3px;font-size:10px">— / —</div>
-          <div class="progress-wrap" style="width:100%"><div class="progress-bar bar-hp" id="player-hp-bar" style="width:100%"></div></div>
+          <div id="player-hp-text" style="margin-bottom:3px;font-size:9px;color:var(--text3)">— / —</div>
+          <div class="hp-bar-wrap"><div class="hp-bar hp-bar-player" id="player-hp-bar" style="width:100%"></div></div>
         </div>
-        <div class="fighter-atk red" id="player-atk-display">ATK: —</div>
-        <div style="font-size:9px;color:var(--text3);margin-top:3px" id="player-allies-display"></div>
+        <div class="fighter-atk" id="player-atk-display" style="font-size:10px;color:var(--blue)">PWR: —</div>
+        <div style="font-size:9px;color:var(--text3);margin-top:2px" id="player-allies-display"></div>
+        <div id="player-turn-badge" class="turn-indicator turn-player" style="margin-top:4px;display:none">YOUR TURN</div>
       </div>
+
       <div class="vs-badge">VS</div>
-      <div class="fighter-box" id="enemy-fighter" style="display:none;flex-direction:column">
-        <div class="fighter-avatar" id="enemy-avatar" style="background:#2a1010;border-color:var(--red2)">❓</div>
-        <div class="fighter-name red" id="enemy-name">???</div>
+
+      <!-- Enemy Side -->
+      <div class="fighter-box enemy-box" id="enemy-fighter" style="display:none;flex-direction:column">
+        <div class="enemy-level-badge" id="enemy-level-badge">LV?</div>
+        <div class="fighter-avatar" id="enemy-avatar" style="background:#1a0808;border-color:var(--red2);box-shadow:0 0 10px rgba(232,64,64,.3)">❓</div>
+        <div class="fighter-name" id="enemy-name" style="color:var(--red)">???</div>
         <div class="fighter-hp">
-          <div id="enemy-hp-text" style="margin-bottom:3px;font-size:10px">??? / ???</div>
-          <div class="progress-wrap" style="width:100%"><div class="progress-bar bar-hp" id="enemy-hp-bar" style="width:100%;background:linear-gradient(90deg,#a02020,#e04040)"></div></div>
+          <div id="enemy-hp-text" style="margin-bottom:3px;font-size:9px;color:var(--text3)">??? / ???</div>
+          <div class="hp-bar-wrap"><div class="hp-bar hp-bar-enemy" id="enemy-hp-bar" style="width:100%"></div></div>
         </div>
-        <div class="fighter-atk red" id="enemy-atk">ATK: ???</div>
+        <div class="fighter-atk" id="enemy-atk" style="font-size:10px;color:var(--red)">ATK: ???</div>
+        <div id="enemy-turn-badge" class="turn-indicator turn-enemy" style="margin-top:4px;display:none">ATTACKING</div>
       </div>
-      <div id="enemy-placeholder" style="flex:1;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:var(--text3)">
-        <span style="font-size:28px">⚔️</span>
-        <span style="font-size:11px">Select enemy or story chapter</span>
+
+      <!-- Idle placeholder -->
+      <div id="enemy-placeholder" style="flex:1;background:linear-gradient(160deg,var(--bg3),var(--bg4));border:1px solid var(--border2);border-radius:10px;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--text3)">
+        <span style="font-size:32px">⚔️</span>
+        <span style="font-size:11px;text-align:center">Select an enemy or start a story chapter</span>
         <button class="btn btn-gold btn-md" onclick="startBattle()">⚓ Find Enemy</button>
       </div>
     </div>
+
+    <!-- Vow banner (if active) -->
+    <div id="vow-banner-display" class="vow-banner" style="display:none"></div>
+
+    <!-- Combat log -->
     <div class="combat-log" id="combat-log">
-      <div class="log-line log-system">⚓ Welcome to the Grand Line! Choose a skill to fight!</div>
+      <div class="log-line log-system"><span class="log-time">now</span>⚓ Welcome to the Grand Line! Choose a skill to fight!</div>
     </div>
-    <div id="battle-passives" style="font-size:10px;color:var(--text3);margin-bottom:6px;display:none">⚔️ Battle active — select a skill!</div>
-    <div style="display:flex;gap:6px;margin-bottom:6px;align-items:center">
-      <button class="btn btn-gray btn-sm" id="auto-battle-btn" onclick="toggleAutoBattle()">⚡ Auto: OFF</button>
-      <button class="btn btn-gray btn-sm" id="fast-forward-btn" onclick="toggleFastForward()">⏩ Fast: OFF</button>
+
+    <!-- Controls row -->
+    <div style="display:flex;gap:5px;margin-bottom:6px;align-items:center;flex-wrap:wrap">
+      <button class="btn btn-gray btn-sm" id="auto-battle-btn" onclick="toggleAutoBattle()">⚡ Auto</button>
+      <button class="btn btn-gray btn-sm" id="fast-forward-btn" onclick="toggleFastForward()">⏩ Fast</button>
+      <div id="buff-indicator" style="display:none;font-size:9px;color:var(--blue);background:rgba(58,143,239,.1);border:1px solid var(--blue2);border-radius:10px;padding:1px 7px">BUFF ACTIVE</div>
       <span id="combo-display" style="font-size:10px;color:var(--gold);font-weight:700;margin-left:auto;display:none"></span>
     </div>
+
+    <!-- Skills -->
     <div class="skills-grid" id="skills-grid"></div>
   </div>
 </div>
@@ -610,7 +663,14 @@ body.data-saver *{animation:none!important;transition:none!important}
     </div>
     <hr class="divider">
     <div class="setting-row">
-      <div class="setting-info"><div class="setting-name" style="color:var(--red)">🗑️ Wipe Save Data</div><div class="setting-desc">Permanently deletes all progress.</div></div>
+      <div class="setting-info">
+        <div class="setting-name" style="color:var(--cyan)">👤 Logged in as</div>
+        <div class="setting-desc" id="settings-username-display" style="color:var(--text);font-weight:700">—</div>
+      </div>
+      <button class="btn btn-gray btn-sm" onclick="logOut()">🚪 Logout</button>
+    </div>
+    <div class="setting-row">
+      <div class="setting-info"><div class="setting-name" style="color:var(--red)">🗑️ Wipe Save Data</div><div class="setting-desc">Permanently deletes your progress. Account remains.</div></div>
       <button class="btn btn-red btn-sm" onclick="wipeData()">WIPE</button>
     </div>
     <div id="owner-panel" style="display:none;margin-top:10px">
@@ -717,55 +777,55 @@ const DF_POOL = {
     {name:"Awa Awa no Mi",      label:"Bubble-Bubble",  emoji:"🫧", color:"#60a0c0",dmgMult:1.0,desc:"Soap bubbles — drain enemy strength on contact.", img:"https://static.wikia.nocookie.net/onepiece/images/1/16/Awa_Awa_no_Mi_Infobox.png"},
   ],
   uncommon:[
-    {name:"Bara Bara no Mi",    label:"Chop-Chop",      emoji:"🎪", color:"#e04040",dmgMult:1.4,desc:"Split body — immune to slash attacks. Buggy's fruit.", img:"https://static.wikia.nocookie.net/onepiece/images/4/4d/Bara_Bara_no_Mi_Infobox.png"},
-    {name:"Sube Sube no Mi",    label:"Slip-Slip",      emoji:"✨", color:"#e0a0e0",dmgMult:1.3,desc:"Perfectly smooth skin — attacks slide right off.", img:"https://static.wikia.nocookie.net/onepiece/images/3/34/Sube_Sube_no_Mi_Infobox.png"},
-    {name:"Toge Toge no Mi",    label:"Spike-Spike",    emoji:"🦔", color:"#a07030",dmgMult:1.5,desc:"Grow sharp spikes anywhere on your body.",         img:"https://static.wikia.nocookie.net/onepiece/images/3/31/Toge_Toge_no_Mi_Infobox.png"},
-    {name:"Doru Doru no Mi",    label:"Wax-Wax",        emoji:"🕯️", color:"#e0c060",dmgMult:1.4,desc:"Candle wax creation — harden into iron strength.", img:"https://static.wikia.nocookie.net/onepiece/images/2/21/Doru_Doru_no_Mi_Infobox.png"},
-    {name:"Hana Hana no Mi",    label:"Flower-Flower",  emoji:"🌸", color:"#e060a0",dmgMult:1.5,desc:"Sprout limbs anywhere — Robin's iconic ability.",  img:"https://static.wikia.nocookie.net/onepiece/images/6/6c/Hana_Hana_no_Mi_Infobox.png"},
+    {name:"Bara Bara no Mi",    label:"Chop-Chop",      emoji:"🎪", color:"#e04040",dmgMult:1.25,desc:"Split body — immune to slash attacks. Buggy's fruit.", img:"https://static.wikia.nocookie.net/onepiece/images/4/4d/Bara_Bara_no_Mi_Infobox.png"},
+    {name:"Sube Sube no Mi",    label:"Slip-Slip",      emoji:"✨", color:"#e0a0e0",dmgMult:1.2,desc:"Perfectly smooth skin — attacks slide right off.", img:"https://static.wikia.nocookie.net/onepiece/images/3/34/Sube_Sube_no_Mi_Infobox.png"},
+    {name:"Toge Toge no Mi",    label:"Spike-Spike",    emoji:"🦔", color:"#a07030",dmgMult:1.3,desc:"Grow sharp spikes anywhere on your body.",         img:"https://static.wikia.nocookie.net/onepiece/images/3/31/Toge_Toge_no_Mi_Infobox.png"},
+    {name:"Doru Doru no Mi",    label:"Wax-Wax",        emoji:"🕯️", color:"#e0c060",dmgMult:1.25,desc:"Candle wax creation — harden into iron strength.", img:"https://static.wikia.nocookie.net/onepiece/images/2/21/Doru_Doru_no_Mi_Infobox.png"},
+    {name:"Hana Hana no Mi",    label:"Flower-Flower",  emoji:"🌸", color:"#e060a0",dmgMult:1.3,desc:"Sprout limbs anywhere — Robin's iconic ability.",  img:"https://static.wikia.nocookie.net/onepiece/images/6/6c/Hana_Hana_no_Mi_Infobox.png"},
   ],
   rare:[
-    {name:"Ito Ito no Mi",      label:"String-String",  emoji:"🕸️", color:"#c0c0e0",dmgMult:2.0,desc:"String manipulation — Awakening turns the world to strings.", img:"https://static.wikia.nocookie.net/onepiece/images/9/9c/Ito_Ito_no_Mi_Infobox.png"},
-    {name:"Yomi Yomi no Mi",    label:"Revive-Revive",  emoji:"💀", color:"#a0a0a0",dmgMult:1.8,desc:"Return from death once — and harness soul energy.", img:"https://static.wikia.nocookie.net/onepiece/images/5/5a/Yomi_Yomi_no_Mi_Infobox.png"},
-    {name:"Horo Horo no Mi",    label:"Hollow-Hollow",  emoji:"👻", color:"#80c080",dmgMult:1.8,desc:"Negative Hollows — drain willpower from enemies.", img:"https://static.wikia.nocookie.net/onepiece/images/0/03/Horo_Horo_no_Mi_Infobox.png"},
-    {name:"Noro Noro no Mi",    label:"Slow-Slow",      emoji:"🐌", color:"#a0d0a0",dmgMult:1.7,desc:"Noroma Photons — slow anything to 1/30 speed for 30s.", img:"https://static.wikia.nocookie.net/onepiece/images/6/67/Noro_Noro_no_Mi_Infobox.png"},
-    {name:"Sabi Sabi no Mi",    label:"Rust-Rust",      emoji:"🪝", color:"#a06020",dmgMult:1.9,desc:"Rapid rust — corrodes weapons and armour instantly.", img:"https://static.wikia.nocookie.net/onepiece/images/a/a4/Sabi_Sabi_no_Mi_Infobox.png"},
+    {name:"Ito Ito no Mi",      label:"String-String",  emoji:"🕸️", color:"#c0c0e0",dmgMult:1.6,desc:"String manipulation — Awakening turns the world to strings.", img:"https://static.wikia.nocookie.net/onepiece/images/9/9c/Ito_Ito_no_Mi_Infobox.png"},
+    {name:"Yomi Yomi no Mi",    label:"Revive-Revive",  emoji:"💀", color:"#a0a0a0",dmgMult:1.45,desc:"Return from death once — and harness soul energy.", img:"https://static.wikia.nocookie.net/onepiece/images/5/5a/Yomi_Yomi_no_Mi_Infobox.png"},
+    {name:"Horo Horo no Mi",    label:"Hollow-Hollow",  emoji:"👻", color:"#80c080",dmgMult:1.45,desc:"Negative Hollows — drain willpower from enemies.", img:"https://static.wikia.nocookie.net/onepiece/images/0/03/Horo_Horo_no_Mi_Infobox.png"},
+    {name:"Noro Noro no Mi",    label:"Slow-Slow",      emoji:"🐌", color:"#a0d0a0",dmgMult:1.4,desc:"Noroma Photons — slow anything to 1/30 speed for 30s.", img:"https://static.wikia.nocookie.net/onepiece/images/6/67/Noro_Noro_no_Mi_Infobox.png"},
+    {name:"Sabi Sabi no Mi",    label:"Rust-Rust",      emoji:"🪝", color:"#a06020",dmgMult:1.5,desc:"Rapid rust — corrodes weapons and armour instantly.", img:"https://static.wikia.nocookie.net/onepiece/images/a/a4/Sabi_Sabi_no_Mi_Infobox.png"},
   ],
   epic:[
-    {name:"Suna Suna no Mi",    label:"Sand-Sand",      emoji:"🏜️", color:"#c8962a",dmgMult:2.5,desc:"Logia sand — dehydrate anything, immune to non-Haki.", img:"https://static.wikia.nocookie.net/onepiece/images/3/35/Suna_Suna_no_Mi_Infobox.png"},
-    {name:"Moku Moku no Mi",    label:"Smoke-Smoke",    emoji:"💨", color:"#a0a0a0",dmgMult:2.3,desc:"Logia smoke — body becomes white smoke.",           img:"https://static.wikia.nocookie.net/onepiece/images/f/f0/Moku_Moku_no_Mi_Infobox.png"},
-    {name:"Goro Goro no Mi",    label:"Rumble-Rumble",  emoji:"⚡", color:"#e0e020",dmgMult:2.8,desc:"INVINCIBLE Logia lightning — fastest Logia. Enel's fruit.", img:"https://static.wikia.nocookie.net/onepiece/images/b/b8/Goro_Goro_no_Mi_Infobox.png"},
-    {name:"Yuki Yuki no Mi",    label:"Snow-Snow",      emoji:"❄️", color:"#c0e0ff",dmgMult:2.3,desc:"Logia snow — control blizzards and freeze terrain.", img:"https://static.wikia.nocookie.net/onepiece/images/9/98/Yuki_Yuki_no_Mi_Infobox.png"},
-    {name:"Numa Numa no Mi",    label:"Swamp-Swamp",    emoji:"🌿", color:"#406030",dmgMult:2.4,desc:"Bottomless swamp Logia — absorb anything into mud.", img:"https://static.wikia.nocookie.net/onepiece/images/4/41/Numa_Numa_no_Mi_Infobox.png"},
+    {name:"Suna Suna no Mi",    label:"Sand-Sand",      emoji:"🏜️", color:"#c8962a",dmgMult:1.8,desc:"Logia sand — dehydrate anything, immune to non-Haki.", img:"https://static.wikia.nocookie.net/onepiece/images/3/35/Suna_Suna_no_Mi_Infobox.png"},
+    {name:"Moku Moku no Mi",    label:"Smoke-Smoke",    emoji:"💨", color:"#a0a0a0",dmgMult:1.7,desc:"Logia smoke — body becomes white smoke.",           img:"https://static.wikia.nocookie.net/onepiece/images/f/f0/Moku_Moku_no_Mi_Infobox.png"},
+    {name:"Goro Goro no Mi",    label:"Rumble-Rumble",  emoji:"⚡", color:"#e0e020",dmgMult:2.0,desc:"INVINCIBLE Logia lightning — fastest Logia. Enel's fruit.", img:"https://static.wikia.nocookie.net/onepiece/images/b/b8/Goro_Goro_no_Mi_Infobox.png"},
+    {name:"Yuki Yuki no Mi",    label:"Snow-Snow",      emoji:"❄️", color:"#c0e0ff",dmgMult:1.7,desc:"Logia snow — control blizzards and freeze terrain.", img:"https://static.wikia.nocookie.net/onepiece/images/9/98/Yuki_Yuki_no_Mi_Infobox.png"},
+    {name:"Numa Numa no Mi",    label:"Swamp-Swamp",    emoji:"🌿", color:"#406030",dmgMult:1.75,desc:"Bottomless swamp Logia — absorb anything into mud.", img:"https://static.wikia.nocookie.net/onepiece/images/4/41/Numa_Numa_no_Mi_Infobox.png"},
   ],
   legendary:[
-    {name:"Mera Mera no Mi",    label:"Flame-Flame",    emoji:"🔥", color:"#e06020",dmgMult:4.0,desc:"Fire Logia — Ace's and Sabo's blazing inferno.",   img:"https://static.wikia.nocookie.net/onepiece/images/b/b6/Mera_Mera_no_Mi_Infobox.png"},
-    {name:"Hie Hie no Mi",      label:"Ice-Ice",        emoji:"🧊", color:"#60c0e0",dmgMult:3.8,desc:"Ice Logia — freeze the ocean. Aokiji's power.",    img:"https://static.wikia.nocookie.net/onepiece/images/e/e3/Hie_Hie_no_Mi_Infobox.png"},
-    {name:"Pika Pika no Mi",    label:"Glint-Glint",    emoji:"💛", color:"#e0e040",dmgMult:4.2,desc:"Light Logia — travel at the speed of light. Kizaru.", img:"https://static.wikia.nocookie.net/onepiece/images/a/a2/Pika_Pika_no_Mi_Infobox.png"},
-    {name:"Magu Magu no Mi",    label:"Magma-Magma",    emoji:"🌋", color:"#c04020",dmgMult:4.5,desc:"Magma Logia — highest offensive power. Akainu.",   img:"https://static.wikia.nocookie.net/onepiece/images/e/ea/Magu_Magu_no_Mi_Infobox.png"},
-    {name:"Yami Yami no Mi",    label:"Dark-Dark",      emoji:"🌑", color:"#4040c0",dmgMult:4.0,desc:"Darkness Logia — nullify other Devil Fruits. Blackbeard.", img:"https://static.wikia.nocookie.net/onepiece/images/6/6f/Yami_Yami_no_Mi_Infobox.png"},
+    {name:"Mera Mera no Mi",    label:"Flame-Flame",    emoji:"🔥", color:"#e06020",dmgMult:2.4,desc:"Fire Logia — Ace's and Sabo's blazing inferno.",   img:"https://static.wikia.nocookie.net/onepiece/images/b/b6/Mera_Mera_no_Mi_Infobox.png"},
+    {name:"Hie Hie no Mi",      label:"Ice-Ice",        emoji:"🧊", color:"#60c0e0",dmgMult:2.2,desc:"Ice Logia — freeze the ocean. Aokiji's power.",    img:"https://static.wikia.nocookie.net/onepiece/images/e/e3/Hie_Hie_no_Mi_Infobox.png"},
+    {name:"Pika Pika no Mi",    label:"Glint-Glint",    emoji:"💛", color:"#e0e040",dmgMult:2.6,desc:"Light Logia — travel at the speed of light. Kizaru.", img:"https://static.wikia.nocookie.net/onepiece/images/a/a2/Pika_Pika_no_Mi_Infobox.png"},
+    {name:"Magu Magu no Mi",    label:"Magma-Magma",    emoji:"🌋", color:"#c04020",dmgMult:2.8,desc:"Magma Logia — highest offensive power. Akainu.",   img:"https://static.wikia.nocookie.net/onepiece/images/e/ea/Magu_Magu_no_Mi_Infobox.png"},
+    {name:"Yami Yami no Mi",    label:"Dark-Dark",      emoji:"🌑", color:"#4040c0",dmgMult:2.4,desc:"Darkness Logia — nullify other Devil Fruits. Blackbeard.", img:"https://static.wikia.nocookie.net/onepiece/images/6/6f/Yami_Yami_no_Mi_Infobox.png"},
   ],
   mythical:[
-    {name:"Hito Hito no Mi, Nika Model", label:"Sun God Nika",emoji:"☀️",color:"#ffe040",dmgMult:6.0,desc:"Luffy's true power — Gear 5 awakening, unlimited freedom.", img:"https://static.wikia.nocookie.net/onepiece/images/1/1a/Gomu_Gomu_no_Mi_Infobox.png"},
-    {name:"Tori Tori no Mi, Phoenix",    label:"Phoenix",      emoji:"🦅",color:"#4080ff",dmgMult:5.5,desc:"Mythical Zoan Phoenix — blue flames heal all wounds.",      img:"https://static.wikia.nocookie.net/onepiece/images/e/e4/Tori_Tori_no_Mi%2C_Model_Phoenix_Infobox.png"},
-    {name:"Uo Uo no Mi, Seiryu Model",   label:"Azure Dragon", emoji:"🐉",color:"#4040e0",dmgMult:7.0,desc:"Kaido's Dragon Zoan — most powerful creature form.",        img:"https://static.wikia.nocookie.net/onepiece/images/4/43/Uo_Uo_no_Mi%2C_Model_Seiryu_Infobox.png"},
-    {name:"Inu Inu no Mi, Kyubi Model",  label:"Nine-Tailed Fox",emoji:"🦊",color:"#e08020",dmgMult:5.8,desc:"Mythical Kyubi Zoan — great fox with illusion powers.", img:"https://static.wikia.nocookie.net/onepiece/images/0/04/Inu_Inu_no_Mi%2C_Model_Nine-Tailed_Fox_Infobox.png"},
-    {name:"Hebi Hebi no Mi, Orochi",     label:"Eight-Headed Serpent",emoji:"🐍",color:"#806020",dmgMult:5.5,desc:"Eight-headed hydra Zoan — regenerates heads endlessly.", img:""},
+    {name:"Hito Hito no Mi, Nika Model", label:"Sun God Nika",emoji:"☀️",color:"#ffe040",dmgMult:3.5,desc:"Luffy's true power — Gear 5 awakening, unlimited freedom.", img:"https://static.wikia.nocookie.net/onepiece/images/1/1a/Gomu_Gomu_no_Mi_Infobox.png"},
+    {name:"Tori Tori no Mi, Phoenix",    label:"Phoenix",      emoji:"🦅",color:"#4080ff",dmgMult:3.0,desc:"Mythical Zoan Phoenix — blue flames heal all wounds.",      img:"https://static.wikia.nocookie.net/onepiece/images/e/e4/Tori_Tori_no_Mi%2C_Model_Phoenix_Infobox.png"},
+    {name:"Uo Uo no Mi, Seiryu Model",   label:"Azure Dragon", emoji:"🐉",color:"#4040e0",dmgMult:4.0,desc:"Kaido's Dragon Zoan — most powerful creature form.",        img:"https://static.wikia.nocookie.net/onepiece/images/4/43/Uo_Uo_no_Mi%2C_Model_Seiryu_Infobox.png"},
+    {name:"Inu Inu no Mi, Kyubi Model",  label:"Nine-Tailed Fox",emoji:"🦊",color:"#e08020",dmgMult:3.2,desc:"Mythical Kyubi Zoan — great fox with illusion powers.", img:"https://static.wikia.nocookie.net/onepiece/images/0/04/Inu_Inu_no_Mi%2C_Model_Nine-Tailed_Fox_Infobox.png"},
+    {name:"Hebi Hebi no Mi, Orochi",     label:"Eight-Headed Serpent",emoji:"🐍",color:"#806020",dmgMult:3.0,desc:"Eight-headed hydra Zoan — regenerates heads endlessly.", img:""},
   ],
   honored:[
-    {name:"Gura Gura no Mi",    label:"Tremor-Tremor",  emoji:"🌊", color:"#60a0ff",dmgMult:10.0,desc:"MOST POWERFUL Paramecia — Whitebeard's world-shaking quakes.", img:"https://static.wikia.nocookie.net/onepiece/images/a/ab/Gura_Gura_no_Mi_Infobox.png"},
-    {name:"Ope Ope no Mi",      label:"Op-Op",          emoji:"💜", color:"#c060e0",dmgMult:9.0, desc:"Ultimate Paramecia — Law's Room. Grants immortality surgery.", img:"https://static.wikia.nocookie.net/onepiece/images/2/28/Ope_Ope_no_Mi_Infobox.png"},
-    {name:"Dragon's Unnamed Fruit", label:"Storm-Storm",emoji:"🌀", color:"#4060c0",dmgMult:12.0,desc:"Dragon's rumored fruit — control weather and revolutions.",    img:""},
+    {name:"Gura Gura no Mi",    label:"Tremor-Tremor",  emoji:"🌊", color:"#60a0ff",dmgMult:5.0,desc:"MOST POWERFUL Paramecia — Whitebeard's world-shaking quakes.", img:"https://static.wikia.nocookie.net/onepiece/images/a/ab/Gura_Gura_no_Mi_Infobox.png"},
+    {name:"Ope Ope no Mi",      label:"Op-Op",          emoji:"💜", color:"#c060e0",dmgMult:4.5, desc:"Ultimate Paramecia — Law's Room. Grants immortality surgery.", img:"https://static.wikia.nocookie.net/onepiece/images/2/28/Ope_Ope_no_Mi_Infobox.png"},
+    {name:"Dragon's Unnamed Fruit", label:"Storm-Storm",emoji:"🌀", color:"#4060c0",dmgMult:5.5,desc:"Dragon's rumored fruit — control weather and revolutions.",    img:""},
   ],
 };
 
 const FS_POOL = {
-  common:[{name:"Brawler Style",desc:"+5% ATK — Street fighting basics.",dmgMult:1.05},{name:"Barrel Technique",desc:"+4% HP — Pirates' brute-force method.",dmgMult:1.04}],
-  uncommon:[{name:"Marine Style",desc:"+10% ATK — Standard Marine fighting.",dmgMult:1.12},{name:"Pirate Blade Work",desc:"+12% ATK — Rough swordsmanship.",dmgMult:1.14}],
-  rare:[{name:"Rokushiki Basics",desc:"+18% ATK · Geppo dodge — CP9 techniques.",dmgMult:1.5},{name:"Three-Sword School",desc:"+20% ATK — Zoro's three-sword basics.",dmgMult:1.55}],
-  epic:[{name:"Full Rokushiki",desc:"+28% ATK · 10% dodge — Six CP9 powers mastered.",dmgMult:2.0},{name:"Santoryu Master",desc:"+30% ATK · Oni Giri — Three-blade mastery.",dmgMult:2.1}],
-  legendary:[{name:"Black Leg Style",desc:"+40% ATK — Sanji's fire-leg technique.",dmgMult:2.8},{name:"Ittoryu Grandmaster",desc:"+45% ATK — Supreme single-sword technique.",dmgMult:3.0}],
-  mythical:[{name:"King of Hell 3-Sword",desc:"+60% ATK · Enma — Zoro's Haki-infused style.",dmgMult:5.0},{name:"Ifrit Jambe",desc:"+55% ATK · Ifrit Jambe — Sanji's ultimate kicks.",dmgMult:4.5}],
-  honored:[{name:"Conqueror's Blade Style",desc:"+80% ATK · Conqueror's Haki — Imbued with the will of a King.",dmgMult:8.0}],
+  common:[{name:"Brawler Style",desc:"+5% ATK — Street fighting basics.",dmgMult:1.03},{name:"Barrel Technique",desc:"+4% HP — Pirates' brute-force method.",dmgMult:1.03}],
+  uncommon:[{name:"Marine Style",desc:"+10% ATK — Standard Marine fighting.",dmgMult:1.08},{name:"Pirate Blade Work",desc:"+12% ATK — Rough swordsmanship.",dmgMult:1.10}],
+  rare:[{name:"Rokushiki Basics",desc:"+18% ATK · Geppo dodge — CP9 techniques.",dmgMult:1.25},{name:"Three-Sword School",desc:"+20% ATK — Zoro's three-sword basics.",dmgMult:1.28}],
+  epic:[{name:"Full Rokushiki",desc:"+28% ATK · 10% dodge — Six CP9 powers mastered.",dmgMult:1.5},{name:"Santoryu Master",desc:"+30% ATK · Oni Giri — Three-blade mastery.",dmgMult:1.55}],
+  legendary:[{name:"Black Leg Style",desc:"+40% ATK — Sanji's fire-leg technique.",dmgMult:1.8},{name:"Ittoryu Grandmaster",desc:"+45% ATK — Supreme single-sword technique.",dmgMult:1.9}],
+  mythical:[{name:"King of Hell 3-Sword",desc:"+60% ATK · Enma — Zoro's Haki-infused style.",dmgMult:2.5},{name:"Ifrit Jambe",desc:"+55% ATK · Ifrit Jambe — Sanji's ultimate kicks.",dmgMult:2.2}],
+  honored:[{name:"Conqueror's Blade Style",desc:"+80% ATK · Conqueror's Haki — Imbued with the will of a King.",dmgMult:3.0}],
 };
 
 const OH_POOL = {
@@ -828,14 +888,14 @@ const G = {
   skills:[
     {name:"Basic Punch",      icon:"👊", dmg:1.0,  effect:"punch",    buff:false, unlocked:true,  unlockArc:null,          desc:"100% DMG — A solid straight punch."},
     {name:"Basic Kick",       icon:"🦵", dmg:1.5,  effect:"kick",     buff:false, unlocked:true,  unlockArc:null,          desc:"150% DMG — A powerful kick to the gut."},
-    {name:"Power Combo",      icon:"💢", dmg:2.8,  effect:"punch",    buff:false, unlocked:false, unlockArc:"east_blue",   desc:"280% DMG — Rapid punch-kick combo."},
-    {name:"Haki Strike",      icon:"⚫", dmg:3.5,  effect:"haki",     buff:false, unlocked:false, unlockArc:"alabasta",    desc:"350% DMG — Armament Haki-coated fist. Breaks defenses."},
-    {name:"Flash Step",       icon:"💨", dmg:4.5,  effect:"gear2",    buff:false, unlocked:false, unlockArc:"water7",      desc:"450% DMG — Explosive speed dash strike."},
-    {name:"Heavy Smash",      icon:"✊", dmg:6.0,  effect:"giant",    buff:false, unlocked:false, unlockArc:"thriller",    desc:"600% DMG — Devastating overhead smash."},
-    {name:"Haki Barrage",     icon:"🌑", dmg:7.5,  effect:"haki",     buff:false, unlocked:false, unlockArc:"marineford",  desc:"750% DMG — Sustained Armament Haki strikes."},
+    {name:"Power Combo",      icon:"💢", dmg:2.0,  effect:"punch",    buff:false, unlocked:false, unlockArc:"east_blue",   desc:"280% DMG — Rapid punch-kick combo."},
+    {name:"Haki Strike",      icon:"⚫", dmg:2.5,  effect:"haki",     buff:false, unlocked:false, unlockArc:"alabasta",    desc:"350% DMG — Armament Haki-coated fist. Breaks defenses."},
+    {name:"Flash Step",       icon:"💨", dmg:3.0,  effect:"gear2",    buff:false, unlocked:false, unlockArc:"water7",      desc:"450% DMG — Explosive speed dash strike."},
+    {name:"Heavy Smash",      icon:"✊", dmg:3.8,  effect:"giant",    buff:false, unlocked:false, unlockArc:"thriller",    desc:"600% DMG — Devastating overhead smash."},
+    {name:"Haki Barrage",     icon:"🌑", dmg:4.5,  effect:"haki",     buff:false, unlocked:false, unlockArc:"marineford",  desc:"750% DMG — Sustained Armament Haki strikes."},
     {name:"Conqueror's Aura", icon:"👑", dmg:0,    effect:"thunder",  buff:true,  unlocked:false, unlockArc:"fishman",     desc:"BUFF — Conqueror's Haki erupts. +30% DMG for 3 turns."},
-    {name:"Supreme Strike",   icon:"💥", dmg:10.0, effect:"explosion",buff:false, unlocked:false, unlockArc:"dressrosa",   desc:"1000% DMG — A devastating all-out blow."},
-    {name:"World Shaker",     icon:"🌊", dmg:15.0, effect:"seaquake", buff:false, unlocked:false, unlockArc:"wano",        desc:"1500% DMG — A ground-splitting shockwave attack."},
+    {name:"Supreme Strike",   icon:"💥", dmg:6.0, effect:"explosion",buff:false, unlocked:false, unlockArc:"dressrosa",   desc:"1000% DMG — A devastating all-out blow."},
+    {name:"World Shaker",     icon:"🌊", dmg:8.0, effect:"seaquake", buff:false, unlocked:false, unlockArc:"wano",        desc:"1500% DMG — A ground-splitting shockwave attack."},
   ],
 
   storyArcs:[
@@ -959,7 +1019,7 @@ const G = {
   // Abilities — 7 slots, proper pool-based reroll
   abilities:{
     df:{name:"Gomu Gomu no Mi",   rarity:"common", type:"DEVIL FRUIT",      badge:"DF", desc:"Rubber Body — basic Paramecia. Start of your DF journey.", dmgMult:1.0, rerolls:0, emoji:"🍎", color:"#e06060", img:"https://static.wikia.nocookie.net/onepiece/images/1/1a/Gomu_Gomu_no_Mi_Infobox.png"},
-    wp:{name:"Sandai Kitetsu",     rarity:"uncommon",type:"WEAPON STYLE",    badge:"WP", desc:"Cursed Great Grade sword. 1.4x DMG.", dmgMult:1.4, rerolls:0},
+    wp:{name:"Sandai Kitetsu",     rarity:"uncommon",type:"WEAPON STYLE",    badge:"WP", desc:"Cursed Great Grade sword. 1.4x DMG.", dmgMult:1.25, rerolls:0},
     hk:{name:"Basic Armament",    rarity:"common", type:"HAKI ABILITY",     badge:"HK", desc:"Harden your body with Haki. 1.1x PWR.", dmgMult:1.1, rerolls:0},
     cr:{name:"Pirate Bloodline",   rarity:"common", type:"CREW HERITAGE",   badge:"CR", desc:"+5% ATK · +5% HP — A family of pirates.", dmgMult:1.0, rerolls:0},
     fs:{name:"Brawler Style",      rarity:"common", type:"FIGHTING STYLE",  badge:"FS", desc:"+5% ATK — Street fighting basics.", dmgMult:1.05, rerolls:0},
@@ -1044,12 +1104,20 @@ function showTab(tab){
 
 // ===================== HEADER =====================
 function updateHeader(){
-  G.power=Math.floor(G.atk*0.001+G.maxHp*0.0001+G.bountyGrade*5);
+  G.power=Math.floor(G.atk*0.001+G.maxHp*0.0001+G.bountyGrade*5+(G.level||1)*100);
   document.getElementById('hdr-bounty').textContent=fmt(G.bountyGrade);
   document.getElementById('hdr-belis').textContent=fmt(G.belis);
   document.getElementById('hdr-power').textContent=fmt(G.power);
-  document.getElementById('hdr-train').textContent=(G.xpTraining?'XP ':'')+(G.hakiTraining?'Haki':'')+((!G.xpTraining&&!G.hakiTraining)?'Idle':'');
+  const trainStatus=(G.xpTraining?'XP ':'')+(G.hakiTraining?'Haki':'')+((!G.xpTraining&&!G.hakiTraining)?'Idle':'');
+  document.getElementById('hdr-train').textContent=trainStatus;
   document.getElementById('hdr-scrolls').textContent=G.scrolls;
+  // Rank label in bounty display
+  const rank=getPirateRank(G.level||1);
+  const rankEl=document.getElementById('hdr-rank-label');
+  if(rankEl)rankEl.textContent=rank;
+  // Awakening glow on power if awakened
+  const pwrEl=document.querySelector('.hdr-power .value');
+  if(pwrEl)pwrEl.style.color=G.awakened?'var(--mythical)':'var(--cyan)';
 }
 
 // ===================== AUTO-SAVE TIMER =====================
@@ -1110,12 +1178,26 @@ function loadGame(){
 }
 
 let toastTimer=null;
-function showToast(msg){
+function showToast(msg,type='gold'){
+  // Legacy toast (bottom center)
   let t=document.getElementById('toast');
   if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:58px;left:50%;transform:translateX(-50%);background:#1c2438;border:1px solid var(--gold);color:var(--gold);padding:5px 14px;border-radius:6px;font-size:11px;font-weight:700;z-index:200;pointer-events:none;transition:opacity .3s';document.body.appendChild(t);}
   t.textContent=msg;t.style.opacity='1';
   if(toastTimer)clearTimeout(toastTimer);
   toastTimer=setTimeout(()=>{t.style.opacity='0';},2200);
+  // Also show in notification stack
+  pushNotif(msg,type);
+}
+function pushNotif(msg,type='gold'){
+  const stack=document.getElementById('notif-stack');if(!stack)return;
+  const colorMap={gold:'var(--gold)',green:'var(--green)',red:'var(--red)',blue:'var(--blue)',purple:'var(--purple)',cyan:'var(--cyan)'};
+  const color=colorMap[type]||colorMap.gold;
+  const n=document.createElement('div');
+  n.className='notif-toast';
+  n.style.borderColor=color;n.style.color=color;
+  n.textContent=msg;
+  stack.appendChild(n);
+  setTimeout(()=>{n.remove();},3000);
 }
 
 // ===================== CANVAS VFX ENGINE =====================
@@ -1828,9 +1910,11 @@ function spawnDmgPopup(dmg,crit){
 // ===================== COMBAT =====================
 function addLog(msg,cls=""){
   const log=document.getElementById('combat-log');if(!log)return;
-  const div=document.createElement('div');div.className=`log-line${cls?" "+cls:""}`;div.textContent=msg;
+  const div=document.createElement('div');div.className=`log-line${cls?" "+cls:""}`;
+  const ts=new Date();const timeStr=ts.getHours().toString().padStart(2,'0')+':'+ts.getMinutes().toString().padStart(2,'0')+':'+ts.getSeconds().toString().padStart(2,'0');
+  div.innerHTML=`<span class="log-time">${timeStr}</span> ${msg}`;
   log.appendChild(div);log.scrollTop=log.scrollHeight;
-  if(log.children.length>40)log.removeChild(log.firstChild);
+  if(log.children.length>50)log.removeChild(log.firstChild);
 }
 
 function startBattle(enemyOverride){
@@ -1869,16 +1953,39 @@ function renderCombat(){
     enemyEl.style.display="flex";if(ph)ph.style.display="none";
     document.getElementById('enemy-avatar').textContent=c.enemyIcon;
     document.getElementById('enemy-name').textContent=c.enemyName;
-    document.getElementById('enemy-hp-text').textContent=fmt(Math.max(0,c.enemyHp))+" / "+fmt(c.enemyMaxHp);
-    document.getElementById('enemy-hp-bar').style.width=Math.max(0,c.enemyHp/c.enemyMaxHp*100)+"%";
-    document.getElementById('enemy-atk').textContent="ATK: "+fmt(c.enemyAtk);
+    document.getElementById('enemy-hp-text').textContent=fmt(Math.max(0,c.enemyHp))+' / '+fmt(c.enemyMaxHp);
+    const ePct=Math.max(0,c.enemyHp/c.enemyMaxHp*100);
+    const eBar=document.getElementById('enemy-hp-bar');
+    if(eBar){eBar.style.width=ePct+'%';eBar.style.background=ePct>50?'linear-gradient(90deg,#a02020,#e04040)':ePct>25?'linear-gradient(90deg,#c06000,#ff8000)':'linear-gradient(90deg,#800000,#c00000)';}
+    document.getElementById('enemy-atk').textContent='ATK: '+fmt(c.enemyAtk);
+    // Enemy level based on hp
+    const lvEl=document.getElementById('enemy-level-badge');
+    if(lvEl){const eLv=Math.max(1,Math.floor(Math.log10(Math.max(1,c.enemyMaxHp))));lvEl.textContent='LV'+eLv;}
+    // Turn badges
+    const ptb=document.getElementById('player-turn-badge'),etb=document.getElementById('enemy-turn-badge');
+    if(ptb){ptb.style.display=c.playerTurn?'block':'none';}
+    if(etb){etb.style.display=(!c.playerTurn&&c.active)?'block':'none';}
+    // Buff indicator
+    const bi=document.getElementById('buff-indicator');
+    if(bi){bi.style.display=c.buffActive?'flex':'none';bi.textContent=`⚡ BUFF ${c.buffTurns} turns`;}
   }else{
     enemyEl.style.display="none";if(ph)ph.style.display="flex";
+    const ptb=document.getElementById('player-turn-badge');if(ptb)ptb.style.display='none';
   }
-  document.getElementById('player-hp-text').textContent=fmt(Math.max(0,c.playerHp))+" / "+fmt(c.playerMaxHp);
-  document.getElementById('player-hp-bar').style.width=Math.max(0,c.playerHp/c.playerMaxHp*100)+"%";
-  document.getElementById('player-atk-display').textContent="ATK: "+fmt(G.atk);
+  // Player HP
+  const pPct=Math.max(0,c.playerHp/c.playerMaxHp*100);
+  const pBar=document.getElementById('player-hp-bar');
+  if(pBar){pBar.style.width=pPct+'%';pBar.style.background=pPct>50?'linear-gradient(90deg,#20a040,#40e060)':pPct>25?'linear-gradient(90deg,#a06000,#e09000)':'linear-gradient(90deg,#800000,#c00000)';}
+  document.getElementById('player-hp-text').textContent=fmt(Math.max(0,c.playerHp))+' / '+fmt(c.playerMaxHp);
+  document.getElementById('player-atk-display').textContent='PWR: '+fmt(G.power||0);
   document.getElementById('player-name-display').textContent=G.playerName;
+  // Vow banner
+  const vb=document.getElementById('vow-banner-display');
+  if(vb&&G.activeVow){
+    const vow=VOWS_LIST?.find(v=>v.id===G.activeVow);
+    vb.style.display='block';
+    vb.textContent='📜 '+( vow?.name||G.activeVow)+' — '+( vow?.desc||'');
+  }else if(vb)vb.style.display='none';
 }
 
 // ===================== DF SKILL SETS =====================
@@ -1889,13 +1996,13 @@ const DF_SKILL_SETS = {
     label:"Gomu Gomu / Nika",
     color:"#f0c040",
     skills:[
-      {name:"Pistol",      icon:"🤜", dmg:3.0,  effect:"gomu_pistol",   buff:false, desc:"300% — Stretching arm snap."},
-      {name:"Bazooka",     icon:"✊✊",dmg:6.0,  effect:"gomu_bazooka",  buff:false, desc:"600% — Both fists combined."},
-      {name:"Elephant Gun",icon:"🐘", dmg:8.0,  effect:"gear3",         buff:false, desc:"800% — Bone-balloon giant arm."},
-      {name:"Gear 2nd",    icon:"💨", dmg:4.5,  effect:"gear2",         buff:false, desc:"450% — Blood-pump speed burst."},
-      {name:"Gear 4 Bound",icon:"🌀", dmg:9.0,  effect:"boundman",      buff:false, desc:"900% — Boundman activation."},
-      {name:"King Kong Gun",icon:"💥",dmg:14.0, effect:"explosion",     buff:false, desc:"1400% — Ultimate Gear 4 strike."},
-      {name:"Gear 5 / Nika",icon:"☀️",dmg:18.0, effect:"explosion",    buff:false, desc:"1800% — Sun God form. Cartoonish reality."},
+      {name:"Pistol",      icon:"🤜", dmg:2.0,  effect:"gomu_pistol",   buff:false, desc:"300% — Stretching arm snap."},
+      {name:"Bazooka",     icon:"✊✊",dmg:3.3,  effect:"gomu_bazooka",  buff:false, desc:"600% — Both fists combined."},
+      {name:"Elephant Gun",icon:"🐘", dmg:3.6,  effect:"gear3",         buff:false, desc:"800% — Bone-balloon giant arm."},
+      {name:"Gear 2nd",    icon:"💨", dmg:2.5,  effect:"gear2",         buff:false, desc:"450% — Blood-pump speed burst."},
+      {name:"Gear 4 Bound",icon:"🌀", dmg:4.1,  effect:"boundman",      buff:false, desc:"900% — Boundman activation."},
+      {name:"King Kong Gun",icon:"💥",dmg:5.6, effect:"explosion",     buff:false, desc:"1400% — Ultimate Gear 4 strike."},
+      {name:"Gear 5 / Nika",icon:"☀️",dmg:7.2, effect:"explosion",    buff:false, desc:"1800% — Sun God form. Cartoonish reality."},
     ]
   },
   // ── FIRE ──────────────────────────────────────
@@ -1903,10 +2010,10 @@ const DF_SKILL_SETS = {
     label:"Mera Mera no Mi",
     color:"#ff4400",
     skills:[
-      {name:"Fire Fist",      icon:"🔥", dmg:4.0,  effect:"fire_fist",  buff:false, desc:"400% — Ace's blazing punch."},
-      {name:"Firefly",        icon:"🪲", dmg:2.5,  effect:"fire",       buff:false, desc:"250% — Scattered flame shots."},
-      {name:"Flame Mirror",   icon:"🪞", dmg:6.0,  effect:"fire_fist",  buff:false, desc:"600% — Wall of fire."},
-      {name:"Kaen Sei-Oken",  icon:"🌠", dmg:9.0,  effect:"red_hawk",   buff:false, desc:"900% — Ultimate flame commandment."},
+      {name:"Fire Fist",      icon:"🔥", dmg:2.2,  effect:"fire_fist",  buff:false, desc:"400% — Ace's blazing punch."},
+      {name:"Firefly",        icon:"🪲", dmg:1.7,  effect:"fire",       buff:false, desc:"250% — Scattered flame shots."},
+      {name:"Flame Mirror",   icon:"🪞", dmg:3.3,  effect:"fire_fist",  buff:false, desc:"600% — Wall of fire."},
+      {name:"Kaen Sei-Oken",  icon:"🌠", dmg:4.1,  effect:"red_hawk",   buff:false, desc:"900% — Ultimate flame commandment."},
     ]
   },
   // ── MAGMA ─────────────────────────────────────
@@ -1914,10 +2021,10 @@ const DF_SKILL_SETS = {
     label:"Magu Magu no Mi",
     color:"#cc3300",
     skills:[
-      {name:"Great Eruption", icon:"🌋", dmg:5.0,  effect:"magma_fist",  buff:false, desc:"500% — Magma fist eruption."},
-      {name:"Ryusei Kazan",   icon:"🪨", dmg:8.0,  effect:"magma_fist",  buff:false, desc:"800% — Volcanic meteorite rain."},
-      {name:"Meigo",          icon:"💀", dmg:6.0,  effect:"fire_fist",   buff:false, desc:"600% — Absolute Justice strike. Ignores DEF."},
-      {name:"Great Eruption+",icon:"🌋💥",dmg:12.0,effect:"magma_fist",  buff:false, desc:"1200% — The killing blow of Marineford."},
+      {name:"Great Eruption", icon:"🌋", dmg:2.8,  effect:"magma_fist",  buff:false, desc:"500% — Magma fist eruption."},
+      {name:"Ryusei Kazan",   icon:"🪨", dmg:3.6,  effect:"magma_fist",  buff:false, desc:"800% — Volcanic meteorite rain."},
+      {name:"Meigo",          icon:"💀", dmg:3.3,  effect:"fire_fist",   buff:false, desc:"600% — Absolute Justice strike. Ignores DEF."},
+      {name:"Great Eruption+",icon:"🌋💥",dmg:4.8,effect:"magma_fist",  buff:false, desc:"1200% — The killing blow of Marineford."},
     ]
   },
   // ── ICE ───────────────────────────────────────
@@ -1925,10 +2032,10 @@ const DF_SKILL_SETS = {
     label:"Hie Hie no Mi",
     color:"#80e0ff",
     skills:[
-      {name:"Ice Saber",      icon:"🗡️", dmg:3.5,  effect:"ice_shard",  buff:false, desc:"350% — Frozen sword slash."},
-      {name:"Pheasant Beak",  icon:"🐦‍❄️",dmg:5.0,  effect:"pheasant_beak",buff:false,desc:"500% — Ice pheasant charge."},
-      {name:"Ice Block",      icon:"🧊", dmg:4.0,  effect:"ice_shard",  buff:false, desc:"400% — Impaling ice pillars."},
-      {name:"Ice Age",        icon:"🌊", dmg:11.0, effect:"ice_age",    buff:false, desc:"1100% — Freeze the entire ocean."},
+      {name:"Ice Saber",      icon:"🗡️", dmg:2.3,  effect:"ice_shard",  buff:false, desc:"350% — Frozen sword slash."},
+      {name:"Pheasant Beak",  icon:"🐦‍❄️",dmg:2.8,  effect:"pheasant_beak",buff:false,desc:"500% — Ice pheasant charge."},
+      {name:"Ice Block",      icon:"🧊", dmg:2.2,  effect:"ice_shard",  buff:false, desc:"400% — Impaling ice pillars."},
+      {name:"Ice Age",        icon:"🌊", dmg:5.0, effect:"ice_age",    buff:false, desc:"1100% — Freeze the entire ocean."},
     ]
   },
   // ── LIGHTNING ─────────────────────────────────
@@ -1936,10 +2043,10 @@ const DF_SKILL_SETS = {
     label:"Goro Goro no Mi",
     color:"#ffe040",
     skills:[
-      {name:"Lightning Ray",  icon:"⚡", dmg:3.5,  effect:"el_thor",    buff:false, desc:"350% — Direct lightning bolt."},
-      {name:"El Thor",        icon:"🌩️", dmg:6.0,  effect:"el_thor",    buff:false, desc:"600% — Massive pillar strike."},
-      {name:"200M Volt",      icon:"⚡⚡",dmg:8.0, effect:"el_thor",    buff:false, desc:"800% — 200 million volt discharge."},
-      {name:"Raigo",          icon:"☁️", dmg:15.0, effect:"raigo",      buff:false, desc:"1500% — God's divine judgment."},
+      {name:"Lightning Ray",  icon:"⚡", dmg:2.3,  effect:"el_thor",    buff:false, desc:"350% — Direct lightning bolt."},
+      {name:"El Thor",        icon:"🌩️", dmg:3.3,  effect:"el_thor",    buff:false, desc:"600% — Massive pillar strike."},
+      {name:"200M Volt",      icon:"⚡⚡",dmg:3.6, effect:"el_thor",    buff:false, desc:"800% — 200 million volt discharge."},
+      {name:"Raigo",          icon:"☁️", dmg:6.0, effect:"raigo",      buff:false, desc:"1500% — God's divine judgment."},
     ]
   },
   // ── DARKNESS ──────────────────────────────────
@@ -1947,10 +2054,10 @@ const DF_SKILL_SETS = {
     label:"Yami Yami no Mi",
     color:"#6020a0",
     skills:[
-      {name:"Black Hole",     icon:"🌑", dmg:5.0,  effect:"black_hole", buff:false, desc:"500% — Absorbs everything into darkness."},
-      {name:"Maelstrom",      icon:"🌀", dmg:3.5,  effect:"maelstrom",  buff:false, desc:"350% — Gravitational collapse."},
-      {name:"Liberation",     icon:"💀", dmg:8.0,  effect:"maelstrom",  buff:false, desc:"800% — Unleash all absorbed matter."},
-      {name:"Dark Quake",     icon:"🖤", dmg:12.0, effect:"seaquake",   buff:false, desc:"1200% — Darkness + Tremor. Blackbeard ultimate."},
+      {name:"Black Hole",     icon:"🌑", dmg:2.8,  effect:"black_hole", buff:false, desc:"500% — Absorbs everything into darkness."},
+      {name:"Maelstrom",      icon:"🌀", dmg:2.3,  effect:"maelstrom",  buff:false, desc:"350% — Gravitational collapse."},
+      {name:"Liberation",     icon:"💀", dmg:3.6,  effect:"maelstrom",  buff:false, desc:"800% — Unleash all absorbed matter."},
+      {name:"Dark Quake",     icon:"🖤", dmg:4.8, effect:"seaquake",   buff:false, desc:"1200% — Darkness + Tremor. Blackbeard ultimate."},
     ]
   },
   // ── SAND ──────────────────────────────────────
@@ -1958,10 +2065,10 @@ const DF_SKILL_SETS = {
     label:"Suna Suna no Mi",
     color:"#c8962a",
     skills:[
-      {name:"Sand Tomb",      icon:"🏜️", dmg:3.0,  effect:"sand_tomb",  buff:false, desc:"300% — Burial in sand."},
-      {name:"Desert Spada",   icon:"🗡️", dmg:5.0,  effect:"sand_tomb",  buff:false, desc:"500% — Sand blade that slices ground."},
-      {name:"Ground Secco",   icon:"🌵", dmg:4.0,  effect:"sand_tomb",  buff:false, desc:"400% — Dehydrate the battlefield."},
-      {name:"Sables Pesado",  icon:"🌪️", dmg:10.0, effect:"sables",     buff:false, desc:"1000% — Massive sand storm."},
+      {name:"Sand Tomb",      icon:"🏜️", dmg:2.0,  effect:"sand_tomb",  buff:false, desc:"300% — Burial in sand."},
+      {name:"Desert Spada",   icon:"🗡️", dmg:2.8,  effect:"sand_tomb",  buff:false, desc:"500% — Sand blade that slices ground."},
+      {name:"Ground Secco",   icon:"🌵", dmg:2.2,  effect:"sand_tomb",  buff:false, desc:"400% — Dehydrate the battlefield."},
+      {name:"Sables Pesado",  icon:"🌪️", dmg:4.5, effect:"sables",     buff:false, desc:"1000% — Massive sand storm."},
     ]
   },
   // ── SMOKE ─────────────────────────────────────
@@ -1969,10 +2076,10 @@ const DF_SKILL_SETS = {
     label:"Moku Moku no Mi",
     color:"#a0a0a0",
     skills:[
-      {name:"Smoke Ring",     icon:"💨", dmg:2.5,  effect:"smoke_cloud", buff:false, desc:"250% — Smoke binding."},
-      {name:"White Blow",     icon:"🌫️", dmg:4.0,  effect:"smoke_cloud", buff:false, desc:"400% — Compressed smoke punch."},
-      {name:"Smoke Screen",   icon:"💨", dmg:0,    effect:"buff_aura",   buff:true,  desc:"BUFF — Smoke cover, +20% dodge."},
-      {name:"Fog Cloud",      icon:"🌁", dmg:7.0,  effect:"smoke_cloud", buff:false, desc:"700% — Suffocating fog cover."},
+      {name:"Smoke Ring",     icon:"💨", dmg:1.7,  effect:"smoke_cloud", buff:false, desc:"250% — Smoke binding."},
+      {name:"White Blow",     icon:"🌫️", dmg:2.2,  effect:"smoke_cloud", buff:false, desc:"400% — Compressed smoke punch."},
+      {name:"Smoke Screen",   icon:"💨", dmg:0.0,    effect:"buff_aura",   buff:true,  desc:"BUFF — Smoke cover, +20% dodge."},
+      {name:"Fog Cloud",      icon:"🌁", dmg:3.2,  effect:"smoke_cloud", buff:false, desc:"700% — Suffocating fog cover."},
     ]
   },
   // ── STRING ────────────────────────────────────
@@ -1980,10 +2087,10 @@ const DF_SKILL_SETS = {
     label:"Ito Ito no Mi",
     color:"#e080ff",
     skills:[
-      {name:"Thousand Fleur", icon:"🌸", dmg:4.0,  effect:"thousand_fleur",buff:false, desc:"400% — Thousands of razor strings."},
-      {name:"God Thread",     icon:"🕸️", dmg:6.0,  effect:"god_thread",  buff:false, desc:"600% — Unbreakable thread cage."},
-      {name:"Torikago Buff",  icon:"🐦", dmg:0,    effect:"buff_aura",   buff:true,  desc:"BUFF — Birdcage, +30% ATK."},
-      {name:"Parasitic String",icon:"🧶",dmg:9.0,  effect:"god_thread",  buff:false, desc:"900% — Full body string control."},
+      {name:"Thousand Fleur", icon:"🌸", dmg:2.2,  effect:"thousand_fleur",buff:false, desc:"400% — Thousands of razor strings."},
+      {name:"God Thread",     icon:"🕸️", dmg:3.3,  effect:"god_thread",  buff:false, desc:"600% — Unbreakable thread cage."},
+      {name:"Torikago Buff",  icon:"🐦", dmg:0.0,    effect:"buff_aura",   buff:true,  desc:"BUFF — Birdcage, +30% ATK."},
+      {name:"Parasitic String",icon:"🧶",dmg:4.1,  effect:"god_thread",  buff:false, desc:"900% — Full body string control."},
     ]
   },
   // ── TREMOR ────────────────────────────────────
@@ -1991,10 +2098,10 @@ const DF_SKILL_SETS = {
     label:"Gura Gura no Mi",
     color:"#60a0ff",
     skills:[
-      {name:"Shockwave Fist", icon:"👊", dmg:6.0,  effect:"seaquake",   buff:false, desc:"600% — Vibrating fist shockwave."},
-      {name:"Quake Bubbles",  icon:"🫧", dmg:8.0,  effect:"seaquake",   buff:false, desc:"800% — Seismic spheres."},
-      {name:"Seaquake",       icon:"🌊", dmg:12.0, effect:"seaquake",   buff:false, desc:"1200% — Ocean-splitting quake."},
-      {name:"Island Quake",   icon:"🏝️", dmg:18.0, effect:"seaquake",   buff:false, desc:"1800% — Whitebeard's ultimate."},
+      {name:"Shockwave Fist", icon:"👊", dmg:3.3,  effect:"seaquake",   buff:false, desc:"600% — Vibrating fist shockwave."},
+      {name:"Quake Bubbles",  icon:"🫧", dmg:3.6,  effect:"seaquake",   buff:false, desc:"800% — Seismic spheres."},
+      {name:"Seaquake",       icon:"🌊", dmg:4.8, effect:"seaquake",   buff:false, desc:"1200% — Ocean-splitting quake."},
+      {name:"Island Quake",   icon:"🏝️", dmg:7.2, effect:"seaquake",   buff:false, desc:"1800% — Whitebeard's ultimate."},
     ]
   },
   // ── PHOENIX ───────────────────────────────────
@@ -2002,10 +2109,10 @@ const DF_SKILL_SETS = {
     label:"Tori Tori no Mi — Phoenix",
     color:"#4080ff",
     skills:[
-      {name:"Phoenix Brand",  icon:"🔵", dmg:5.0,  effect:"phoenix_brand",buff:false, desc:"500% — Blue flame strike."},
-      {name:"Blue Flames",    icon:"💙", dmg:0,    effect:"blue_flames", buff:true,  desc:"HEAL — Regenerate 15% Max HP with blue fire."},
-      {name:"Rebirth Flames", icon:"🦅", dmg:7.0,  effect:"phoenix_brand",buff:false, desc:"700% — Immolating dive."},
-      {name:"Zanka no Tachi", icon:"⚔️", dmg:12.0, effect:"blue_flames", buff:false, desc:"1200% — Phoenix body slam."},
+      {name:"Phoenix Brand",  icon:"🔵", dmg:2.8,  effect:"phoenix_brand",buff:false, desc:"500% — Blue flame strike."},
+      {name:"Blue Flames",    icon:"💙", dmg:0.0,    effect:"blue_flames", buff:true,  desc:"HEAL — Regenerate 15% Max HP with blue fire."},
+      {name:"Rebirth Flames", icon:"🦅", dmg:3.2,  effect:"phoenix_brand",buff:false, desc:"700% — Immolating dive."},
+      {name:"Zanka no Tachi", icon:"⚔️", dmg:4.8, effect:"blue_flames", buff:false, desc:"1200% — Phoenix body slam."},
     ]
   },
   // ── DRAGON ────────────────────────────────────
@@ -2013,10 +2120,10 @@ const DF_SKILL_SETS = {
     label:"Uo Uo no Mi — Azure Dragon",
     color:"#4040e0",
     skills:[
-      {name:"Boro Breath",    icon:"🌬️", dmg:8.0,  effect:"boro_breath",buff:false, desc:"800% — Explosive flame breath."},
-      {name:"Blast Breath",   icon:"💨", dmg:10.0, effect:"blast_breath",buff:false, desc:"1000% — Pressurised breath."},
-      {name:"Thunder Bagua",  icon:"⚡", dmg:15.0, effect:"el_thor",    buff:false, desc:"1500% — Lightning club swing."},
-      {name:"Dragon Twister", icon:"🌀", dmg:18.0, effect:"sables",     buff:false, desc:"1800% — Kaido's ultimate."},
+      {name:"Boro Breath",    icon:"🌬️", dmg:3.6,  effect:"boro_breath",buff:false, desc:"800% — Explosive flame breath."},
+      {name:"Blast Breath",   icon:"💨", dmg:4.5, effect:"blast_breath",buff:false, desc:"1000% — Pressurised breath."},
+      {name:"Thunder Bagua",  icon:"⚡", dmg:6.0, effect:"el_thor",    buff:false, desc:"1500% — Lightning club swing."},
+      {name:"Dragon Twister", icon:"🌀", dmg:7.2, effect:"sables",     buff:false, desc:"1800% — Kaido's ultimate."},
     ]
   },
   // ── OP-OP ─────────────────────────────────────
@@ -2024,10 +2131,10 @@ const DF_SKILL_SETS = {
     label:"Ope Ope no Mi",
     color:"#8040ff",
     skills:[
-      {name:"Shambles",       icon:"🔄", dmg:3.0,  effect:"shambles",   buff:false, desc:"300% — Swap positions in the Room."},
-      {name:"Counter Shock",  icon:"⚡", dmg:5.0,  effect:"gamma_knife",buff:false, desc:"500% — Electric discharge."},
-      {name:"Gamma Knife",    icon:"🔪", dmg:8.0,  effect:"gamma_knife",buff:false, desc:"800% — Internal organ destruction."},
-      {name:"Mes",            icon:"✂️", dmg:6.0,  effect:"shambles",   buff:false, desc:"600% — Extracts soul from body."},
+      {name:"Shambles",       icon:"🔄", dmg:2.0,  effect:"shambles",   buff:false, desc:"300% — Swap positions in the Room."},
+      {name:"Counter Shock",  icon:"⚡", dmg:2.8,  effect:"gamma_knife",buff:false, desc:"500% — Electric discharge."},
+      {name:"Gamma Knife",    icon:"🔪", dmg:3.6,  effect:"gamma_knife",buff:false, desc:"800% — Internal organ destruction."},
+      {name:"Mes",            icon:"✂️", dmg:3.3,  effect:"shambles",   buff:false, desc:"600% — Extracts soul from body."},
     ]
   },
   // ── TREMOR-DARKNESS (Blackbeard dual) ─────────
@@ -2035,10 +2142,10 @@ const DF_SKILL_SETS = {
     label:"Dual Fruit — Blackbeard",
     color:"#4030c0",
     skills:[
-      {name:"Black Hole",     icon:"🌑", dmg:5.0,  effect:"black_hole", buff:false, desc:"500%"},
-      {name:"Seaquake",       icon:"🌊", dmg:10.0, effect:"seaquake",   buff:false, desc:"1000%"},
-      {name:"Dark Quake",     icon:"🖤", dmg:14.0, effect:"maelstrom",  buff:false, desc:"1400% — Dual-fruit devastation."},
-      {name:"Liberation",     icon:"💀", dmg:18.0, effect:"explosion",  buff:false, desc:"1800% — Everything destroyed."},
+      {name:"Black Hole",     icon:"🌑", dmg:2.8,  effect:"black_hole", buff:false, desc:"500%"},
+      {name:"Seaquake",       icon:"🌊", dmg:4.5, effect:"seaquake",   buff:false, desc:"1000%"},
+      {name:"Dark Quake",     icon:"🖤", dmg:5.6, effect:"maelstrom",  buff:false, desc:"1400% — Dual-fruit devastation."},
+      {name:"Liberation",     icon:"💀", dmg:7.2, effect:"explosion",  buff:false, desc:"1800% — Everything destroyed."},
     ]
   },
 };
@@ -2076,26 +2183,30 @@ function phoenixHeal(){
 function renderSkills(){
   const grid=document.getElementById('skills-grid');if(!grid)return;
   let html='';
-  // ── Base story skills ──
+  // ── Base story skills header ──
+  html+=`<div style="grid-column:1/-1;font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:2px 0;margin-bottom:1px">⚔️ Base Skills</div>`;
   G.skills.forEach((sk,idx)=>{
     if(sk.unlocked){
       if(sk.buff){
-        html+=`<div class="skill-card" onclick="useSkill(${idx})">
-          <div class="skill-name">${sk.icon} ${sk.name}</div>
+        html+=`<div class="skill-card" onclick="useSkill(${idx})" title="${sk.desc}">
+          <div style="font-size:18px;margin-bottom:2px">${sk.icon}</div>
+          <div class="skill-name">${sk.name}</div>
           <span class="skill-type type-buff">✦ Buff</span>
-          <div class="skill-dmg" style="color:var(--blue)">BUFF</div>
-          <div class="skill-effect">${sk.desc}</div></div>`;
+          <div class="skill-dmg" style="color:var(--blue)">BUFF</div></div>`;
       }else{
-        html+=`<div class="skill-card" onclick="useSkill(${idx})">
-          <div class="skill-name">${sk.icon} ${sk.name}</div>
-          <span class="skill-type type-dmg">✕ Damage</span>
-          <div class="skill-dmg">${Math.floor(sk.dmg*100)}% DMG</div>
-          <div class="skill-effect">${sk.effect?sk.effect.replace(/_/g,' '):''}</div></div>`;
+        const dmgPct=Math.floor(sk.dmg*100);
+        const dmgCol=dmgPct>=1000?'var(--mythical)':dmgPct>=600?'var(--legendary)':dmgPct>=300?'var(--epic)':'var(--gold)';
+        html+=`<div class="skill-card" onclick="useSkill(${idx})" title="${sk.desc}">
+          <div style="font-size:18px;margin-bottom:2px">${sk.icon}</div>
+          <div class="skill-name">${sk.name}</div>
+          <span class="skill-type type-dmg">✕ DMG</span>
+          <div class="skill-dmg" style="color:${dmgCol}">${dmgPct}%</div></div>`;
       }
     }else{
-      html+=`<div class="skill-card locked-skill" title="Unlock: clear ${sk.unlockArc} arc">
-        <div class="skill-name">🔒 ${sk.name}</div>
-        <div class="skill-effect" style="color:var(--text3);font-size:8px">Clear ${(sk.unlockArc||'').replace(/_/g,' ')}</div></div>`;
+      html+=`<div class="skill-card locked-skill">
+        <div style="font-size:16px;margin-bottom:2px">🔒</div>
+        <div class="skill-name" style="font-size:9px">${sk.name}</div>
+        <div class="skill-effect">Clear ${(sk.unlockArc||'').replace(/_/g,' ')}</div></div>`;
     }
   });
 
@@ -2113,17 +2224,19 @@ function renderSkills(){
         ${set.label} Skills</div>`;
       set.skills.slice(0,maxSkills).forEach((sk,idx)=>{
         if(sk.buff){
-          html+=`<div class="skill-card" style="border-color:${set.color}44" onclick="useDFSkill(${idx})">
-            <div class="skill-name" style="color:${set.color}">${sk.icon} ${sk.name}</div>
-            <span class="skill-type type-buff">✦ Buff</span>
-            <div class="skill-dmg" style="color:var(--blue)">BUFF</div>
-            <div class="skill-effect">${sk.desc}</div></div>`;
+          html+=`<div class="skill-card df-skill-card" style="border-color:${set.color}55;background:linear-gradient(160deg,var(--bg3),${set.color}08)" onclick="useDFSkill(${idx})" title="${sk.desc}">
+            <div style="font-size:18px;margin-bottom:2px">${sk.icon}</div>
+            <div class="skill-name" style="color:${set.color}">${sk.name}</div>
+            <span class="skill-type type-buff">✦ DF BUFF</span>
+            <div class="skill-dmg" style="color:${set.color}">BUFF</div></div>`;
         }else{
-          html+=`<div class="skill-card" style="border-color:${set.color}44" onclick="useDFSkill(${idx})">
-            <div class="skill-name" style="color:${set.color}">${sk.icon} ${sk.name}</div>
-            <span class="skill-type type-dmg">✕ Damage</span>
-            <div class="skill-dmg">${Math.floor(sk.dmg*100)}% DMG</div>
-            <div class="skill-effect">${sk.desc}</div></div>`;
+          const dfDmgPct=Math.floor(sk.dmg*100);
+          const dfDmgCol=dfDmgPct>=1000?'var(--mythical)':dfDmgPct>=600?'var(--legendary)':dfDmgPct>=300?'var(--epic)':set.color;
+          html+=`<div class="skill-card df-skill-card" style="border-color:${set.color}55;background:linear-gradient(160deg,var(--bg3),${set.color}08)" onclick="useDFSkill(${idx})" title="${sk.desc}">
+            <div style="font-size:18px;margin-bottom:2px">${sk.icon}</div>
+            <div class="skill-name" style="color:${set.color}">${sk.name}</div>
+            <span class="skill-type type-dmg" style="background:${set.color}22;color:${set.color};border-color:${set.color}44">✕ DF</span>
+            <div class="skill-dmg" style="color:${dfDmgCol}">${dfDmgPct}%</div></div>`;
         }
       });
       if(dfTier<set.skills.length){
@@ -2292,7 +2405,8 @@ function onEnemyDefeated(){
       addLog(`⭐ FIRST CLEAR! +${boss.reward.scrolls} Scrolls!`,"log-system");
       boss.cleared=true;
       trackEventProgress('bosses',1);
-      showVictoryOverlay(`👹 ${boss.name} DEFEATED!`,`First clear bonus: +${boss.reward.scrolls} Scrolls\n+${fmt(boss.reward.belis)} Belis`,'var(--mythical)');
+      showVictoryOverlay(`${boss.name} DEFEATED!`,`First clear bonus: +${boss.reward.scrolls} Scrolls\n+${fmt(boss.reward.belis)} Belis`,'var(--mythical)','boss');
+      pushNotif(`👹 Boss cleared: ${boss.name}!`,'purple');
     }else{
       G.belis+=Math.floor(boss.reward.belis*0.1);
       addLog(`🔄 Rematch bonus!`,"log-system");
@@ -2651,9 +2765,9 @@ function prestige(){
 // ===================== ABILITIES (7 slots, pool-based reroll) =====================
 const ABILITY_META={
   df:{label:"DEVIL FRUIT",   badgeClass:"badge-df", pool:DF_POOL, rollFn:(r)=>{const f=rollFromPool(DF_POOL,r);return{...f,rarity:r,type:"DEVIL FRUIT",badge:"DF"};}},
-  wp:{label:"WEAPON STYLE",  badgeClass:"badge-wp", pool:null,    rollFn:(r)=>{const options={common:{name:"Basic Cutlass",desc:"1.1x DMG",dmgMult:1.1},uncommon:{name:"Pirate Sabre",desc:"1.4x DMG",dmgMult:1.4},rare:{name:"Kitetsu Blade",desc:"2.0x DMG",dmgMult:2.0},epic:{name:"Wado Ichimonji",desc:"2.8x DMG",dmgMult:2.8},legendary:{name:"Yoru - Mihawk's Blade",desc:"4.0x DMG",dmgMult:4.0},mythical:{name:"Enma - Dragon Cutter",desc:"6.0x DMG",dmgMult:6.0},honored:{name:"The Black Blade - Supreme Grade",desc:"10x DMG",dmgMult:10.0}};const o=options[r]||options.common;return{...o,rarity:r,type:"WEAPON STYLE",badge:"WP"};}},
-  hk:{label:"HAKI ABILITY",  badgeClass:"badge-hk", pool:null,    rollFn:(r)=>{const m={common:{name:"Basic Armament",desc:"1.1x PWR",dmgMult:1.1},uncommon:{name:"Hardening",desc:"1.3x PWR",dmgMult:1.3},rare:{name:"Advanced Armament",desc:"1.8x PWR",dmgMult:1.8},epic:{name:"Flowing Armament",desc:"2.4x PWR",dmgMult:2.4},legendary:{name:"Supreme Armament",desc:"3.5x PWR · Flow Haki",dmgMult:3.5},mythical:{name:"Ryou - Advanced Ryuou",desc:"5.0x PWR",dmgMult:5.0},honored:{name:"Conqueror's Coating",desc:"8.0x PWR · Full Conqueror's",dmgMult:8.0}};const o=m[r]||m.common;return{...o,rarity:r,type:"HAKI ABILITY",badge:"HK"};}},
-  cr:{label:"CREW HERITAGE",  badgeClass:"badge-cr", pool:null,    rollFn:(r)=>{const m={common:{name:"Pirate Bloodline",desc:"+5% ATK/HP",dmgMult:1.0},uncommon:{name:"Marine Lineage",desc:"+8% all",dmgMult:1.08},rare:{name:"Noble Heritage",desc:"+12% all",dmgMult:1.12},epic:{name:"Warlord Lineage",desc:"+18% all",dmgMult:1.18},legendary:{name:"Yonko's Bloodline",desc:"+25% all",dmgMult:1.25},mythical:{name:"Roger's Bloodline",desc:"+40% all",dmgMult:1.4},honored:{name:"Will of D.",desc:"+60% all · Conqueror's Aura",dmgMult:1.6}};const o=m[r]||m.common;return{...o,rarity:r,type:"CREW HERITAGE",badge:"CR"};}},
+  wp:{label:"WEAPON STYLE",  badgeClass:"badge-wp", pool:null,    rollFn:(r)=>{const options={common:{name:"Basic Cutlass",desc:"1.1x DMG",dmgMult:1.1},uncommon:{name:"Pirate Sabre",desc:"1.4x DMG",dmgMult:1.4},rare:{name:"Kitetsu Blade",desc:"2.0x DMG",dmgMult:1.5},epic:{name:"Wado Ichimonji",desc:"2.8x DMG",dmgMult:1.8},legendary:{name:"Yoru - Mihawk's Blade",desc:"4.0x DMG",dmgMult:4.0},mythical:{name:"Enma - Dragon Cutter",desc:"6.0x DMG",dmgMult:6.0},honored:{name:"The Black Blade - Supreme Grade",desc:"10x DMG",dmgMult:10.0}};const o=options[r]||options.common;return{...o,rarity:r,type:"WEAPON STYLE",badge:"WP"};}},
+  hk:{label:"HAKI ABILITY",  badgeClass:"badge-hk", pool:null,    rollFn:(r)=>{const m={common:{name:"Basic Armament",desc:"1.1x PWR",dmgMult:1.08},uncommon:{name:"Hardening",desc:"1.2x PWR",dmgMult:1.2},rare:{name:"Advanced Armament",desc:"1.4x PWR",dmgMult:1.4},epic:{name:"Flowing Armament",desc:"1.7x PWR",dmgMult:1.7},legendary:{name:"Supreme Armament",desc:"2.2x PWR · Flow Haki",dmgMult:2.2},mythical:{name:"Ryou - Advanced Ryuou",desc:"3.0x PWR",dmgMult:3.0},honored:{name:"Conqueror's Coating",desc:"4.0x PWR · Full Conqueror's",dmgMult:4.0}};const o=m[r]||m.common;return{...o,rarity:r,type:"HAKI ABILITY",badge:"HK"};}},
+  cr:{label:"CREW HERITAGE",  badgeClass:"badge-cr", pool:null,    rollFn:(r)=>{const m={common:{name:"Pirate Bloodline",desc:"+5% ATK/HP",dmgMult:1.0},uncommon:{name:"Marine Lineage",desc:"+8% all",dmgMult:1.08},rare:{name:"Noble Heritage",desc:"+12% all",dmgMult:1.08},epic:{name:"Warlord Lineage",desc:"+18% all",dmgMult:1.18},legendary:{name:"Yonko's Bloodline",desc:"+25% all",dmgMult:1.25},mythical:{name:"Roger's Bloodline",desc:"+40% all",dmgMult:1.4},honored:{name:"Will of D.",desc:"+60% all · Conqueror's Aura",dmgMult:1.6}};const o=m[r]||m.common;return{...o,rarity:r,type:"CREW HERITAGE",badge:"CR"};}},
   fs:{label:"FIGHTING STYLE", badgeClass:"badge-fs", pool:FS_POOL, rollFn:(r)=>{const f=rollFromPool(FS_POOL,r);return{...f,rarity:r,type:"FIGHTING STYLE",badge:"FS"};}},
   oh:{label:"OBSERVATION HAKI",badgeClass:"badge-oh",pool:OH_POOL, rollFn:(r)=>{const f=rollFromPool(OH_POOL,r);return{...f,rarity:r,type:"OBSERVATION HAKI",badge:"OH"};}},
   sp:{label:"SPECIAL TRAIT",  badgeClass:"badge-sp", pool:SP_POOL, rollFn:(r)=>{const f=rollFromPool(SP_POOL,r);return{...f,rarity:r,type:"SPECIAL TRAIT",badge:"SP"};}},
@@ -3000,22 +3114,24 @@ function checkAwakening(){
 }
 
 // ===================== VICTORY / DEFEAT OVERLAY =====================
-function showVictoryOverlay(title,msg,color='var(--gold)'){
+function showVictoryOverlay(title,msg,color='var(--gold)',type='win'){
   let overlay=document.getElementById('result-overlay');
   if(!overlay){
     overlay=document.createElement('div');
     overlay.id='result-overlay';
-    overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;cursor:pointer';
+    overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;cursor:pointer;backdrop-filter:blur(4px)';
     overlay.onclick=()=>{overlay.style.display='none';};
     document.body.appendChild(overlay);
   }
+  const icons={win:'🏆',defeat:'💀',boss:'👹',awaken:'⚡',event:'🎁'};
+  const bigIcon=icons[type]||'🏆';
   overlay.innerHTML=`
-    <div style="font-family:'Cinzel',serif;font-size:28px;font-weight:900;color:${color};text-shadow:0 0 30px ${color}">${title}</div>
-    <div style="font-size:14px;color:var(--text2);text-align:center;white-space:pre-line;max-width:300px">${msg}</div>
-    <div style="font-size:11px;color:var(--text3);margin-top:8px">Tap anywhere to continue</div>`;
+    <div style="font-size:52px;animation:vfx-float 2s ease infinite alternate">${bigIcon}</div>
+    <div style="font-family:'Cinzel',serif;font-size:24px;font-weight:900;color:${color};text-shadow:0 0 30px ${color};text-align:center;padding:0 16px">${title}</div>
+    <div style="font-size:13px;color:var(--text2);text-align:center;white-space:pre-line;max-width:280px;line-height:1.6">${msg}</div>
+    <div style="font-size:10px;color:var(--text3);margin-top:4px;opacity:.7">Tap anywhere to continue</div>`;
   overlay.style.display='flex';
-  // Auto-dismiss after 4s if auto-battle is on
-  if(_autoBattle)setTimeout(()=>{overlay.style.display='none';},2000);
+  if(_autoBattle||_fastForward)setTimeout(()=>{overlay.style.display='none';},1500);
 }
 
 // ===================== TITLES SYSTEM =====================
@@ -3048,8 +3164,9 @@ function checkTitles(){
   TITLES.forEach(t=>{
     if(!G.unlockedTitles.includes(t.id)&&t.check()){
       G.unlockedTitles.push(t.id);
-      showToast(`🏅 Title Unlocked: ${t.name}!`);
+      showToast(`🏅 Title Unlocked: ${t.name}!`,'gold');
       playScrollSound();
+      pushNotif(`🏅 ${t.name}`,'gold');
     }
   });
 }
@@ -3798,6 +3915,7 @@ function gameTick(){
       G.maxHp=Math.floor(G.maxHp*1.12);G.atk=Math.floor(G.atk*1.08);G.hp=G.maxHp;
       addLog(`🎉 Level Up! Lv.${G.level}!`,"log-system");
       playLevelUpSound();trackEventProgress('levels',1);checkJobUnlocks();
+      pushNotif(`⬆️ Level Up! Lv.${G.level} — ${getPirateRank(G.level)}`,'blue');
     }
   }
   // Haki training
@@ -3819,7 +3937,7 @@ function gameTick(){
 
 // ===================== INIT =====================
 function init(){
-  // AUTH FIRST — show login screen, load after
+  // AUTH FIRST — check session or show login screen
   showLoginScreen();
   // Sync settings toggles
   const sm={dataSaver:"toggle-datasaver",abilityFX:"toggle-fx",sounds:"toggle-sounds",autoClose:"toggle-autoclose"};
@@ -3922,8 +4040,9 @@ document.addEventListener('DOMContentLoaded',init);
       </div>
     </div>
 
-    <div style="text-align:center;margin-top:12px;font-size:10px;color:var(--text3)">
-      All data saved locally on this device only.
+    <div style="text-align:center;margin-top:12px;font-size:10px;color:var(--text3);line-height:1.6">
+      Accounts are stored permanently on this device.<br>
+      Your pirate progress is tied to your username.
     </div>
   </div>
 </div>
@@ -3935,7 +4054,7 @@ document.addEventListener('DOMContentLoaded',init);
 //   op_save_{username}  → full game save for that user
 //   op_current_user     → currently logged-in username (session)
 
-const OWNER_NAMES = ['naellllv', 'naellllv2', 'captain'];
+const OWNER_NAMES = ['sendai', 'captain'];
 
 function hashPassword(pw) {
   // Simple deterministic hash (not crypto-secure, but fine for a browser game)
@@ -4068,6 +4187,15 @@ function finishLogin(username) {
   document.getElementById('login-screen').style.display = 'none';
   // Continue init
   continueInit();
+  // Welcome message
+  const isNew = !existingSave;
+  setTimeout(()=>{
+    if(isNew){
+      showToast(`🏴‍☠️ Welcome to the Grand Line, ${username}!`, 'gold');
+    } else {
+      showToast(`⚓ Welcome back, ${username}!`, 'blue');
+    }
+  }, 800);
 }
 
 function logOut() {
@@ -4186,17 +4314,8 @@ function adminRefreshUserList() {
 }
 
 // ===================== SAVE/LOAD per-user =====================
-// Wrap saveGame to also write to user-keyed slot
-const _origSaveGame = saveGame;
-function saveGame() {
-  const username = localStorage.getItem('op_current_user');
-  const save = buildSaveObject();
-  if (username) setUserSave(username, save);
-  // Also write to legacy key for compatibility
-  try { localStorage.setItem('opIncremental_v3', JSON.stringify(save)); } catch(e){}
-  const t=document.getElementById('save-timer');if(t)t.textContent='✓';
-  setTimeout(()=>{const t2=document.getElementById('save-timer');if(t2)t2.textContent='60s';},1000);
-}
+// This saveGame overrides the one in the main script with per-user storage
+const _origSaveGame = null; // no-op reference
 
 function buildSaveObject() {
   return {
@@ -4256,25 +4375,42 @@ function loadGameFromData(s) {
 }
 
 function continueInit() {
+  // Apply settings
   document.body.classList.toggle("data-saver", G.settings.dataSaver);
-  document.getElementById('player-name-display').textContent = G.playerName;
-  const hdruEl = document.getElementById('hdr-username');
-  if(hdruEl) hdruEl.textContent = G.playerName;
-  G.isOwner = isOwner();
-  if (G.isOwner) {
-    document.getElementById('owner-badge').style.display = "inline-block";
-    document.getElementById('owner-panel').style.display = "block";
-    adminRefreshUserList();
+  // Update all name displays
+  ['player-name-display','char-name-val','settings-username-display'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=G.playerName;});
+  const hdruEl=document.getElementById('hdr-username');
+  if(hdruEl) hdruEl.textContent=G.playerName;
+  // Check owner status
+  G.isOwner=isOwner();
+  const ownerBadge=document.getElementById('owner-badge');
+  const ownerPanel=document.getElementById('owner-panel');
+  if(G.isOwner){
+    if(ownerBadge)ownerBadge.style.display="inline-block";
+    if(ownerPanel)ownerPanel.style.display="block";
+    setTimeout(adminRefreshUserList,500);
+  } else {
+    if(ownerBadge)ownerBadge.style.display="none";
+    if(ownerPanel)ownerPanel.style.display="none";
   }
-  // Sync settings toggles
+  // Sync settings toggle buttons
   const sm={dataSaver:"toggle-datasaver",abilityFX:"toggle-fx",sounds:"toggle-sounds",autoClose:"toggle-autoclose"};
-  Object.entries(sm).forEach(([k,id])=>{const btn=document.getElementById(id);if(btn){btn.textContent=G.settings[k]?"ON":"OFF";btn.className=`toggle-btn toggle-${G.settings[k]?"on":"off"}`;}});
-  renderSkills();renderCombat();renderCrew();renderChar();renderHome();renderTrain();renderDig();renderBossTab();
-  renderRaidTab();renderModesTab();renderTitlesTab();renderEventTab();
+  Object.entries(sm).forEach(([k,id])=>{
+    const btn=document.getElementById(id);
+    if(btn){btn.textContent=G.settings[k]?"ON":"OFF";btn.className=`toggle-btn toggle-${G.settings[k]?"on":"off"}`;}
+  });
+  // Ensure defaults exist
   if(!G.stats) G.stats={wins:0,losses:0,crits:0,maxCombo:0,raidsCleared:0,infiniteBest:0};
   if(!G.unlockedTitles) G.unlockedTitles=[];
+  if(!G.storage) G.storage=[];
+  if(!G.skillTreeLevels) G.skillTreeLevels={};
+  if(G.skillTreeLevels && Object.keys(G.skillTreeLevels).length) applySkillTreeBonuses();
+  // Render all tabs
+  renderSkills();renderCombat();renderCrew();renderChar();renderHome();renderTrain();renderDig();renderBossTab();
+  renderRaidTab();renderModesTab();renderTitlesTab();renderEventTab();
   updateHeader();updatePlayerAlliesDisplay();syncScrollDisplays();
   checkTitles();
+  // Canvas resize handler
   function resizeCanvas(){
     const canvas=document.getElementById('vfx-canvas');
     const wrap=document.getElementById('combat-arena');
@@ -4282,8 +4418,12 @@ function continueInit() {
   }
   resizeCanvas();
   window.addEventListener('resize',resizeCanvas);
-  setInterval(gameTick,200);
-  setInterval(tickSaveTimer,1000);
+  // Start game loops (guard against double-start)
+  if(!window._gameLoopStarted){
+    window._gameLoopStarted=true;
+    setInterval(gameTick,200);
+    setInterval(tickSaveTimer,1000);
+  }
 }
 
 // Add logout button to header
