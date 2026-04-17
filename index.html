@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -21,17 +20,17 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;fo
 body.data-saver *{animation:none!important;transition:none!important}
 
 /* HEADER */
-#header{background:linear-gradient(135deg,#080d16,#0e1422);border-bottom:1px solid var(–border2);padding:5px 10px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:10;box-shadow:0 2px 10px rgba(0,0,0,.5)}
+#header{background:linear-gradient(135deg,#080d16,#0e1422);border-bottom:1px solid var(--border2);padding:5px 10px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:10;box-shadow:0 2px 10px rgba(0,0,0,.5)}
 .hdr-stat{display:flex;flex-direction:column;align-items:center;min-width:90px}
-.hdr-stat .label{font-size:9px;color:var(–text3);text-transform:uppercase;letter-spacing:1px}
-.hdr-stat .value{font-size:12px;font-weight:700;font-family:‘Cinzel’,serif}
-.hdr-bounty .value{color:var(–red)}.hdr-belis .value{color:var(–gold)}.hdr-power .value{color:var(–cyan)}.hdr-train .value{color:var(–blue)}
+.hdr-stat .label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+.hdr-stat .value{font-size:12px;font-weight:700;font-family:'Cinzel',serif}
+.hdr-bounty .value{color:var(--red)}.hdr-belis .value{color:var(--gold)}.hdr-power .value{color:var(--cyan)}.hdr-train .value{color:var(--blue)}
 .hdr-center{display:flex;gap:5px;align-items:center}
-.hdr-btn{background:var(–bg3);border:1px solid var(–border2);color:var(–text2);padding:3px 8px;border-radius:4px;cursor:pointer;font-family:‘Rajdhani’,sans-serif;font-size:11px;font-weight:600;transition:.15s}
-.hdr-btn:hover{border-color:var(–gold);color:var(–gold)}
-.owner-badge{background:linear-gradient(135deg,#f0c040,#ff8800);color:#000;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:700;font-family:‘Cinzel’,serif;display:none}
-.save-indicator{font-size:9px;color:var(–text3);text-align:right}
-.save-indicator span{color:var(–green);font-weight:700}
+.hdr-btn{background:var(--bg3);border:1px solid var(--border2);color:var(--text2);padding:3px 8px;border-radius:4px;cursor:pointer;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;transition:.15s}
+.hdr-btn:hover{border-color:var(--gold);color:var(--gold)}
+.owner-badge{background:linear-gradient(135deg,#f0c040,#ff8800);color:#000;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:700;font-family:'Cinzel',serif;display:none}
+.save-indicator{font-size:9px;color:var(--text3);text-align:right}
+.save-indicator span{color:var(--green);font-weight:700}
 
 /* MAIN */
 #main{flex:1;overflow:hidden;display:flex;flex-direction:column}
@@ -39,27 +38,27 @@ body.data-saver *{animation:none!important;transition:none!important}
 .tab-content.active{display:flex;flex:1;overflow:hidden}
 
 /* TABBAR */
-#tabbar{background:#090c14;border-top:1px solid var(–border2);display:flex;flex-shrink:0;overflow-x:auto}
-.tab-btn{flex:1;min-width:54px;padding:7px 2px;display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer;border:none;background:transparent;color:var(–text3);font-family:‘Rajdhani’,sans-serif;font-size:9px;font-weight:600;letter-spacing:.3px;transition:.15s;border-top:2px solid transparent}
-.tab-btn:hover{color:var(–text);background:#111828}
-.tab-btn.active{color:var(–gold);border-top-color:var(–gold);background:#111828}
+#tabbar{background:#090c14;border-top:1px solid var(--border2);display:flex;flex-shrink:0;overflow-x:auto}
+.tab-btn{flex:1;min-width:54px;padding:7px 2px;display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer;border:none;background:transparent;color:var(--text3);font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:600;letter-spacing:.3px;transition:.15s;border-top:2px solid transparent}
+.tab-btn:hover{color:var(--text);background:#111828}
+.tab-btn.active{color:var(--gold);border-top-color:var(--gold);background:#111828}
 .tab-btn .icon{font-size:15px}
-.tab-btn.event-tab{color:var(–red)}.tab-btn.event-tab.active{color:var(–red);border-top-color:var(–red)}
+.tab-btn.event-tab{color:var(--red)}.tab-btn.event-tab.active{color:var(--red);border-top-color:var(--red)}
 
 /* PANELS */
-.panel{background:var(–bg2);border:1px solid var(–border);border-radius:6px;padding:10px}
-.panel-title{font-family:‘Cinzel’,serif;font-size:12px;color:var(–gold);margin-bottom:8px;font-weight:700;letter-spacing:.5px}
-.section-title{font-size:10px;color:var(–text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;font-weight:700}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:10px}
+.panel-title{font-family:'Cinzel',serif;font-size:12px;color:var(--gold);margin-bottom:8px;font-weight:700;letter-spacing:.5px}
+.section-title{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;font-weight:700}
 
 /* BUTTONS */
-.btn{border:none;border-radius:4px;cursor:pointer;font-family:‘Rajdhani’,sans-serif;font-weight:700;transition:.15s;display:inline-flex;align-items:center;justify-content:center;gap:4px}
+.btn{border:none;border-radius:4px;cursor:pointer;font-family:'Rajdhani',sans-serif;font-weight:700;transition:.15s;display:inline-flex;align-items:center;justify-content:center;gap:4px}
 .btn:active{transform:scale(.97)}
-.btn-green{background:var(–green2);color:#fff;border:1px solid var(–green)}.btn-green:hover{background:var(–green)}
-.btn-red{background:var(–red2);color:#fff;border:1px solid var(–red)}.btn-red:hover{background:var(–red)}
-.btn-blue{background:var(–blue2);color:#fff;border:1px solid var(–blue)}.btn-blue:hover{background:var(–blue)}
-.btn-gold{background:linear-gradient(135deg,#8a6010,#c08820);color:#fff;border:1px solid var(–gold)}.btn-gold:hover{background:linear-gradient(135deg,#c08820,#f0c040);color:#000}
-.btn-purple{background:var(–purple2);color:#fff;border:1px solid var(–purple)}.btn-purple:hover{background:var(–purple)}
-.btn-gray{background:#2a3050;color:var(–text2);border:1px solid var(–border2)}.btn-gray:hover{border-color:var(–text2)}
+.btn-green{background:var(--green2);color:#fff;border:1px solid var(--green)}.btn-green:hover{background:var(--green)}
+.btn-red{background:var(--red2);color:#fff;border:1px solid var(--red)}.btn-red:hover{background:var(--red)}
+.btn-blue{background:var(--blue2);color:#fff;border:1px solid var(--blue)}.btn-blue:hover{background:var(--blue)}
+.btn-gold{background:linear-gradient(135deg,#8a6010,#c08820);color:#fff;border:1px solid var(--gold)}.btn-gold:hover{background:linear-gradient(135deg,#c08820,#f0c040);color:#000}
+.btn-purple{background:var(--purple2);color:#fff;border:1px solid var(--purple)}.btn-purple:hover{background:var(--purple)}
+.btn-gray{background:#2a3050;color:var(--text2);border:1px solid var(--border2)}.btn-gray:hover{border-color:var(--text2)}
 .btn-sm{padding:3px 9px;font-size:11px}.btn-md{padding:5px 12px;font-size:12px}
 .btn-lg{padding:9px 16px;font-size:13px;width:100%}.btn-xl{padding:11px;font-size:14px;width:100%}
 .btn:disabled{opacity:.4;cursor:not-allowed}
@@ -72,8 +71,8 @@ body.data-saver *{animation:none!important;transition:none!important}
 .bar-exp{background:linear-gradient(90deg,#606020,#c0c030)}.bar-xptraining{background:linear-gradient(90deg,#c06010,#f09030)}
 
 /* RARITY */
-.rarity-common{color:#aaa}.rarity-uncommon{color:#20d060}.rarity-rare{color:var(–rare)}
-.rarity-epic{color:var(–epic)}.rarity-legendary{color:var(–legendary)}.rarity-mythical{color:var(–mythical)}.rarity-honored{color:var(–honored)}
+.rarity-common{color:#aaa}.rarity-uncommon{color:#20d060}.rarity-rare{color:var(--rare)}
+.rarity-epic{color:var(--epic)}.rarity-legendary{color:var(--legendary)}.rarity-mythical{color:var(--mythical)}.rarity-honored{color:var(--honored)}
 
 /* VFX */
 @keyframes vfx-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
@@ -84,220 +83,218 @@ body.data-saver *{animation:none!important;transition:none!important}
 /* COMBAT */
 #combat-tab{gap:0;flex-direction:column;padding:8px;overflow-y:auto}
 .combat-arena-wrap{display:flex;align-items:stretch;justify-content:space-between;gap:8px;margin-bottom:8px;position:relative;min-height:130px}
-.fighter-box{background:linear-gradient(160deg,var(–bg3),var(–bg4));border:1px solid var(–border2);border-radius:10px;padding:12px;flex:1;text-align:center;transition:.3s;position:relative;overflow:hidden}
-.fighter-box::before{content:’’;position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.3));pointer-events:none}
-.fighter-box.taking-hit{animation:vfx-shake .4s ease;border-color:var(–red)!important}
-.fighter-box.player-box{border-color:var(–blue2)}
-.fighter-box.enemy-box{border-color:var(–red2)}
-.fighter-avatar{width:60px;height:60px;border-radius:50%;background:var(–bg4);border:2px solid var(–border2);margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:28px;position:relative;z-index:1;box-shadow:0 0 12px rgba(0,0,0,.5)}
+.fighter-box{background:linear-gradient(160deg,var(--bg3),var(--bg4));border:1px solid var(--border2);border-radius:10px;padding:12px;flex:1;text-align:center;transition:.3s;position:relative;overflow:hidden}
+.fighter-box::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.3));pointer-events:none}
+.fighter-box.taking-hit{animation:vfx-shake .4s ease;border-color:var(--red)!important}
+.fighter-box.player-box{border-color:var(--blue2)}
+.fighter-box.enemy-box{border-color:var(--red2)}
+.fighter-avatar{width:60px;height:60px;border-radius:50%;background:var(--bg4);border:2px solid var(--border2);margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:28px;position:relative;z-index:1;box-shadow:0 0 12px rgba(0,0,0,.5)}
 .fighter-name{font-weight:700;font-size:13px;margin-bottom:4px;position:relative;z-index:1}
-.fighter-hp{font-size:10px;color:var(–text2);margin-bottom:5px;position:relative;z-index:1}
+.fighter-hp{font-size:10px;color:var(--text2);margin-bottom:5px;position:relative;z-index:1}
 .hp-bar-wrap{height:8px;background:#1a2030;border-radius:4px;overflow:hidden;margin-bottom:3px}
 .hp-bar{height:100%;border-radius:4px;transition:width .4s ease}
 .hp-bar-player{background:linear-gradient(90deg,#20a040,#40e060);box-shadow:0 0 6px rgba(40,220,80,.4)}
 .hp-bar-enemy{background:linear-gradient(90deg,#a02020,#e04040);box-shadow:0 0 6px rgba(220,40,40,.4)}
-.fighter-atk{font-size:10px;color:var(–red);font-weight:700;position:relative;z-index:1}
-.vs-badge{font-family:‘Cinzel’,serif;font-size:20px;font-weight:900;color:var(–gold);text-shadow:0 0 20px rgba(240,192,64,.6);flex-shrink:0;display:flex;align-items:center;writing-mode:vertical-rl;letter-spacing:4px}
-.combat-log{background:#060910;border:1px solid var(–border);border-radius:6px;padding:6px 8px;font-size:11px;color:var(–text2);margin-bottom:6px;max-height:68px;overflow-y:auto}
+.fighter-atk{font-size:10px;color:var(--red);font-weight:700;position:relative;z-index:1}
+.vs-badge{font-family:'Cinzel',serif;font-size:20px;font-weight:900;color:var(--gold);text-shadow:0 0 20px rgba(240,192,64,.6);flex-shrink:0;display:flex;align-items:center;writing-mode:vertical-rl;letter-spacing:4px}
+.combat-log{background:#060910;border:1px solid var(--border);border-radius:6px;padding:6px 8px;font-size:11px;color:var(--text2);margin-bottom:6px;max-height:68px;overflow-y:auto}
 .log-line{padding:2px 0;border-bottom:1px solid #111828;display:flex;align-items:baseline;gap:4px}.log-line:last-child{border:none}
-.log-time{font-size:9px;color:var(–text3);flex-shrink:0}
-.log-dmg{color:var(–red)}.log-heal{color:var(–green)}.log-buff{color:var(–blue)}.log-system{color:var(–gold)}.log-crit{color:#ffe040;font-weight:700}
+.log-time{font-size:9px;color:var(--text3);flex-shrink:0}
+.log-dmg{color:var(--red)}.log-heal{color:var(--green)}.log-buff{color:var(--blue)}.log-system{color:var(--gold)}.log-crit{color:#ffe040;font-weight:700}
 .skills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
-.skill-card{background:var(–bg3);border:1px solid var(–border2);border-radius:7px;padding:7px 5px;cursor:pointer;transition:.15s;text-align:center;position:relative;overflow:hidden}
-.skill-card::after{content:’’;position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent);pointer-events:none}
-.skill-card:hover:not(.locked-skill){border-color:var(–blue);transform:translateY(-2px);box-shadow:0 4px 12px rgba(58,143,239,.2)}
+.skill-card{background:var(--bg3);border:1px solid var(--border2);border-radius:7px;padding:7px 5px;cursor:pointer;transition:.15s;text-align:center;position:relative;overflow:hidden}
+.skill-card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent);pointer-events:none}
+.skill-card:hover:not(.locked-skill){border-color:var(--blue);transform:translateY(-2px);box-shadow:0 4px 12px rgba(58,143,239,.2)}
 .skill-card:active:not(.locked-skill){transform:scale(.96)}
-.skill-card.flee-card{border-color:var(–red2)}.skill-card.flee-card:hover{border-color:var(–red);box-shadow:0 4px 12px rgba(232,64,64,.2)}
+.skill-card.flee-card{border-color:var(--red2)}.skill-card.flee-card:hover{border-color:var(--red);box-shadow:0 4px 12px rgba(232,64,64,.2)}
 .skill-card.locked-skill{opacity:.3;cursor:not-allowed}
 .skill-card.df-skill-card{border-color:rgba(144,68,232,.4)!important}
 .skill-card .skill-name{font-size:10px;font-weight:700;margin-bottom:2px;line-height:1.2}
 .skill-card .skill-type{font-size:8px;padding:1px 4px;border-radius:2px;display:inline-block;margin-bottom:2px}
-.type-dmg{background:#2a1020;color:var(–red);border:1px solid var(–red2)}
-.type-buff{background:#102030;color:var(–blue);border:1px solid var(–blue2)}
-.type-heal{background:#102010;color:var(–green);border:1px solid var(–green2)}
-.skill-card .skill-dmg{font-size:10px;font-weight:700;color:var(–gold)}
-.skill-card .skill-effect{font-size:8px;color:var(–text3);line-height:1.3}
+.type-dmg{background:#2a1020;color:var(--red);border:1px solid var(--red2)}
+.type-buff{background:#102030;color:var(--blue);border:1px solid var(--blue2)}
+.type-heal{background:#102010;color:var(--green);border:1px solid var(--green2)}
+.skill-card .skill-dmg{font-size:10px;font-weight:700;color:var(--gold)}
+.skill-card .skill-effect{font-size:8px;color:var(--text3);line-height:1.3}
 /* DMG POPUP */
-.dmg-popup{position:absolute;font-family:‘Cinzel’,serif;font-weight:700;pointer-events:none;z-index:30;white-space:nowrap;animation:vfx-float .9s ease forwards}
+.dmg-popup{position:absolute;font-family:'Cinzel',serif;font-weight:700;pointer-events:none;z-index:30;white-space:nowrap;animation:vfx-float .9s ease forwards}
 /* TURN INDICATOR */
 .turn-indicator{font-size:10px;padding:2px 8px;border-radius:10px;display:inline-block;font-weight:700}
-.turn-player{background:rgba(58,143,239,.15);color:var(–blue);border:1px solid var(–blue2)}
-.turn-enemy{background:rgba(232,64,64,.15);color:var(–red);border:1px solid var(–red2)}
+.turn-player{background:rgba(58,143,239,.15);color:var(--blue);border:1px solid var(--blue2)}
+.turn-enemy{background:rgba(232,64,64,.15);color:var(--red);border:1px solid var(--red2)}
 /* NOTIFICATION TOAST */
 #notif-stack{position:fixed;top:50px;right:10px;z-index:300;display:flex;flex-direction:column;gap:4px;pointer-events:none}
-.notif-toast{background:var(–bg2);border:1px solid var(–border2);border-radius:6px;padding:7px 12px;font-size:11px;font-weight:700;color:var(–text);animation:notifSlide .3s ease,notifFade .3s ease 2.7s forwards;max-width:220px;box-shadow:0 4px 12px rgba(0,0,0,.5)}
+.notif-toast{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:7px 12px;font-size:11px;font-weight:700;color:var(--text);animation:notifSlide .3s ease,notifFade .3s ease 2.7s forwards;max-width:220px;box-shadow:0 4px 12px rgba(0,0,0,.5)}
 @keyframes notifSlide{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes notifFade{from{opacity:1}to{opacity:0}}
 /* STAT CHANGE INDICATOR */
-.stat-up{color:var(–green)!important;animation:statPulse .6s ease}
-.stat-down{color:var(–red)!important;animation:statPulse .6s ease}
+.stat-up{color:var(--green)!important;animation:statPulse .6s ease}
+.stat-down{color:var(--red)!important;animation:statPulse .6s ease}
 @keyframes statPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
 /* ENEMY LEVEL BADGE */
-.enemy-level-badge{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.7);border:1px solid var(–border2);border-radius:3px;font-size:9px;color:var(–text3);padding:1px 4px;z-index:2}
+.enemy-level-badge{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.7);border:1px solid var(--border2);border-radius:3px;font-size:9px;color:var(--text3);padding:1px 4px;z-index:2}
 /* POWER BAR */
 .power-bar-wrap{height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;margin:3px 0}
-.power-bar{height:100%;border-radius:2px;background:linear-gradient(90deg,var(–cyan),#60f0ff);transition:width .5s}
+.power-bar{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--cyan),#60f0ff);transition:width .5s}
 /* ACTIVE VOW DISPLAY */
-.vow-banner{background:linear-gradient(90deg,rgba(58,143,239,.1),transparent);border-left:3px solid var(–blue);padding:4px 8px;font-size:10px;color:var(–blue);margin-bottom:5px;border-radius:0 4px 4px 0}
+.vow-banner{background:linear-gradient(90deg,rgba(58,143,239,.1),transparent);border-left:3px solid var(--blue);padding:4px 8px;font-size:10px;color:var(--blue);margin-bottom:5px;border-radius:0 4px 4px 0}
 
 /* CREW */
 #crew-tab{gap:8px;padding:10px;overflow-y:auto;flex-wrap:wrap;align-content:flex-start}
 .crew-col{display:flex;flex-direction:column;gap:8px}
 .crew-col-equip{width:230px;flex-shrink:0}.crew-col-collect{flex:1;min-width:260px}.crew-col-roll{width:210px;flex-shrink:0}
-.equip-slot{background:var(–bg3);border:1px solid var(–border2);border-radius:6px;padding:9px;margin-bottom:5px}
-.equip-slot .slot-name{font-size:10px;color:var(–text3);margin-bottom:3px}
-.equip-slot .slot-ally{font-weight:700;font-size:12px;margin-bottom:2px}.equip-slot .slot-bonus{font-size:10px;color:var(–green)}
-.ally-row{background:var(–bg3);border:1px solid var(–border2);border-radius:6px;padding:7px 9px;margin-bottom:4px;display:flex;align-items:center;gap:7px}
-.ally-row .ally-name{font-weight:700;font-size:12px;flex:1}.ally-row .ally-bonus{font-size:10px;color:var(–green);flex:1}
+.equip-slot{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:9px;margin-bottom:5px}
+.equip-slot .slot-name{font-size:10px;color:var(--text3);margin-bottom:3px}
+.equip-slot .slot-ally{font-weight:700;font-size:12px;margin-bottom:2px}.equip-slot .slot-bonus{font-size:10px;color:var(--green)}
+.ally-row{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:7px 9px;margin-bottom:4px;display:flex;align-items:center;gap:7px}
+.ally-row .ally-name{font-weight:700;font-size:12px;flex:1}.ally-row .ally-bonus{font-size:10px;color:var(--green);flex:1}
 .ally-actions{display:flex;gap:3px}
-.roll-rates{font-size:11px;color:var(–text2);line-height:1.9}
+.roll-rates{font-size:11px;color:var(--text2);line-height:1.9}
 .roll-rates .rate-line{display:flex;justify-content:space-between}
-.total-allies{font-size:10px;color:var(–text3);margin-bottom:5px}
-.roll-result-popup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(–bg2);border:2px solid var(–gold);border-radius:12px;padding:20px 28px;text-align:center;z-index:100;animation:popIn .3s ease;display:none;min-width:220px}
-.roll-result-popup .result-rarity{font-size:20px;font-family:‘Cinzel’,serif;font-weight:700;margin-bottom:5px}
-.roll-result-popup .result-name{font-size:15px;color:var(–text);margin-bottom:3px}
-.roll-result-popup .result-bonus{font-size:12px;color:var(–green);margin-bottom:12px}
+.total-allies{font-size:10px;color:var(--text3);margin-bottom:5px}
+.roll-result-popup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg2);border:2px solid var(--gold);border-radius:12px;padding:20px 28px;text-align:center;z-index:100;animation:popIn .3s ease;display:none;min-width:220px}
+.roll-result-popup .result-rarity{font-size:20px;font-family:'Cinzel',serif;font-weight:700;margin-bottom:5px}
+.roll-result-popup .result-name{font-size:15px;color:var(--text);margin-bottom:3px}
+.roll-result-popup .result-bonus{font-size:12px;color:var(--green);margin-bottom:12px}
 @keyframes popIn{from{transform:translate(-50%,-50%) scale(.5);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
 
 /* CHAR */
 #char-tab{gap:8px;padding:10px;overflow-y:auto;flex-wrap:wrap;align-content:flex-start}
 .char-equip-col{width:330px;flex-shrink:0}.char-right-col{flex:1;min-width:200px;display:flex;flex-direction:column;gap:8px}
-.equip-item{background:var(–bg3);border:1px solid var(–border2);border-radius:6px;padding:7px 9px;margin-bottom:4px;display:flex;align-items:center;gap:7px}
-.equip-item .slot-label{font-size:9px;color:var(–text3);width:52px;flex-shrink:0}
+.equip-item{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:7px 9px;margin-bottom:4px;display:flex;align-items:center;gap:7px}
+.equip-item .slot-label{font-size:9px;color:var(--text3);width:52px;flex-shrink:0}
 .equip-item .item-info{flex:1}
-.equip-item .item-name{font-weight:700;font-size:11px;color:var(–gold)}
-.equip-item .item-stat{font-size:10px;color:var(–text2)}.equip-item .item-desc{font-size:9px;color:var(–text3);margin-top:1px}
-.inv-item{background:var(–bg3);border:1px solid var(–border2);border-radius:5px;padding:6px 9px;margin-bottom:3px;display:flex;align-items:center;gap:7px}
-.inv-item .inv-type{font-size:9px;color:var(–text3);width:38px;flex-shrink:0}
+.equip-item .item-name{font-weight:700;font-size:11px;color:var(--gold)}
+.equip-item .item-stat{font-size:10px;color:var(--text2)}.equip-item .item-desc{font-size:9px;color:var(--text3);margin-top:1px}
+.inv-item{background:var(--bg3);border:1px solid var(--border2);border-radius:5px;padding:6px 9px;margin-bottom:3px;display:flex;align-items:center;gap:7px}
+.inv-item .inv-type{font-size:9px;color:var(--text3);width:38px;flex-shrink:0}
 .inv-item .inv-name{font-weight:700;font-size:11px;flex:1}
-.loadout-btn{background:var(–bg3);border:1px solid var(–border2);border-radius:8px;padding:12px;text-align:center;cursor:pointer;transition:.15s;margin-bottom:5px;display:flex;align-items:center;gap:9px}
-.loadout-btn:hover{border-color:var(–gold)}.loadout-btn .lb-icon{font-size:20px}
-.loadout-btn .lb-name{font-family:‘Cinzel’,serif;font-size:11px;font-weight:700;color:var(–text2)}.loadout-btn:hover .lb-name{color:var(–gold)}
+.loadout-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;text-align:center;cursor:pointer;transition:.15s;margin-bottom:5px;display:flex;align-items:center;gap:9px}
+.loadout-btn:hover{border-color:var(--gold)}.loadout-btn .lb-icon{font-size:20px}
+.loadout-btn .lb-name{font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:var(--text2)}.loadout-btn:hover .lb-name{color:var(--gold)}
 
 /* HOME */
 #home-tab{gap:0;padding:0;overflow:hidden}
 .home-grid{display:grid;grid-template-columns:210px 1fr 290px;height:100%;overflow:hidden}
-.home-col{padding:9px;overflow-y:auto;border-right:1px solid var(–border)}.home-col:last-child{border:none}
-.arc-btn{background:var(–bg3);border:1px solid var(–border2);border-radius:6px;padding:7px 9px;margin-bottom:4px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:7px}
-.arc-btn:hover:not(.locked){border-color:var(–gold)}.arc-btn.active{border-color:var(–gold);background:#1a1c14}.arc-btn.locked{opacity:.4;cursor:not-allowed}
-.arc-btn .arc-icon{font-size:15px;flex-shrink:0}.arc-btn .arc-name{font-weight:700;font-size:11px}.arc-btn .arc-sub{font-size:9px;color:var(–text3)}
-.chapter-card{background:var(–bg3);border:1px solid var(–border2);border-radius:6px;padding:9px;margin-bottom:5px;cursor:pointer;transition:.15s}
-.chapter-card:hover:not(.chapter-locked){border-color:var(–blue)}.chapter-card.chapter-cleared{border-color:var(–green2);background:#0a1a10}
-.chapter-card.chapter-locked{opacity:.4;cursor:not-allowed}.chapter-card.chapter-boss{border-color:var(–red2)}.chapter-card.chapter-boss:hover:not(.chapter-locked){border-color:var(–red)}
-.chapter-name{font-weight:700;font-size:11px;margin-bottom:2px}.chapter-desc{font-size:9px;color:var(–text3);margin-bottom:5px}
-.chapter-reward{font-size:9px;color:var(–gold)}
-.job-row{background:var(–bg3);border:1px solid var(–border2);border-radius:5px;padding:7px 9px;margin-bottom:4px;display:flex;align-items:center;gap:7px}
-.job-row .job-name{font-weight:700;font-size:12px;flex:1}.job-row .job-belis{font-size:10px;color:var(–gold);display:block;margin-top:1px}
-.upgrade-row{background:var(–bg3);border:1px solid var(–border2);border-radius:5px;padding:7px 9px;margin-bottom:4px;display:flex;align-items:center;gap:7px}
+.home-col{padding:9px;overflow-y:auto;border-right:1px solid var(--border)}.home-col:last-child{border:none}
+.arc-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:7px 9px;margin-bottom:4px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:7px}
+.arc-btn:hover:not(.locked){border-color:var(--gold)}.arc-btn.active{border-color:var(--gold);background:#1a1c14}.arc-btn.locked{opacity:.4;cursor:not-allowed}
+.arc-btn .arc-icon{font-size:15px;flex-shrink:0}.arc-btn .arc-name{font-weight:700;font-size:11px}.arc-btn .arc-sub{font-size:9px;color:var(--text3)}
+.chapter-card{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:9px;margin-bottom:5px;cursor:pointer;transition:.15s}
+.chapter-card:hover:not(.chapter-locked){border-color:var(--blue)}.chapter-card.chapter-cleared{border-color:var(--green2);background:#0a1a10}
+.chapter-card.chapter-locked{opacity:.4;cursor:not-allowed}.chapter-card.chapter-boss{border-color:var(--red2)}.chapter-card.chapter-boss:hover:not(.chapter-locked){border-color:var(--red)}
+.chapter-name{font-weight:700;font-size:11px;margin-bottom:2px}.chapter-desc{font-size:9px;color:var(--text3);margin-bottom:5px}
+.chapter-reward{font-size:9px;color:var(--gold)}
+.job-row{background:var(--bg3);border:1px solid var(--border2);border-radius:5px;padding:7px 9px;margin-bottom:4px;display:flex;align-items:center;gap:7px}
+.job-row .job-name{font-weight:700;font-size:12px;flex:1}.job-row .job-belis{font-size:10px;color:var(--gold);display:block;margin-top:1px}
+.upgrade-row{background:var(--bg3);border:1px solid var(--border2);border-radius:5px;padding:7px 9px;margin-bottom:4px;display:flex;align-items:center;gap:7px}
 .upgrade-row .upg-info{flex:1}.upgrade-row .upg-name{font-weight:700;font-size:11px}
-.upgrade-row .upg-eff{font-size:9px;color:var(–green);margin-top:1px}.upgrade-row .upg-cost{font-size:10px;color:var(–gold);font-weight:700}
+.upgrade-row .upg-eff{font-size:9px;color:var(--green);margin-top:1px}.upgrade-row .upg-cost{font-size:10px;color:var(--gold);font-weight:700}
 
 /* TRAIN */
 #train-tab{gap:0;padding:0;overflow:hidden}
 .train-grid{display:grid;grid-template-columns:230px 1fr 320px;height:100%;overflow:hidden}
-.train-col{padding:9px;overflow-y:auto;border-right:1px solid var(–border)}.train-col:last-child{border:none}
+.train-col{padding:9px;overflow-y:auto;border-right:1px solid var(--border)}.train-col:last-child{border:none}
 .char-stat-row{display:flex;align-items:center;margin-bottom:7px;gap:7px}
-.stat-label{font-size:10px;color:var(–text3);width:55px;flex-shrink:0}
+.stat-label{font-size:10px;color:var(--text3);width:55px;flex-shrink:0}
 .stat-value{font-size:13px;font-weight:700;flex:1;text-align:right}
-.stat-hp{color:var(–green)}.stat-atk{color:var(–red)}
+.stat-hp{color:var(--green)}.stat-atk{color:var(--red)}
 .char-info-row{display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px}
-.char-info-label{color:var(–text3)}.char-info-value{color:var(–text);font-weight:600}
-.mastery-row{background:var(–bg3);border:1px solid var(–border2);border-radius:6px;padding:7px 9px;margin-bottom:5px}
-.mastery-name{font-size:11px;font-weight:700;margin-bottom:3px}.mastery-name span{font-size:10px;color:var(–text3);font-weight:400}
-.mastery-xp{font-size:9px;color:var(–text3);margin-top:2px}
+.char-info-label{color:var(--text3)}.char-info-value{color:var(--text);font-weight:600}
+.mastery-row{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:7px 9px;margin-bottom:5px}
+.mastery-name{font-size:11px;font-weight:700;margin-bottom:3px}.mastery-name span{font-size:10px;color:var(--text3);font-weight:400}
+.mastery-xp{font-size:9px;color:var(--text3);margin-top:2px}
 
 /* ABILITIES */
-.ability-card{background:var(–bg3);border:1px solid var(–border2);border-radius:6px;padding:9px;margin-bottom:7px}
+.ability-card{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:9px;margin-bottom:7px}
 .ability-header{display:flex;align-items:center;gap:7px;margin-bottom:5px}
 .ability-badge{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
-.badge-df{background:#3a1060;color:var(–purple);border:1px solid var(–purple2)}
-.badge-wp{background:#601010;color:var(–red);border:1px solid var(–red2)}
-.badge-hk{background:#102040;color:var(–blue);border:1px solid var(–blue2)}
-.badge-cr{background:#603010;color:var(–gold);border:1px solid var(–gold2)}
-.badge-fs{background:#106010;color:var(–green);border:1px solid var(–green2)}
-.badge-oh{background:#204040;color:var(–cyan);border:1px solid #106060}
-.badge-sp{background:#401040;color:var(–honored);border:1px solid #602060}
-.ability-type-label{font-size:9px;color:var(–text3);text-transform:uppercase;letter-spacing:1px}
+.badge-df{background:#3a1060;color:var(--purple);border:1px solid var(--purple2)}
+.badge-wp{background:#601010;color:var(--red);border:1px solid var(--red2)}
+.badge-hk{background:#102040;color:var(--blue);border:1px solid var(--blue2)}
+.badge-cr{background:#603010;color:var(--gold);border:1px solid var(--gold2)}
+.badge-fs{background:#106010;color:var(--green);border:1px solid var(--green2)}
+.badge-oh{background:#204040;color:var(--cyan);border:1px solid #106060}
+.badge-sp{background:#401040;color:var(--honored);border:1px solid #602060}
+.ability-type-label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
 .ability-name{font-size:12px;font-weight:700}.ability-rarity{font-size:10px;font-weight:700}
-.ability-desc{font-size:10px;color:var(–text2);margin-bottom:6px;line-height:1.4}
+.ability-desc{font-size:10px;color:var(--text2);margin-bottom:6px;line-height:1.4}
 .reroll-btns{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
-.reroll-count{font-size:9px;color:var(–text3);margin-left:auto}
+.reroll-count{font-size:9px;color:var(--text3);margin-left:auto}
 /* DF fruit icon */
 .df-fruit-wrap{position:relative;width:38px;height:38px;flex-shrink:0}
 .df-fruit-img{width:38px;height:38px;border-radius:6px;object-fit:cover;position:absolute;top:0;left:0}
 .df-fruit-emoji{width:38px;height:38px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px;border:2px solid}
-.df-mult-badge{display:inline-block;background:#1a1030;border:1px solid var(–purple2);color:var(–purple);padding:1px 5px;border-radius:3px;font-size:9px;font-weight:700;margin-top:2px}
+.df-mult-badge{display:inline-block;background:#1a1030;border:1px solid var(--purple2);color:var(--purple);padding:1px 5px;border-radius:3px;font-size:9px;font-weight:700;margin-top:2px}
 /* prestige/voyage req display */
 .req-badge{display:inline-block;font-size:9px;padding:1px 5px;border-radius:3px;font-weight:700;margin-left:4px}
-.req-ok{background:#0a2010;color:var(–green);border:1px solid var(–green2)}
-.req-fail{background:#2a1010;color:var(–red);border:1px solid var(–red2)}
+.req-ok{background:#0a2010;color:var(--green);border:1px solid var(--green2)}
+.req-fail{background:#2a1010;color:var(--red);border:1px solid var(--red2)}
 
 /* MINE */
 #mine-tab{gap:8px;padding:10px;overflow-y:auto;flex-wrap:wrap;align-content:flex-start}
 .mine-main{flex:1;min-width:260px;display:flex;flex-direction:column;gap:8px}
 .mine-upgrades{width:300px;flex-shrink:0;display:flex;flex-direction:column;gap:8px}
-.excavation-area{background:var(–bg3);border:1px solid var(–border2);border-radius:8px;padding:14px;text-align:center}
-.excavation-msg{font-size:14px;font-weight:600;margin:12px 0;color:var(–text2)}
+.excavation-area{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:14px;text-align:center}
+.excavation-msg{font-size:14px;font-weight:600;margin:12px 0;color:var(--text2)}
 .dig-icon{font-size:28px;margin-bottom:3px;animation:digBob 2s ease-in-out infinite}
 @keyframes digBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 .dig-progress{margin:8px 0 12px}
 .find-rarity-list{display:flex;flex-direction:column;gap:3px}
 .find-row{display:flex;align-items:center;gap:7px;font-size:11px}
 .find-dot{width:7px;height:7px;border-radius:50%}
-.find-rarity-label{width:75px;font-weight:700}.find-item{flex:1;color:var(–text2)}
-.dig-result-popup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(–bg2);border:2px solid var(–gold);border-radius:12px;padding:22px 30px;text-align:center;z-index:100;animation:popIn .3s ease;display:none;min-width:240px}
+.find-rarity-label{width:75px;font-weight:700}.find-item{flex:1;color:var(--text2)}
+.dig-result-popup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg2);border:2px solid var(--gold);border-radius:12px;padding:22px 30px;text-align:center;z-index:100;animation:popIn .3s ease;display:none;min-width:240px}
 
 /* BOSS */
 #boss-tab-content{padding:10px;overflow-y:auto}
-.boss-card{background:var(–bg3);border:1px solid var(–border2);border-radius:8px;padding:12px;margin-bottom:7px;display:flex;align-items:center;gap:10px}
-.boss-card.boss-defeated{border-color:var(–green2);background:#0a1810}
-.boss-avatar{width:50px;height:50px;border-radius:8px;background:var(–bg4);border:2px solid var(–red2);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
-.boss-info{flex:1}.boss-name{font-weight:700;font-size:13px;margin-bottom:1px}.boss-arc{font-size:9px;color:var(–text3);margin-bottom:3px}
-.boss-hp-label{font-size:10px;color:var(–text3)}.boss-reward{font-size:10px;color:var(–gold);margin-top:2px}
-.boss-clear-badge{font-size:10px;color:var(–green);font-weight:700}
-.boss-desc{font-size:9px;color:var(–text3);margin-top:2px}
+.boss-card{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:12px;margin-bottom:7px;display:flex;align-items:center;gap:10px}
+.boss-card.boss-defeated{border-color:var(--green2);background:#0a1810}
+.boss-avatar{width:50px;height:50px;border-radius:8px;background:var(--bg4);border:2px solid var(--red2);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.boss-info{flex:1}.boss-name{font-weight:700;font-size:13px;margin-bottom:1px}.boss-arc{font-size:9px;color:var(--text3);margin-bottom:3px}
+.boss-hp-label{font-size:10px;color:var(--text3)}.boss-reward{font-size:10px;color:var(--gold);margin-top:2px}
+.boss-clear-badge{font-size:10px;color:var(--green);font-weight:700}
+.boss-desc{font-size:9px;color:var(--text3);margin-top:2px}
 
 /* PLACEHOLDER */
 .placeholder-screen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;opacity:.6}
-.placeholder-screen .ph-icon{font-size:44px}.placeholder-screen .ph-title{font-family:‘Cinzel’,serif;font-size:18px;font-weight:700;color:var(–gold)}
-.placeholder-screen .ph-sub{font-size:12px;color:var(–text3)}
+.placeholder-screen .ph-icon{font-size:44px}.placeholder-screen .ph-title{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--gold)}
+.placeholder-screen .ph-sub{font-size:12px;color:var(--text3)}
 
 /* SETTINGS */
 #set-tab{padding:18px;overflow-y:auto;max-width:580px;margin:0 auto;width:100%}
-.setting-row{background:var(–bg3);border:1px solid var(–border2);border-radius:6px;padding:11px 14px;margin-bottom:5px;display:flex;align-items:center;gap:9px}
+.setting-row{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;padding:11px 14px;margin-bottom:5px;display:flex;align-items:center;gap:9px}
 .setting-info{flex:1}.setting-name{font-weight:700;font-size:12px}
-.setting-desc{font-size:10px;color:var(–text3);margin-top:2px}
-.toggle-btn{padding:3px 10px;border-radius:4px;font-weight:700;font-size:11px;cursor:pointer;border:none;font-family:‘Rajdhani’,sans-serif}
-.toggle-on{background:var(–green2);color:#fff}.toggle-on:hover{background:var(–green)}
-.toggle-off{background:#2a3050;color:var(–text3)}.toggle-off:hover{background:var(–bg4)}
+.setting-desc{font-size:10px;color:var(--text3);margin-top:2px}
+.toggle-btn{padding:3px 10px;border-radius:4px;font-weight:700;font-size:11px;cursor:pointer;border:none;font-family:'Rajdhani',sans-serif}
+.toggle-on{background:var(--green2);color:#fff}.toggle-on:hover{background:var(--green)}
+.toggle-off{background:#2a3050;color:var(--text3)}.toggle-off:hover{background:var(--bg4)}
 .threshold-btns{display:flex;gap:3px;flex-wrap:wrap;margin-top:5px}
-.thresh-btn{padding:3px 7px;border-radius:3px;border:1px solid var(–border2);background:var(–bg4);color:var(–text2);cursor:pointer;font-size:10px;font-weight:700;font-family:‘Rajdhani’,sans-serif}
-.thresh-btn.active{background:var(–blue2);color:#fff;border-color:var(–blue)}
+.thresh-btn{padding:3px 7px;border-radius:3px;border:1px solid var(--border2);background:var(--bg4);color:var(--text2);cursor:pointer;font-size:10px;font-weight:700;font-family:'Rajdhani',sans-serif}
+.thresh-btn.active{background:var(--blue2);color:#fff;border-color:var(--blue)}
 
 /* TAGS & MISC */
 .tag{padding:1px 4px;border-radius:2px;font-size:9px;font-weight:700}
-.tag-epic{background:#2a1060;color:var(–epic);border:1px solid var(–purple2)}
-.tag-rare{background:#102060;color:var(–rare);border:1px solid var(–blue2)}
-.tag-legendary{background:#302000;color:var(–legendary);border:1px solid var(–gold2)}
-.tag-mythical{background:#302010;color:var(–mythical);border:1px solid #804020}
+.tag-epic{background:#2a1060;color:var(--epic);border:1px solid var(--purple2)}
+.tag-rare{background:#102060;color:var(--rare);border:1px solid var(--blue2)}
+.tag-legendary{background:#302000;color:var(--legendary);border:1px solid var(--gold2)}
+.tag-mythical{background:#302010;color:var(--mythical);border:1px solid #804020}
 .tag-common{background:#202020;color:#888;border:1px solid #383838}
-.tag-uncommon{background:#102820;color:var(–green);border:1px solid var(–green2)}
-.tag-honored{background:#301030;color:var(–honored);border:1px solid #804080}
-.gold{color:var(–gold)}.red{color:var(–red)}.green{color:var(–green)}.blue{color:var(–blue)}.cyan{color:var(–cyan)}.text2{color:var(–text2)}
-.divider{border:none;border-top:1px solid var(–border);margin:7px 0}
+.tag-uncommon{background:#102820;color:var(--green);border:1px solid var(--green2)}
+.tag-honored{background:#301030;color:var(--honored);border:1px solid #804080}
+.gold{color:var(--gold)}.red{color:var(--red)}.green{color:var(--green)}.blue{color:var(--blue)}.cyan{color:var(--cyan)}.text2{color:var(--text2)}
+.divider{border:none;border-top:1px solid var(--border);margin:7px 0}
 .badge{padding:1px 5px;border-radius:3px;font-size:9px;font-weight:700}
-.badge-locked{background:#2a2030;color:var(–text3);border:1px solid var(–border)}
+.badge-locked{background:#2a2030;color:var(--text3);border:1px solid var(--border)}
 .animate-pulse{animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 ::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:#0a0d14}
 ::-webkit-scrollbar-thumb{background:#2a3a58;border-radius:2px}::-webkit-scrollbar-thumb:hover{background:#3a4a70}
 </style>
-
 </head>
 <body>
 
 <!-- HEADER -->
-
 <div id="header">
   <div style="display:flex;gap:5px;align-items:center">
     <div class="hdr-btn" onclick="openLeaderboard()">🏆 Board</div>
@@ -322,80 +319,74 @@ body.data-saver *{animation:none!important;transition:none!important}
 </div>
 
 <!-- MAIN -->
-
 <div id="notif-stack"></div>
 <div id="main">
 
 <!-- COMBAT TAB -->
-
 <div id="tab-combat" class="tab-content active" style="flex-direction:column">
   <div id="combat-tab">
     <!-- Arena -->
     <div class="combat-arena-wrap" id="combat-arena">
       <canvas id="vfx-canvas" style="position:absolute;inset:0;pointer-events:none;z-index:20;border-radius:10px;width:100%;height:100%"></canvas>
 
-```
-  <!-- Player Side -->
-  <div class="fighter-box player-box" id="player-fighter">
-    <div class="fighter-avatar" id="player-avatar" style="border-color:var(--blue2);box-shadow:0 0 10px rgba(58,143,239,.3)">🏴‍☠️</div>
-    <div class="fighter-name" id="player-name-display" style="color:var(--blue)">Pirate</div>
-    <div class="fighter-hp">
-      <div id="player-hp-text" style="margin-bottom:3px;font-size:9px;color:var(--text3)">— / —</div>
-      <div class="hp-bar-wrap"><div class="hp-bar hp-bar-player" id="player-hp-bar" style="width:100%"></div></div>
+      <!-- Player Side -->
+      <div class="fighter-box player-box" id="player-fighter">
+        <div class="fighter-avatar" id="player-avatar" style="border-color:var(--blue2);box-shadow:0 0 10px rgba(58,143,239,.3)">🏴‍☠️</div>
+        <div class="fighter-name" id="player-name-display" style="color:var(--blue)">Pirate</div>
+        <div class="fighter-hp">
+          <div id="player-hp-text" style="margin-bottom:3px;font-size:9px;color:var(--text3)">— / —</div>
+          <div class="hp-bar-wrap"><div class="hp-bar hp-bar-player" id="player-hp-bar" style="width:100%"></div></div>
+        </div>
+        <div class="fighter-atk" id="player-atk-display" style="font-size:10px;color:var(--blue)">PWR: —</div>
+        <div style="font-size:9px;color:var(--text3);margin-top:2px" id="player-allies-display"></div>
+        <div id="player-turn-badge" class="turn-indicator turn-player" style="margin-top:4px;display:none">YOUR TURN</div>
+      </div>
+
+      <div class="vs-badge">VS</div>
+
+      <!-- Enemy Side -->
+      <div class="fighter-box enemy-box" id="enemy-fighter" style="display:none;flex-direction:column">
+        <div class="enemy-level-badge" id="enemy-level-badge">LV?</div>
+        <div class="fighter-avatar" id="enemy-avatar" style="background:#1a0808;border-color:var(--red2);box-shadow:0 0 10px rgba(232,64,64,.3)">❓</div>
+        <div class="fighter-name" id="enemy-name" style="color:var(--red)">???</div>
+        <div class="fighter-hp">
+          <div id="enemy-hp-text" style="margin-bottom:3px;font-size:9px;color:var(--text3)">??? / ???</div>
+          <div class="hp-bar-wrap"><div class="hp-bar hp-bar-enemy" id="enemy-hp-bar" style="width:100%"></div></div>
+        </div>
+        <div class="fighter-atk" id="enemy-atk" style="font-size:10px;color:var(--red)">ATK: ???</div>
+        <div id="enemy-turn-badge" class="turn-indicator turn-enemy" style="margin-top:4px;display:none">ATTACKING</div>
+      </div>
+
+      <!-- Idle placeholder -->
+      <div id="enemy-placeholder" style="flex:1;background:linear-gradient(160deg,var(--bg3),var(--bg4));border:1px solid var(--border2);border-radius:10px;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--text3)">
+        <span style="font-size:32px">⚔️</span>
+        <span style="font-size:11px;text-align:center">Select an enemy or start a story chapter</span>
+        <button class="btn btn-gold btn-md" onclick="startBattle()">⚓ Find Enemy</button>
+      </div>
     </div>
-    <div class="fighter-atk" id="player-atk-display" style="font-size:10px;color:var(--blue)">PWR: —</div>
-    <div style="font-size:9px;color:var(--text3);margin-top:2px" id="player-allies-display"></div>
-    <div id="player-turn-badge" class="turn-indicator turn-player" style="margin-top:4px;display:none">YOUR TURN</div>
-  </div>
 
-  <div class="vs-badge">VS</div>
+    <!-- Vow banner (if active) -->
+    <div id="vow-banner-display" class="vow-banner" style="display:none"></div>
 
-  <!-- Enemy Side -->
-  <div class="fighter-box enemy-box" id="enemy-fighter" style="display:none;flex-direction:column">
-    <div class="enemy-level-badge" id="enemy-level-badge">LV?</div>
-    <div class="fighter-avatar" id="enemy-avatar" style="background:#1a0808;border-color:var(--red2);box-shadow:0 0 10px rgba(232,64,64,.3)">❓</div>
-    <div class="fighter-name" id="enemy-name" style="color:var(--red)">???</div>
-    <div class="fighter-hp">
-      <div id="enemy-hp-text" style="margin-bottom:3px;font-size:9px;color:var(--text3)">??? / ???</div>
-      <div class="hp-bar-wrap"><div class="hp-bar hp-bar-enemy" id="enemy-hp-bar" style="width:100%"></div></div>
+    <!-- Combat log -->
+    <div class="combat-log" id="combat-log">
+      <div class="log-line log-system"><span class="log-time">now</span>⚓ Welcome to the Grand Line! Choose a skill to fight!</div>
     </div>
-    <div class="fighter-atk" id="enemy-atk" style="font-size:10px;color:var(--red)">ATK: ???</div>
-    <div id="enemy-turn-badge" class="turn-indicator turn-enemy" style="margin-top:4px;display:none">ATTACKING</div>
-  </div>
 
-  <!-- Idle placeholder -->
-  <div id="enemy-placeholder" style="flex:1;background:linear-gradient(160deg,var(--bg3),var(--bg4));border:1px solid var(--border2);border-radius:10px;padding:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--text3)">
-    <span style="font-size:32px">⚔️</span>
-    <span style="font-size:11px;text-align:center">Select an enemy or start a story chapter</span>
-    <button class="btn btn-gold btn-md" onclick="startBattle()">⚓ Find Enemy</button>
-  </div>
-</div>
+    <!-- Controls row -->
+    <div style="display:flex;gap:5px;margin-bottom:6px;align-items:center;flex-wrap:wrap">
+      <button class="btn btn-gray btn-sm" id="auto-battle-btn" onclick="toggleAutoBattle()">⚡ Auto</button>
+      <button class="btn btn-gray btn-sm" id="fast-forward-btn" onclick="toggleFastForward()">⏩ Fast</button>
+      <div id="buff-indicator" style="display:none;font-size:9px;color:var(--blue);background:rgba(58,143,239,.1);border:1px solid var(--blue2);border-radius:10px;padding:1px 7px">BUFF ACTIVE</div>
+      <span id="combo-display" style="font-size:10px;color:var(--gold);font-weight:700;margin-left:auto;display:none"></span>
+    </div>
 
-<!-- Vow banner (if active) -->
-<div id="vow-banner-display" class="vow-banner" style="display:none"></div>
-
-<!-- Combat log -->
-<div class="combat-log" id="combat-log">
-  <div class="log-line log-system"><span class="log-time">now</span>⚓ Welcome to the Grand Line! Choose a skill to fight!</div>
-</div>
-
-<!-- Controls row -->
-<div style="display:flex;gap:5px;margin-bottom:6px;align-items:center;flex-wrap:wrap">
-  <button class="btn btn-gray btn-sm" id="auto-battle-btn" onclick="toggleAutoBattle()">⚡ Auto</button>
-  <button class="btn btn-gray btn-sm" id="fast-forward-btn" onclick="toggleFastForward()">⏩ Fast</button>
-  <div id="buff-indicator" style="display:none;font-size:9px;color:var(--blue);background:rgba(58,143,239,.1);border:1px solid var(--blue2);border-radius:10px;padding:1px 7px">BUFF ACTIVE</div>
-  <span id="combo-display" style="font-size:10px;color:var(--gold);font-weight:700;margin-left:auto;display:none"></span>
-</div>
-
-<!-- Skills -->
-<div class="skills-grid" id="skills-grid"></div>
-```
-
+    <!-- Skills -->
+    <div class="skills-grid" id="skills-grid"></div>
   </div>
 </div>
 
 <!-- CREW TAB -->
-
 <div id="tab-crew" class="tab-content">
   <div id="crew-tab">
     <div class="crew-col crew-col-equip">
@@ -439,7 +430,6 @@ body.data-saver *{animation:none!important;transition:none!important}
 </div>
 
 <!-- CHAR TAB -->
-
 <div id="tab-char" class="tab-content">
   <div id="char-tab">
     <div class="char-equip-col">
@@ -468,7 +458,6 @@ body.data-saver *{animation:none!important;transition:none!important}
 </div>
 
 <!-- HOME TAB -->
-
 <div id="tab-home" class="tab-content">
   <div class="home-grid" style="height:100%">
     <div class="home-col">
@@ -491,7 +480,6 @@ body.data-saver *{animation:none!important;transition:none!important}
 </div>
 
 <!-- TRAIN TAB -->
-
 <div id="tab-train" class="tab-content">
   <div class="train-grid" style="height:100%">
     <div class="train-col">
@@ -578,13 +566,11 @@ body.data-saver *{animation:none!important;transition:none!important}
 </div>
 
 <!-- RAID TAB -->
-
 <div id="tab-raid" class="tab-content" style="flex-direction:column;overflow-y:auto">
   <div id="raid-content"></div>
 </div>
 
 <!-- BOSS TAB -->
-
 <div id="tab-boss" class="tab-content" style="flex-direction:column;overflow-y:auto">
   <div id="boss-tab-content">
     <div style="padding:10px">
@@ -596,7 +582,6 @@ body.data-saver *{animation:none!important;transition:none!important}
 </div>
 
 <!-- MINE TAB -->
-
 <div id="tab-mine" class="tab-content">
   <div id="mine-tab">
     <div class="mine-main">
@@ -626,25 +611,21 @@ body.data-saver *{animation:none!important;transition:none!important}
 </div>
 
 <!-- MODES TAB -->
-
 <div id="tab-modes" class="tab-content" style="flex-direction:column;overflow-y:auto">
   <div id="modes-content"></div>
 </div>
 
 <!-- RANK TAB -->
-
 <div id="tab-rank" class="tab-content" style="flex-direction:column;overflow-y:auto">
   <div id="rank-content"></div>
 </div>
 
 <!-- EVENT TAB -->
-
 <div id="tab-event" class="tab-content" style="flex-direction:column;overflow-y:auto">
   <div id="event-content"></div>
 </div>
 
 <!-- SETTINGS TAB -->
-
 <div id="tab-set" class="tab-content" style="flex-direction:column;overflow-y:auto">
   <div id="set-tab">
     <h2 style="font-family:'Cinzel',serif;color:var(--gold);margin-bottom:12px;font-size:15px">⚙️ Settings</h2>
@@ -750,7 +731,6 @@ body.data-saver *{animation:none!important;transition:none!important}
 </div><!-- end #main -->
 
 <!-- TABBAR -->
-
 <div id="tabbar">
   <button class="tab-btn active" id="tbtn-combat" onclick="showTab('combat')"><span class="icon">⚔️</span>COMBAT</button>
   <button class="tab-btn" id="tbtn-crew" onclick="showTab('crew')"><span class="icon">👥</span>CREW</button>
@@ -767,7 +747,6 @@ body.data-saver *{animation:none!important;transition:none!important}
 </div>
 
 <!-- ROLL POPUP -->
-
 <div class="roll-result-popup" id="roll-result-popup" onclick="closeRollPopup()">
   <div class="result-rarity" id="result-rarity">LEGENDARY</div>
   <div id="result-ally-icon" style="font-size:34px;margin-bottom:7px">⚓</div>
@@ -777,7 +756,6 @@ body.data-saver *{animation:none!important;transition:none!important}
 </div>
 
 <!-- MINE POPUP -->
-
 <div class="dig-result-popup" id="dig-result-popup" onclick="closeDigPopup()">
   <div id="dig-result-icon" style="font-size:38px;margin-bottom:7px">💎</div>
   <div id="dig-result-rarity" style="font-size:16px;font-family:'Cinzel',serif;font-weight:700;margin-bottom:3px">LEGENDARY</div>
@@ -902,7 +880,7 @@ const G = {
     active:false, isBoss:false, bossIdx:null,
     playerHp:500, playerMaxHp:500,
     enemyHp:0, enemyMaxHp:0, enemyName:"", enemyAtk:0, enemyIcon:"❓",
-    playerTurn:true, buffActive:false, buffTurns:0,
+    playerTurn:true, buffActive:false, buffTurns:0, conquerorActive:false, conquerorTurns:0,
   },
   settings:{dataSaver:false, abilityFX:true, sounds:true, autoClose:true, threshold:"R"},
   mastery:{gomu:{lv:1,xp:0,maxXp:100}, sword:{lv:1,xp:0,maxXp:100}},
@@ -986,14 +964,19 @@ const G = {
   ],
 
   enemies:[
-    {name:"Marine Grunt",      icon:"⚓",hp:300,    maxHp:300,    atk:20,    xp:30,   belis:100},
-    {name:"Bounty Hunter",     icon:"🎯",hp:800,    maxHp:800,    atk:50,    xp:80,   belis:300},
-    {name:"East Blue Pirate",  icon:"🏴",hp:2000,   maxHp:2000,   atk:120,   xp:200,  belis:800},
-    {name:"Grand Line Soldier",icon:"⚔️",hp:8000,   maxHp:8000,   atk:400,   xp:600,  belis:3000},
-    {name:"Baroque Agent",     icon:"🎭",hp:25000,  maxHp:25000,  atk:1200,  xp:2000, belis:10000},
-    {name:"Skypiea Priest",    icon:"⚡",hp:80000,  maxHp:80000,  atk:4000,  xp:6000, belis:40000},
-    {name:"CP9 Agent",         icon:"🕵️",hp:250000, maxHp:250000, atk:12000, xp:20000,belis:150000},
-    {name:"Beast Pirate",      icon:"🐲",hp:5000000,maxHp:5000000,atk:200000,xp:500000,belis:2000000},
+    {name:"Marine Grunt",        icon:"⚓",hp:300,      maxHp:300,      atk:20,      xp:30,     belis:100},
+    {name:"Bounty Hunter",       icon:"🎯",hp:800,      maxHp:800,      atk:50,      xp:80,     belis:300},
+    {name:"East Blue Pirate",    icon:"🏴",hp:2000,     maxHp:2000,     atk:120,     xp:200,    belis:800},
+    {name:"Grand Line Soldier",  icon:"⚔️",hp:8000,     maxHp:8000,     atk:400,     xp:600,    belis:3000},
+    {name:"Baroque Agent",       icon:"🎭",hp:25000,    maxHp:25000,    atk:1200,    xp:2000,   belis:10000},
+    {name:"Skypiea Priest",      icon:"⚡",hp:80000,    maxHp:80000,    atk:4000,    xp:6000,   belis:40000},
+    {name:"CP9 Agent",           icon:"🕵️",hp:250000,   maxHp:250000,   atk:12000,   xp:20000,  belis:150000},
+    {name:"Thriller Bark Zombie",icon:"🧟",hp:600000,   maxHp:600000,   atk:30000,   xp:60000,  belis:500000},
+    {name:"New World Pirate",    icon:"🌊",hp:2000000,  maxHp:2000000,  atk:80000,   xp:200000, belis:1500000},
+    {name:"Beast Pirate",        icon:"🐲",hp:5000000,  maxHp:5000000,  atk:200000,  xp:500000, belis:2000000},
+    {name:"Tobi Roppo",          icon:"👹",hp:20000000, maxHp:20000000, atk:800000,  xp:2000000,belis:10000000},
+    {name:"All-Star Commander",  icon:"💀",hp:80000000, maxHp:80000000, atk:3000000, xp:8000000,belis:50000000},
+    {name:"Seraphim Unit",       icon:"🤖",hp:300000000,maxHp:300000000,atk:12000000,xp:30000000,belis:200000000},
   ],
 
   allAllies:[
@@ -1940,7 +1923,11 @@ function addLog(msg,cls=""){
 }
 
 function startBattle(enemyOverride){
-  const e=enemyOverride||G.enemies[Math.floor(rng()*G.enemies.length)];
+  if(!enemyOverride){
+    showEnemyPicker();
+    return;
+  }
+  const e=enemyOverride;
   G.combat.active=true;G.combat.isBoss=false;
   G.combat.playerHp=G.maxHp;G.combat.playerMaxHp=G.maxHp;
   G.combat.enemyHp=e.hp;G.combat.enemyMaxHp=e.hp||e.maxHp||e.hp;
@@ -1951,6 +1938,35 @@ function startBattle(enemyOverride){
   renderCombat();renderSkills();
   addLog(`⚔️ ${e.name} appeared!`,"log-system");
   document.getElementById('battle-passives').style.display="block";
+}
+
+function showEnemyPicker(){
+  // Build enemy picker popup sorted by power
+  const enemies=G.enemies.map((e,i)=>({...e,idx:i}));
+  const html=`
+    <div style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold);margin-bottom:12px">⚔️ Choose Your Enemy</div>
+    <div style="font-size:10px;color:var(--text3);margin-bottom:10px">Select an enemy to fight. Stronger enemies give more Belis & XP.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:55vh;overflow-y:auto">
+      ${enemies.map(e=>`
+        <div onclick="pickEnemy(${e.idx})" style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:9px"
+          onmouseover="this.style.borderColor='var(--red)';this.style.background='#1a0a0a'"
+          onmouseout="this.style.borderColor='var(--border2)';this.style.background='var(--bg3)'">
+          <span style="font-size:22px">${e.icon}</span>
+          <div>
+            <div style="font-weight:700;font-size:12px;color:var(--text)">${e.name}</div>
+            <div style="font-size:10px;color:var(--red)">HP: ${fmt(e.hp)}</div>
+            <div style="font-size:10px;color:var(--gold)">+${fmt(e.belis)} Belis</div>
+          </div>
+        </div>`).join('')}
+    </div>
+    <button class="btn btn-gray btn-md" style="width:100%;margin-top:10px" onclick="closeModal()">Cancel</button>`;
+  openModal(html);
+}
+
+function pickEnemy(idx){
+  closeModal();
+  const e={...G.enemies[idx],maxHp:G.enemies[idx].hp};
+  startBattle(e);
 }
 
 function startBossBattle(bossIdx){
@@ -2093,6 +2109,17 @@ const DF_SKILL_SETS = {
       {name:"Sables Pesado",  icon:"🌪️", dmg:4.5, effect:"sables",     buff:false, desc:"1000% — Massive sand storm."},
     ]
   },
+  // ── SNOW ──────────────────────────────────────
+  snow:{
+    label:"Yuki Yuki no Mi",
+    color:"#c0e8ff",
+    skills:[
+      {name:"Snow Spear",     icon:"❄️", dmg:3.5, effect:"ice_shard",  buff:false, desc:"350% — Sharp snow lance."},
+      {name:"Ice Shield",     icon:"🧊", dmg:0,   effect:"buff_aura",  buff:true,  desc:"BUFF — Snow armour +25% DMG."},
+      {name:"Blizzard",       icon:"🌨️", dmg:6.0, effect:"ice_age",    buff:false, desc:"600% — Howling snowstorm."},
+      {name:"White Christmas",icon:"⛄", dmg:9.5, effect:"ice_age",    buff:false, desc:"950% — Flash-freeze the world."},
+    ]
+  },
   // ── SMOKE ─────────────────────────────────────
   smoke:{
     label:"Moku Moku no Mi",
@@ -2148,6 +2175,17 @@ const DF_SKILL_SETS = {
       {name:"Dragon Twister", icon:"🌀", dmg:7.2, effect:"sables",     buff:false, desc:"1800% — Kaido's ultimate."},
     ]
   },
+  // ── LIGHT ─────────────────────────────────────
+  light:{
+    label:"Pika Pika no Mi",
+    color:"#ffe060",
+    skills:[
+      {name:"Light Beam",     icon:"💛", dmg:4.0,  effect:"el_thor",   buff:false, desc:"400% — Concentrated light beam."},
+      {name:"Yasakani no Magatama",icon:"✨",dmg:6.5,effect:"raigo",  buff:false, desc:"650% — Infinite light bullets."},
+      {name:"Amaterasu",      icon:"☀️", dmg:9.0,  effect:"explosion", buff:false, desc:"900% — Blinding solar burst."},
+      {name:"Speed of Light", icon:"🌟", dmg:12.0, effect:"el_thor",   buff:false, desc:"1200% — Travel at light speed."},
+    ]
+  },
   // ── OP-OP ─────────────────────────────────────
   opop:{
     label:"Ope Ope no Mi",
@@ -2183,11 +2221,13 @@ function getDFSkillKey(dfName){
   if(n.includes('goro')||n.includes('rumble'))return'lightning';
   if(n.includes('yami')||n.includes('dark'))return'darkness';
   if(n.includes('suna')||n.includes('sand'))return'sand';
+  if(n.includes('yuki')||n.includes('snow'))return'snow';
   if(n.includes('moku')||n.includes('smoke'))return'smoke';
   if(n.includes('ito')||n.includes('string'))return'string';
   if(n.includes('gura')||n.includes('tremor'))return'tremor';
   if(n.includes('phoenix')||n.includes('tori'))return'phoenix';
   if(n.includes('seiryu')||n.includes('dragon'))return'dragon';
+  if(n.includes('pika')||n.includes('glint')||n.includes('light'))return'light';
   if(n.includes('ope'))return'opop';
   if(n.includes('blackbeard')||n.includes('dual'))return'dual_tremor_dark';
   return null;
@@ -2356,6 +2396,10 @@ function useSkill(idx){
   playVFX(vfxKey);
   if(sk.buff){
     c.buffActive=true;c.buffTurns=3;
+    if(sk.effect==='thunder'||sk.effect==='conquerors'){
+      c.conquerorActive=true;c.conquerorTurns=2;
+      addLog(`👑 Conqueror's Haki erupts! Enemies cower! -20% enemy ATK for 2 turns.`,"log-buff");
+    }
     playBuffSound();
     addLog(`✦ ${sk.name} activated! +25% DMG for 3 turns.`,"log-buff");
   }else{
@@ -2383,11 +2427,14 @@ function useSkill(idx){
   setTimeout(()=>{
     const ohDodge=G.abilities.oh?.dodge||0;
     if(rng()<ohDodge){addLog(`👁️ Observation Haki! You dodged!`,"log-buff");c.playerTurn=true;renderCombat();updateHeader();return;}
-    let eDmg=Math.floor(c.enemyAtk*(0.85+rng()*0.3));
+    // Conqueror's Haki debuff
+    const conqMult2=(c.conquerorActive&&c.conquerorTurns>0)?0.8:1;
+    if(c.conquerorActive){c.conquerorTurns--;if(c.conquerorTurns<=0)c.conquerorActive=false;}
+    let eDmg=Math.floor(c.enemyAtk*conqMult2*(0.85+rng()*0.3));
     c.playerHp-=eDmg;
     playHitSound();
     playEnemyHitVFX();
-    addLog(`👹 ${c.enemyName}: ${fmt(eDmg)} DMG!`,"log-dmg");
+    addLog(`👹 ${c.enemyName}: ${fmt(eDmg)} DMG!${conqMult2<1?' (cowering)':''}`,"log-dmg");
     if(c.playerHp<=0){
       addLog("💀 You were defeated! Battle ended.","log-system");
       c.playerHp=Math.floor(G.maxHp*0.3);
@@ -2427,6 +2474,7 @@ function onEnemyDefeated(){
       addLog(`⭐ FIRST CLEAR! +${boss.reward.scrolls} Scrolls!`,"log-system");
       boss.cleared=true;
       trackEventProgress('bosses',1);
+      if(typeof pushNotif==='function')pushNotif(`👹 ${boss.name} defeated! +${boss.reward.scrolls} Scrolls`,'purple');
       showVictoryOverlay(`${boss.name} DEFEATED!`,`First clear bonus: +${boss.reward.scrolls} Scrolls\n+${fmt(boss.reward.belis)} Belis`,'var(--mythical)','boss');
       pushNotif(`👹 Boss cleared: ${boss.name}!`,'purple');
     }else{
@@ -2453,6 +2501,7 @@ function onEnemyDefeated(){
           if(arcIdx>=0&&arcIdx+1<G.storyArcs.length){
             G.storyArcs[arcIdx+1].unlocked=true;
             addLog(`🗺️ ${G.storyArcs[arcIdx+1].name} unlocked!`,"log-system");
+            pushNotif && pushNotif(`🗺️ ${G.storyArcs[arcIdx+1].name} unlocked!`,'blue');
           }
         }
       }
@@ -3984,9 +4033,7 @@ function init(){
 }
 document.addEventListener('DOMContentLoaded',init);
 </script>
-
 <!-- ========== MODALS ========== -->
-
 <div id="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:400;align-items:center;justify-content:center;padding:12px" onclick="closeModal(event)">
   <div id="modal-box" style="background:var(--bg2);border:1px solid var(--border2);border-radius:10px;max-width:480px;width:100%;max-height:80vh;overflow-y:auto;padding:16px;position:relative" onclick="event.stopPropagation()">
     <button onclick="closeModal()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;line-height:1">✕</button>
@@ -4021,13 +4068,12 @@ document.addEventListener('DOMContentLoaded',init);
 .lb-rank{font-family:'Cinzel',serif;font-size:14px;font-weight:700;width:28px;text-align:center;flex-shrink:0}
 </style>
 
-<!-- ========== LOGIN SCREEN ========== -->
 
+<!-- ========== LOGIN SCREEN ========== -->
 <!-- ═══════════════════════════════════════════════════════════
      LANDING PAGE — shows when not logged in
      Play Now opens #auth-modal. After login this hides.
 ═══════════════════════════════════════════════════════════ -->
-
 <style>
 /* ── Landing page base ── */
 #landing-page{
@@ -4445,7 +4491,6 @@ document.addEventListener('DOMContentLoaded',init);
 </style>
 
 <!-- LANDING PAGE -->
-
 <div id="landing-page">
   <!-- Particle canvas -->
   <canvas id="lp-canvas"></canvas>
@@ -4455,7 +4500,6 @@ document.addEventListener('DOMContentLoaded',init);
   <div id="lp-progress"><div id="lp-prog-bar"></div></div>
 
   <!-- ── NAVBAR ── -->
-
   <nav id="lp-nav">
     <a class="lp-logo" onclick="landingScrollTo('#lp-hero')">
       <span class="lp-logo-skull">☠️</span> One Piece Incremental
@@ -4482,7 +4526,6 @@ document.addEventListener('DOMContentLoaded',init);
   </nav>
 
   <!-- ── HERO ── -->
-
   <section id="lp-hero" class="lp-section">
     <div class="lp-hero-bg"></div>
     <div class="lp-ship">🚢</div>
@@ -4513,7 +4556,6 @@ document.addEventListener('DOMContentLoaded',init);
   <div class="lp-rope"></div>
 
   <!-- ── FEATURES ── -->
-
   <section id="lp-features" class="lp-section">
     <div class="lp-inner">
       <div style="text-align:center">
@@ -4551,7 +4593,6 @@ document.addEventListener('DOMContentLoaded',init);
   <div class="lp-rope"></div>
 
   <!-- ── DEVIL FRUITS ── -->
-
   <section id="lp-fruits" class="lp-section">
     <div class="lp-inner" style="padding-bottom:40px">
       <div style="text-align:center">
@@ -4588,7 +4629,6 @@ document.addEventListener('DOMContentLoaded',init);
   <div class="lp-rope"></div>
 
   <!-- ── GAMEPASSES ── -->
-
   <section id="lp-passes" class="lp-section">
     <div class="lp-inner">
       <div style="text-align:center">
@@ -4631,7 +4671,6 @@ document.addEventListener('DOMContentLoaded',init);
   <div class="lp-rope"></div>
 
   <!-- ── ROADMAP ── -->
-
   <section id="lp-roadmap" class="lp-section">
     <div class="lp-inner">
       <div>
@@ -4652,7 +4691,6 @@ document.addEventListener('DOMContentLoaded',init);
   <div class="lp-rope"></div>
 
   <!-- ── CREWS ── -->
-
   <section id="lp-crews" class="lp-section">
     <div class="lp-inner">
       <div style="text-align:center">
@@ -4672,7 +4710,6 @@ document.addEventListener('DOMContentLoaded',init);
   <div class="lp-rope"></div>
 
   <!-- ── TESTIMONIALS ── -->
-
   <section id="lp-testi" class="lp-section">
     <div class="lp-inner">
       <div style="text-align:center">
@@ -4690,7 +4727,6 @@ document.addEventListener('DOMContentLoaded',init);
   <div class="lp-rope"></div>
 
   <!-- ── FAQ ── -->
-
   <section id="lp-faq" class="lp-section">
     <div class="lp-inner">
       <div style="text-align:center">
@@ -4709,7 +4745,6 @@ document.addEventListener('DOMContentLoaded',init);
   <div class="lp-rope"></div>
 
   <!-- ── CTA ── -->
-
   <section id="lp-cta" class="lp-section">
     <div class="lp-cta-inner">
       <div class="lp-stag lp-reveal" style="justify-content:center">🏴‍☠️ The Sea Awaits</div>
@@ -4723,7 +4758,6 @@ document.addEventListener('DOMContentLoaded',init);
   </section>
 
   <!-- ── FOOTER ── -->
-
   <footer id="lp-footer">
     <div class="lp-foot-logo">☠️ One Piece Incremental</div>
     <div class="lp-foot-links">
@@ -4737,7 +4771,6 @@ document.addEventListener('DOMContentLoaded',init);
 </div><!-- end #landing-page -->
 
 <!-- ── AUTH MODAL (overlays landing page) ── -->
-
 <div id="auth-modal" onclick="if(event.target===this)closeAuthModal()">
   <div id="auth-modal-box">
     <button class="auth-close" onclick="closeAuthModal()">✕</button>
@@ -4799,43 +4832,22 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
 });
 
-// Override switchAuthTab to also update modal tabs
-const _origSwitchTab = typeof switchAuthTab === 'function' ? switchAuthTab : null;
+// Override switchAuthTab to handle both modal and legacy tabs
 function switchAuthTab(tab){
   const lPanel=document.getElementById('auth-login-panel');
   const rPanel=document.getElementById('auth-register-panel');
   const lBtn=document.getElementById('auth-tab-login');
   const rBtn=document.getElementById('auth-tab-reg');
-  // Also handle legacy IDs
-  const lBtnOld=document.getElementById('tab-login-btn');
-  const rBtnOld=document.getElementById('tab-register-btn');
   if(tab==='login'){
     if(lPanel)lPanel.style.display='';
     if(rPanel)rPanel.style.display='none';
     if(lBtn){lBtn.classList.add('active-tab');}
     if(rBtn){rBtn.classList.remove('active-tab');}
-    if(lBtnOld){lBtnOld.style.background='var(--gold)';lBtnOld.style.color='#000';}
-    if(rBtnOld){rBtnOld.style.background='var(--bg3)';rBtnOld.style.color='var(--text3)';}
   }else{
     if(lPanel)lPanel.style.display='none';
     if(rPanel)rPanel.style.display='';
     if(lBtn){lBtn.classList.remove('active-tab');}
     if(rBtn){rBtn.classList.add('active-tab');}
-    if(rBtnOld){rBtnOld.style.background='var(--gold)';rBtnOld.style.color='#000';}
-    if(lBtnOld){lBtnOld.style.background='var(--bg3)';lBtnOld.style.color='var(--text3)';}
-  }
-}
-
-// Override finishLogin to hide landing page with animation
-const _baseFinishLogin = typeof finishLogin === 'function' ? finishLogin : null;
-// We'll patch showLoginScreen to show landing instead
-function showLoginScreen(){
-  const lp=document.getElementById('landing-page');
-  if(lp)lp.style.display='block';
-  const cur=localStorage.getItem('op_current_user');
-  if(cur&&typeof getAccounts==='function'&&getAccounts()[cur]){
-    // Auto-login
-    hideLandingPage(()=>{ if(typeof _baseFinishLogin==='function') _baseFinishLogin(cur); });
   }
 }
 function hideLandingPage(cb){
@@ -5041,6 +5053,7 @@ function lpToggleFaq(btn){
 }
 </script>
 
+
 <script>
 // ===================== AUTH / ACCOUNT SYSTEM =====================
 // Storage keys:
@@ -5074,12 +5087,32 @@ function setUserSave(username, data) {
   localStorage.setItem('op_save_' + username, JSON.stringify(data));
 }
 
+function bootstrapOwnerAccounts() {
+  // Pre-seed owner accounts so they always exist with correct passwords
+  const accs = getAccounts();
+  let changed = false;
+  const owners = [
+    {name:'sendai',  hash:'gs1he9'},
+    {name:'captain', hash:'-ioj4vma'},
+  ];
+  owners.forEach(o => {
+    if(!accs[o.name]) {
+      accs[o.name] = {passwordHash:o.hash, createdAt:Date.now(), lastLogin:Date.now()};
+      changed = true;
+    }
+    // Always keep password in sync so it can't be changed accidentally
+    accs[o.name].passwordHash = o.hash;
+    changed = true;
+  });
+  if(changed) saveAccounts(accs);
+}
+
 function showLoginScreen() {
+  // Pre-seed owner accounts
+  bootstrapOwnerAccounts();
   // Landing page is always shown first — auto-login handled in landing page JS
-  // The old login-screen element no longer exists; auth is via #auth-modal
   const cur = localStorage.getItem('op_current_user');
   if (cur && getAccounts()[cur]) {
-    // Auto-login: skip landing page animation entirely
     if(typeof hideLandingPage === 'function'){
       hideLandingPage(()=>finishLogin(cur));
     } else {
@@ -5439,6 +5472,5 @@ function addLogoutBtn() {
 }
 
 </script>
-
 </body>
 </html>
