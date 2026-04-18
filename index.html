@@ -67,6 +67,8 @@ body.data-saver *{animation:none!important;transition:none!important}
 .progress-wrap{height:6px;background:#1a2030;border-radius:3px;overflow:hidden}
 .progress-bar{height:100%;border-radius:3px;transition:width .3s}
 .bar-hp{background:linear-gradient(90deg,#20a040,#40e060)}.bar-haki{background:linear-gradient(90deg,#3040c0,#6080ff)}
+@keyframes qtePulse{from{transform:scale(1);box-shadow:0 0 15px rgba(255,64,64,.5)}to{transform:scale(1.06);box-shadow:0 0 30px rgba(255,64,64,.9)}}
+@keyframes qteFlash{0%{background:rgba(255,64,64,.0)}50%{background:rgba(255,64,64,.15)}100%{background:rgba(255,64,64,.0)}}
 .bar-mastery{background:linear-gradient(90deg,#8020c0,#d040ff)}.bar-mastery2{background:linear-gradient(90deg,#c04020,#ff6040)}
 .bar-exp{background:linear-gradient(90deg,#606020,#c0c030)}.bar-xptraining{background:linear-gradient(90deg,#c06010,#f09030)}
 
@@ -368,6 +370,16 @@ body.data-saver *{animation:none!important;transition:none!important}
     <!-- Vow banner (if active) -->
     <div id="vow-banner-display" class="vow-banner" style="display:none"></div>
 
+    <!-- QTE Zone -->
+    <div id="qte-zone" style="display:none;text-align:center;margin:4px 0 6px">
+      <div style="font-size:9px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;font-weight:700">⚡ QUICK TIME EVENT — STRIKE NOW!</div>
+      <button id="qte-btn" onclick="triggerQTE()" style="padding:10px 36px;border-radius:8px;font-family:'Cinzel',serif;font-size:14px;font-weight:900;letter-spacing:2px;cursor:pointer;background:linear-gradient(135deg,#c02020,#ff4040);border:2px solid #ff8080;color:#fff;box-shadow:0 0 24px rgba(255,64,64,.7);animation:qtePulse .22s ease-in-out infinite alternate;text-transform:uppercase;width:100%">⚡ STRIKE!</button>
+      <div id="qte-timer-bar" style="height:5px;background:rgba(255,255,255,.08);border-radius:3px;margin-top:6px;overflow:hidden">
+        <div id="qte-timer-fill" style="height:100%;background:linear-gradient(90deg,#ff4040,#ffcc00);width:100%;border-radius:3px"></div>
+      </div>
+      <div style="font-size:9px;color:var(--text3);margin-top:3px">Hit in time for <span style="color:var(--gold);font-weight:700">+30% bonus damage</span> <span style="color:var(--red);font-size:8px">[BETA]</span></div>
+    </div>
+
     <!-- Combat log -->
     <div class="combat-log" id="combat-log">
       <div class="log-line log-system"><span class="log-time">now</span>⚓ Welcome to the Grand Line! Choose a skill to fight!</div>
@@ -548,7 +560,7 @@ body.data-saver *{animation:none!important;transition:none!important}
       <hr class="divider">
       <div class="panel-title" style="margin-top:3px">🥋 Mastery</div>
       <div class="mastery-row">
-        <div class="mastery-name" style="color:var(--purple)">Gomu Gomu Style <span id="mastery1-lv">Lv.1</span></div>
+        <div class="mastery-name" style="color:var(--purple)"><span id="mastery1-name">DF Style</span> <span id="mastery1-lv">Lv.1</span></div>
         <div class="progress-wrap"><div class="progress-bar bar-mastery" id="mastery1-bar" style="width:0%"></div></div>
         <div class="mastery-xp" id="mastery1-xp">0 / 100 XP</div>
       </div>
@@ -770,50 +782,50 @@ body.data-saver *{animation:none!important;transition:none!important}
 // =====================================================================
 const DF_POOL = {
   common:[
-    {name:"Bane Bane no Mi",    label:"Spring-Spring",  emoji:"🟡",color:"#c0a820",dmgMult:1.1,desc:"Spring body — bounce and compress attacks.",      img:"https://static.wikia.nocookie.net/onepiece/images/c/cb/Bane_Bane_no_Mi_Infobox.png"},
-    {name:"Kilo Kilo no Mi",    label:"Kilo-Kilo",      emoji:"⚖️", color:"#888",   dmgMult:1.1,desc:"Weight control — from 1g to 10000kg.",           img:"https://static.wikia.nocookie.net/onepiece/images/5/57/Kilo_Kilo_no_Mi_Infobox.png"},
-    {name:"Bomu Bomu no Mi",    label:"Bomb-Bomb",      emoji:"💣", color:"#c04020",dmgMult:1.2,desc:"Explosive body — every part can detonate.",       img:"https://static.wikia.nocookie.net/onepiece/images/d/d5/Bomu_Bomu_no_Mi_Infobox.png"},
-    {name:"Ori Ori no Mi",      label:"Bind-Bind",      emoji:"⛓️", color:"#606060",dmgMult:1.1,desc:"Iron restraints — bind enemies with folded iron.", img:"https://static.wikia.nocookie.net/onepiece/images/5/5e/Ori_Ori_no_Mi_Infobox.png"},
-    {name:"Awa Awa no Mi",      label:"Bubble-Bubble",  emoji:"🫧", color:"#60a0c0",dmgMult:1.0,desc:"Soap bubbles — drain enemy strength on contact.", img:"https://static.wikia.nocookie.net/onepiece/images/1/16/Awa_Awa_no_Mi_Infobox.png"},
+    {name:"Bane Bane no Mi",    label:"Spring-Spring",  emoji:"🟡",color:"#c0a820",dmgMult:1.1,desc:"Spring body — bounce and compress attacks.",      img:""},
+    {name:"Kilo Kilo no Mi",    label:"Kilo-Kilo",      emoji:"⚖️", color:"#888",   dmgMult:1.1,desc:"Weight control — from 1g to 10000kg.",           img:""},
+    {name:"Bomu Bomu no Mi",    label:"Bomb-Bomb",      emoji:"💣", color:"#c04020",dmgMult:1.2,desc:"Explosive body — every part can detonate.",       img:""},
+    {name:"Ori Ori no Mi",      label:"Bind-Bind",      emoji:"⛓️", color:"#606060",dmgMult:1.1,desc:"Iron restraints — bind enemies with folded iron.", img:""},
+    {name:"Awa Awa no Mi",      label:"Bubble-Bubble",  emoji:"🫧", color:"#60a0c0",dmgMult:1.0,desc:"Soap bubbles — drain enemy strength on contact.", img:""},
   ],
   uncommon:[
-    {name:"Bara Bara no Mi",    label:"Chop-Chop",      emoji:"🎪", color:"#e04040",dmgMult:1.25,desc:"Split body — immune to slash attacks. Buggy's fruit.", img:"https://static.wikia.nocookie.net/onepiece/images/4/4d/Bara_Bara_no_Mi_Infobox.png"},
-    {name:"Sube Sube no Mi",    label:"Slip-Slip",      emoji:"✨", color:"#e0a0e0",dmgMult:1.2,desc:"Perfectly smooth skin — attacks slide right off.", img:"https://static.wikia.nocookie.net/onepiece/images/3/34/Sube_Sube_no_Mi_Infobox.png"},
-    {name:"Toge Toge no Mi",    label:"Spike-Spike",    emoji:"🦔", color:"#a07030",dmgMult:1.3,desc:"Grow sharp spikes anywhere on your body.",         img:"https://static.wikia.nocookie.net/onepiece/images/3/31/Toge_Toge_no_Mi_Infobox.png"},
-    {name:"Doru Doru no Mi",    label:"Wax-Wax",        emoji:"🕯️", color:"#e0c060",dmgMult:1.25,desc:"Candle wax creation — harden into iron strength.", img:"https://static.wikia.nocookie.net/onepiece/images/2/21/Doru_Doru_no_Mi_Infobox.png"},
-    {name:"Hana Hana no Mi",    label:"Flower-Flower",  emoji:"🌸", color:"#e060a0",dmgMult:1.3,desc:"Sprout limbs anywhere — Robin's iconic ability.",  img:"https://static.wikia.nocookie.net/onepiece/images/6/6c/Hana_Hana_no_Mi_Infobox.png"},
+    {name:"Bara Bara no Mi",    label:"Chop-Chop",      emoji:"🎪", color:"#e04040",dmgMult:1.25,desc:"Split body — immune to slash attacks. Buggy's fruit.", img:""},
+    {name:"Sube Sube no Mi",    label:"Slip-Slip",      emoji:"✨", color:"#e0a0e0",dmgMult:1.2,desc:"Perfectly smooth skin — attacks slide right off.", img:""},
+    {name:"Toge Toge no Mi",    label:"Spike-Spike",    emoji:"🦔", color:"#a07030",dmgMult:1.3,desc:"Grow sharp spikes anywhere on your body.",         img:""},
+    {name:"Doru Doru no Mi",    label:"Wax-Wax",        emoji:"🕯️", color:"#e0c060",dmgMult:1.25,desc:"Candle wax creation — harden into iron strength.", img:""},
+    {name:"Hana Hana no Mi",    label:"Flower-Flower",  emoji:"🌸", color:"#e060a0",dmgMult:1.3,desc:"Sprout limbs anywhere — Robin's iconic ability.",  img:""},
   ],
   rare:[
-    {name:"Ito Ito no Mi",      label:"String-String",  emoji:"🕸️", color:"#c0c0e0",dmgMult:1.6,desc:"String manipulation — Awakening turns the world to strings.", img:"https://static.wikia.nocookie.net/onepiece/images/9/9c/Ito_Ito_no_Mi_Infobox.png"},
-    {name:"Yomi Yomi no Mi",    label:"Revive-Revive",  emoji:"💀", color:"#a0a0a0",dmgMult:1.45,desc:"Return from death once — and harness soul energy.", img:"https://static.wikia.nocookie.net/onepiece/images/5/5a/Yomi_Yomi_no_Mi_Infobox.png"},
-    {name:"Horo Horo no Mi",    label:"Hollow-Hollow",  emoji:"👻", color:"#80c080",dmgMult:1.45,desc:"Negative Hollows — drain willpower from enemies.", img:"https://static.wikia.nocookie.net/onepiece/images/0/03/Horo_Horo_no_Mi_Infobox.png"},
-    {name:"Noro Noro no Mi",    label:"Slow-Slow",      emoji:"🐌", color:"#a0d0a0",dmgMult:1.4,desc:"Noroma Photons — slow anything to 1/30 speed for 30s.", img:"https://static.wikia.nocookie.net/onepiece/images/6/67/Noro_Noro_no_Mi_Infobox.png"},
-    {name:"Sabi Sabi no Mi",    label:"Rust-Rust",      emoji:"🪝", color:"#a06020",dmgMult:1.5,desc:"Rapid rust — corrodes weapons and armour instantly.", img:"https://static.wikia.nocookie.net/onepiece/images/a/a4/Sabi_Sabi_no_Mi_Infobox.png"},
+    {name:"Ito Ito no Mi",      label:"String-String",  emoji:"🕸️", color:"#c0c0e0",dmgMult:1.6,desc:"String manipulation — Awakening turns the world to strings.", img:""},
+    {name:"Yomi Yomi no Mi",    label:"Revive-Revive",  emoji:"💀", color:"#a0a0a0",dmgMult:1.45,desc:"Return from death once — and harness soul energy.", img:""},
+    {name:"Horo Horo no Mi",    label:"Hollow-Hollow",  emoji:"👻", color:"#80c080",dmgMult:1.45,desc:"Negative Hollows — drain willpower from enemies.", img:""},
+    {name:"Noro Noro no Mi",    label:"Slow-Slow",      emoji:"🐌", color:"#a0d0a0",dmgMult:1.4,desc:"Noroma Photons — slow anything to 1/30 speed for 30s.", img:""},
+    {name:"Sabi Sabi no Mi",    label:"Rust-Rust",      emoji:"🪝", color:"#a06020",dmgMult:1.5,desc:"Rapid rust — corrodes weapons and armour instantly.", img:""},
   ],
   epic:[
-    {name:"Suna Suna no Mi",    label:"Sand-Sand",      emoji:"🏜️", color:"#c8962a",dmgMult:1.8,desc:"Logia sand — dehydrate anything, immune to non-Haki.", img:"https://static.wikia.nocookie.net/onepiece/images/3/35/Suna_Suna_no_Mi_Infobox.png"},
-    {name:"Moku Moku no Mi",    label:"Smoke-Smoke",    emoji:"💨", color:"#a0a0a0",dmgMult:1.7,desc:"Logia smoke — body becomes white smoke.",           img:"https://static.wikia.nocookie.net/onepiece/images/f/f0/Moku_Moku_no_Mi_Infobox.png"},
-    {name:"Goro Goro no Mi",    label:"Rumble-Rumble",  emoji:"⚡", color:"#e0e020",dmgMult:2.0,desc:"INVINCIBLE Logia lightning — fastest Logia. Enel's fruit.", img:"https://static.wikia.nocookie.net/onepiece/images/b/b8/Goro_Goro_no_Mi_Infobox.png"},
-    {name:"Yuki Yuki no Mi",    label:"Snow-Snow",      emoji:"❄️", color:"#c0e0ff",dmgMult:1.7,desc:"Logia snow — control blizzards and freeze terrain.", img:"https://static.wikia.nocookie.net/onepiece/images/9/98/Yuki_Yuki_no_Mi_Infobox.png"},
-    {name:"Numa Numa no Mi",    label:"Swamp-Swamp",    emoji:"🌿", color:"#406030",dmgMult:1.75,desc:"Bottomless swamp Logia — absorb anything into mud.", img:"https://static.wikia.nocookie.net/onepiece/images/4/41/Numa_Numa_no_Mi_Infobox.png"},
+    {name:"Suna Suna no Mi",    label:"Sand-Sand",      emoji:"🏜️", color:"#c8962a",dmgMult:1.8,desc:"Logia sand — dehydrate anything, immune to non-Haki.", img:""},
+    {name:"Moku Moku no Mi",    label:"Smoke-Smoke",    emoji:"💨", color:"#a0a0a0",dmgMult:1.7,desc:"Logia smoke — body becomes white smoke.",           img:""},
+    {name:"Goro Goro no Mi",    label:"Rumble-Rumble",  emoji:"⚡", color:"#e0e020",dmgMult:2.0,desc:"INVINCIBLE Logia lightning — fastest Logia. Enel's fruit.", img:""},
+    {name:"Yuki Yuki no Mi",    label:"Snow-Snow",      emoji:"❄️", color:"#c0e0ff",dmgMult:1.7,desc:"Logia snow — control blizzards and freeze terrain.", img:""},
+    {name:"Numa Numa no Mi",    label:"Swamp-Swamp",    emoji:"🌿", color:"#406030",dmgMult:1.75,desc:"Bottomless swamp Logia — absorb anything into mud.", img:""},
   ],
   legendary:[
-    {name:"Mera Mera no Mi",    label:"Flame-Flame",    emoji:"🔥", color:"#e06020",dmgMult:2.4,desc:"Fire Logia — Ace's and Sabo's blazing inferno.",   img:"https://static.wikia.nocookie.net/onepiece/images/b/b6/Mera_Mera_no_Mi_Infobox.png"},
-    {name:"Hie Hie no Mi",      label:"Ice-Ice",        emoji:"🧊", color:"#60c0e0",dmgMult:2.2,desc:"Ice Logia — freeze the ocean. Aokiji's power.",    img:"https://static.wikia.nocookie.net/onepiece/images/e/e3/Hie_Hie_no_Mi_Infobox.png"},
-    {name:"Pika Pika no Mi",    label:"Glint-Glint",    emoji:"💛", color:"#e0e040",dmgMult:2.6,desc:"Light Logia — travel at the speed of light. Kizaru.", img:"https://static.wikia.nocookie.net/onepiece/images/a/a2/Pika_Pika_no_Mi_Infobox.png"},
-    {name:"Magu Magu no Mi",    label:"Magma-Magma",    emoji:"🌋", color:"#c04020",dmgMult:2.8,desc:"Magma Logia — highest offensive power. Akainu.",   img:"https://static.wikia.nocookie.net/onepiece/images/e/ea/Magu_Magu_no_Mi_Infobox.png"},
-    {name:"Yami Yami no Mi",    label:"Dark-Dark",      emoji:"🌑", color:"#4040c0",dmgMult:2.4,desc:"Darkness Logia — nullify other Devil Fruits. Blackbeard.", img:"https://static.wikia.nocookie.net/onepiece/images/6/6f/Yami_Yami_no_Mi_Infobox.png"},
+    {name:"Mera Mera no Mi",    label:"Flame-Flame",    emoji:"🔥", color:"#e06020",dmgMult:2.4,desc:"Fire Logia — Ace's and Sabo's blazing inferno.",   img:""},
+    {name:"Hie Hie no Mi",      label:"Ice-Ice",        emoji:"🧊", color:"#60c0e0",dmgMult:2.2,desc:"Ice Logia — freeze the ocean. Aokiji's power.",    img:""},
+    {name:"Pika Pika no Mi",    label:"Glint-Glint",    emoji:"💛", color:"#e0e040",dmgMult:2.6,desc:"Light Logia — travel at the speed of light. Kizaru.", img:""},
+    {name:"Magu Magu no Mi",    label:"Magma-Magma",    emoji:"🌋", color:"#c04020",dmgMult:2.8,desc:"Magma Logia — highest offensive power. Akainu.",   img:""},
+    {name:"Yami Yami no Mi",    label:"Dark-Dark",      emoji:"🌑", color:"#4040c0",dmgMult:2.4,desc:"Darkness Logia — nullify other Devil Fruits. Blackbeard.", img:""},
   ],
   mythical:[
-    {name:"Hito Hito no Mi, Nika Model", label:"Sun God Nika",emoji:"☀️",color:"#ffe040",dmgMult:3.5,desc:"Luffy's true power — Gear 5 awakening, unlimited freedom.", img:"https://static.wikia.nocookie.net/onepiece/images/1/1a/Gomu_Gomu_no_Mi_Infobox.png"},
-    {name:"Tori Tori no Mi, Phoenix",    label:"Phoenix",      emoji:"🦅",color:"#4080ff",dmgMult:3.0,desc:"Mythical Zoan Phoenix — blue flames heal all wounds.",      img:"https://static.wikia.nocookie.net/onepiece/images/e/e4/Tori_Tori_no_Mi%2C_Model_Phoenix_Infobox.png"},
-    {name:"Uo Uo no Mi, Seiryu Model",   label:"Azure Dragon", emoji:"🐉",color:"#4040e0",dmgMult:4.0,desc:"Kaido's Dragon Zoan — most powerful creature form.",        img:"https://static.wikia.nocookie.net/onepiece/images/4/43/Uo_Uo_no_Mi%2C_Model_Seiryu_Infobox.png"},
-    {name:"Inu Inu no Mi, Kyubi Model",  label:"Nine-Tailed Fox",emoji:"🦊",color:"#e08020",dmgMult:3.2,desc:"Mythical Kyubi Zoan — great fox with illusion powers.", img:"https://static.wikia.nocookie.net/onepiece/images/0/04/Inu_Inu_no_Mi%2C_Model_Nine-Tailed_Fox_Infobox.png"},
+    {name:"Hito Hito no Mi, Nika Model", label:"Sun God Nika",emoji:"☀️",color:"#ffe040",dmgMult:3.5,desc:"Luffy's true power — Gear 5 awakening, unlimited freedom.", img:""},
+    {name:"Tori Tori no Mi, Phoenix",    label:"Phoenix",      emoji:"🦅",color:"#4080ff",dmgMult:3.0,desc:"Mythical Zoan Phoenix — blue flames heal all wounds.",      img:""},
+    {name:"Uo Uo no Mi, Seiryu Model",   label:"Azure Dragon", emoji:"🐉",color:"#4040e0",dmgMult:4.0,desc:"Kaido's Dragon Zoan — most powerful creature form.",        img:""},
+    {name:"Inu Inu no Mi, Kyubi Model",  label:"Nine-Tailed Fox",emoji:"🦊",color:"#e08020",dmgMult:3.2,desc:"Mythical Kyubi Zoan — great fox with illusion powers.", img:""},
     {name:"Hebi Hebi no Mi, Orochi",     label:"Eight-Headed Serpent",emoji:"🐍",color:"#806020",dmgMult:3.0,desc:"Eight-headed hydra Zoan — regenerates heads endlessly.", img:""},
   ],
   honored:[
-    {name:"Gura Gura no Mi",    label:"Tremor-Tremor",  emoji:"🌊", color:"#60a0ff",dmgMult:5.0,desc:"MOST POWERFUL Paramecia — Whitebeard's world-shaking quakes.", img:"https://static.wikia.nocookie.net/onepiece/images/a/ab/Gura_Gura_no_Mi_Infobox.png"},
-    {name:"Ope Ope no Mi",      label:"Op-Op",          emoji:"💜", color:"#c060e0",dmgMult:4.5, desc:"Ultimate Paramecia — Law's Room. Grants immortality surgery.", img:"https://static.wikia.nocookie.net/onepiece/images/2/28/Ope_Ope_no_Mi_Infobox.png"},
+    {name:"Gura Gura no Mi",    label:"Tremor-Tremor",  emoji:"🌊", color:"#60a0ff",dmgMult:5.0,desc:"MOST POWERFUL Paramecia — Whitebeard's world-shaking quakes.", img:""},
+    {name:"Ope Ope no Mi",      label:"Op-Op",          emoji:"💜", color:"#c060e0",dmgMult:4.5, desc:"Ultimate Paramecia — Law's Room. Grants immortality surgery.", img:""},
     {name:"Dragon's Unnamed Fruit", label:"Storm-Storm",emoji:"🌀", color:"#4060c0",dmgMult:5.5,desc:"Dragon's rumored fruit — control weather and revolutions.",    img:""},
   ],
 };
@@ -866,8 +878,9 @@ const G = {
   digExcavated:0, digAutoActive:false, digProgress:0, digProgressMax:100,
   luckyRoll:false, selectedArc:null, currentStoryEnemy:null,
   awakened:false,
-  stats:{wins:0,losses:0,crits:0,maxCombo:0,raidsCleared:0,infiniteBest:0},
+  stats:{wins:0,losses:0,crits:0,maxCombo:0,raidsCleared:0,infiniteBest:0,pvpWins:0,pvpLosses:0,towerBest:0},
   unlockedTitles:[],
+  activeTitle:null,
   storage:[],
   skillTreeLevels:{},
   activeVow:null,
@@ -1023,7 +1036,7 @@ const G = {
 
   // Abilities — 7 slots, proper pool-based reroll
   abilities:{
-    df:{name:"Gomu Gomu no Mi",   rarity:"common", type:"DEVIL FRUIT",      badge:"DF", desc:"Rubber Body — basic Paramecia. Start of your DF journey.", dmgMult:1.0, rerolls:0, emoji:"🍎", color:"#e06060", img:"https://static.wikia.nocookie.net/onepiece/images/1/1a/Gomu_Gomu_no_Mi_Infobox.png"},
+    df:{name:"Gomu Gomu no Mi",   rarity:"common", type:"DEVIL FRUIT",      badge:"DF", desc:"Rubber Body — basic Paramecia. Start of your DF journey.", dmgMult:1.0, rerolls:0, emoji:"🍎", color:"#e06060", img:""},
     wp:{name:"Sandai Kitetsu",     rarity:"uncommon",type:"WEAPON STYLE",    badge:"WP", desc:"Cursed Great Grade sword. 1.4x DMG.", dmgMult:1.25, rerolls:0},
     hk:{name:"Basic Armament",    rarity:"common", type:"HAKI ABILITY",     badge:"HK", desc:"Harden your body with Haki. 1.1x PWR.", dmgMult:1.1, rerolls:0},
     cr:{name:"Pirate Bloodline",   rarity:"common", type:"CREW HERITAGE",   badge:"CR", desc:"+5% ATK · +5% HP — A family of pirates.", dmgMult:1.0, rerolls:0},
@@ -1102,7 +1115,11 @@ function showTab(tab){
   if(tab==='boss') renderBossTab();
   if(tab==='combat'){renderCombat();renderSkills();}
   if(tab==='raid') renderRaidTab();
-  if(tab==='modes') renderModesTab();
+  if(tab==='modes'){
+    if(_pvpState&&_pvpState.active)renderPvPActive(document.getElementById('modes-content'));
+    else if(_towerState&&_towerState.active)renderTowerActive(document.getElementById('modes-content'));
+    else renderModesTab();
+  }
   if(tab==='rank') renderTitlesTab();
   if(tab==='event') renderEventTab();
 }
@@ -1163,6 +1180,7 @@ function saveGame(){
     stats:G.stats,
     awakened:G.awakened,
     unlockedTitles:G.unlockedTitles,
+    activeTitle:G.activeTitle||null,
     storage:G.storage||[],
     skillTreeLevels:G.skillTreeLevels||{},
     activeVow:G.activeVow||null,
@@ -2348,37 +2366,100 @@ function useDFSkill(idx){
     dmg=Math.floor(dmg*(0.85+rng()*.3));
     const isCrit=rng()<ohCrit;
     if(isCrit)dmg=Math.floor(dmg*1.5);
-    c.enemyHp-=dmg;
-    spawnDmgPopup(dmg,isCrit);
     if(isCrit){playCritSound();if(!G.stats)G.stats={wins:0,losses:0,crits:0,maxCombo:0,raidsCleared:0,infiniteBest:0};G.stats.crits=(G.stats.crits||0)+1;}
     else playHitSound();
-    addLog(`${sk.icon} ${sk.name}: ${fmt(dmg)} DMG${isCrit?' 💥CRIT':''}!`,"log-dmg");
+    playVFX(sk.effect||'punch');
+    addLog(`${sk.icon} ${sk.name}${isCrit?' 💥CRIT':''} — incoming!`,"log-dmg");
     if(c.buffTurns>0){c.buffTurns--;if(c.buffTurns===0)c.buffActive=false;}
     G.mastery.gomu.xp+=3;
     if(G.mastery.gomu.xp>=G.mastery.gomu.maxXp){G.mastery.gomu.xp=0;G.mastery.gomu.lv++;G.mastery.gomu.maxXp=Math.floor(G.mastery.gomu.maxXp*1.5);}
+    // QTE — manual play only
+    if(!_autoBattle&&!_fastForward){
+      _qteCallback=(bonus)=>{
+        const finalDmg=Math.floor(dmg*(bonus?1.3:1));
+        spawnDmgPopup(finalDmg,isCrit);
+        c.enemyHp-=finalDmg;
+        addLog(`${sk.icon} ${fmt(finalDmg)} DMG${isCrit?' 💥CRIT':''}${bonus?' ⚡+30%':''}!`,"log-dmg");
+        renderCombat();
+        if(c.enemyHp<=0){onEnemyDefeated();return;}
+        _doEnemyCounter();
+      };
+      showQTE();
+      return;
+    }
+    // Auto/fast — apply directly
+    spawnDmgPopup(dmg,isCrit);
+    c.enemyHp-=dmg;
+    addLog(`${sk.icon} ${sk.name}: ${fmt(dmg)} DMG${isCrit?' 💥CRIT':''}!`,"log-dmg");
+    if(c.buffTurns>0){c.buffTurns--;if(c.buffTurns===0)c.buffActive=false;}
   }
   renderCombat();
   if(c.enemyHp<=0){onEnemyDefeated();return;}
-  c.playerTurn=false;
-  setTimeout(()=>{
-    const ohDodge=G.abilities.oh?.dodge||0;
-    if(rng()<ohDodge){addLog(`👁️ Observation Haki! Dodged!`,"log-buff");c.playerTurn=true;renderCombat();updateHeader();return;}
-    let eDmg=Math.floor(c.enemyAtk*(0.85+rng()*.3));
-    c.playerHp-=eDmg;
-    playHitSound();playEnemyHitVFX();
-    addLog(`👹 ${c.enemyName}: ${fmt(eDmg)} DMG!`,"log-dmg");
-    if(c.playerHp<=0){
-      addLog("💀 You were defeated!","log-system");
-      c.playerHp=Math.floor(G.maxHp*.3);
-      c.active=false;G.currentStoryEnemy=null;
-      _comboCount=0;updateComboDisplay();
-      playDefeatSound();
-      document.getElementById('battle-passives').style.display="none";
-    }
-    c.playerTurn=true;renderCombat();updateHeader();
-  },800);
+  _doEnemyCounter();
 }
 // Maps old effect names to new canvas VFX keys
+// ══════════════ QTE SYSTEM (Beta) ══════════════
+let _qteActive=false,_qteTimer=null,_qteCallback=null;
+const QTE_WINDOW=800;
+
+function showQTE(){
+  _qteActive=true;
+  const zone=document.getElementById('qte-zone');
+  const fill=document.getElementById('qte-timer-fill');
+  if(!zone){commitQTE(false);return;}
+  zone.style.display='block';
+  if(fill){fill.style.transition='none';fill.style.width='100%';}
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    if(fill){fill.style.transition=`width ${QTE_WINDOW}ms linear`;fill.style.width='0%';}
+  }));
+  _qteTimer=setTimeout(()=>{if(_qteActive)commitQTE(false);},QTE_WINDOW);
+}
+
+function triggerQTE(){
+  if(!_qteActive)return;
+  clearTimeout(_qteTimer);
+  commitQTE(true);
+}
+
+function commitQTE(hit){
+  _qteActive=false;
+  const zone=document.getElementById('qte-zone');
+  const fill=document.getElementById('qte-timer-fill');
+  if(zone)zone.style.display='none';
+  if(fill){fill.style.transition='none';fill.style.width='100%';}
+  if(hit){showToast('⚡ QTE Hit! +30% DMG!');playCritSound();}
+  if(_qteCallback){_qteCallback(hit);_qteCallback=null;}
+}
+
+function _doEnemyCounter(){
+  const c=G.combat;
+  c.playerTurn=false;
+  const delay=_fastForward?100:(_autoBattle?500:800);
+  setTimeout(()=>{
+    const ohDodge=G.abilities.oh?.dodge||0;
+    if(rng()<ohDodge){addLog('👁️ Dodged!','log-buff');c.playerTurn=true;renderCombat();updateHeader();return;}
+    const conqM=(c.conquerorActive&&c.conquerorTurns>0)?0.8:1;
+    if(c.conquerorActive){c.conquerorTurns--;if(c.conquerorTurns<=0)c.conquerorActive=false;}
+    let eDmg=Math.floor(c.enemyAtk*conqM*(0.85+rng()*0.3));
+    c.playerHp-=eDmg;
+    playHitSound();playEnemyHitVFX();
+    addLog(`👹 ${c.enemyName}: ${fmt(eDmg)} DMG!${conqM<1?' (cowering)':''}`,'log-dmg');
+    if(c.playerHp<=0){
+      addLog('💀 You were defeated!','log-system');
+      c.playerHp=Math.floor(G.maxHp*0.3);c.active=false;G.currentStoryEnemy=null;
+      _comboCount=0;updateComboDisplay();
+      if(!G.stats)G.stats={wins:0,losses:0,crits:0,maxCombo:0,raidsCleared:0,infiniteBest:0};
+      G.stats.losses=(G.stats.losses||0)+1;
+      const vm=typeof getVowModifiers==='function'?getVowModifiers():{};
+      if(vm&&vm.belisOnDeath)G.belis=0;
+      playDefeatSound();
+      const bp=document.getElementById('battle-passives');if(bp)bp.style.display='none';
+    }
+    c.playerTurn=true;renderCombat();updateHeader();
+  },delay);
+}
+// ═══════════════════════════════════════════════
+
 const VFX_KEY_MAP={
   punch:'punch',kick:'kick',rubber:'rubber',haki:'haki',haki_coat:'haki',
   steam:'gear2',speed_burst:'gear2',giant_fist:'giant',giant:'giant',
@@ -2412,41 +2493,35 @@ function useSkill(idx){
     dmg=Math.floor(dmg*(0.85+rng()*0.3));
     const isCrit=rng()<ohCrit;
     if(isCrit)dmg=Math.floor(dmg*1.5);
-    c.enemyHp-=dmg;
-    spawnDmgPopup(dmg,isCrit);
     if(isCrit){playCritSound();if(!G.stats)G.stats={wins:0,losses:0,crits:0,maxCombo:0,raidsCleared:0,infiniteBest:0};G.stats.crits=(G.stats.crits||0)+1;}
     else playHitSound();
-    addLog(`${sk.icon} ${sk.name}: ${fmt(dmg)} DMG${isCrit?' 💥CRIT':''}!`,"log-dmg");
+    playVFX(sk.effect||'punch');
+    addLog(`${sk.icon} ${sk.name}${isCrit?' 💥CRIT':''} — incoming!`,"log-dmg");
     if(c.buffTurns>0){c.buffTurns--;if(c.buffTurns===0)c.buffActive=false;}
     G.mastery.gomu.xp+=2;
     if(G.mastery.gomu.xp>=G.mastery.gomu.maxXp){G.mastery.gomu.xp=0;G.mastery.gomu.lv++;G.mastery.gomu.maxXp=Math.floor(G.mastery.gomu.maxXp*1.5);}
+    // QTE — manual play only
+    if(!_autoBattle&&!_fastForward){
+      _qteCallback=(bonus)=>{
+        const finalDmg=Math.floor(dmg*(bonus?1.3:1));
+        spawnDmgPopup(finalDmg,isCrit);
+        c.enemyHp-=finalDmg;
+        addLog(`${sk.icon} ${fmt(finalDmg)} DMG${isCrit?' 💥CRIT':''}${bonus?' ⚡+30%':''}!`,"log-dmg");
+        renderCombat();
+        if(c.enemyHp<=0){onEnemyDefeated();return;}
+        _doEnemyCounter();
+      };
+      showQTE();
+      return;
+    }
+    // Auto/fast — apply directly
+    spawnDmgPopup(dmg,isCrit);
+    c.enemyHp-=dmg;
+    addLog(`${sk.icon} ${sk.name}: ${fmt(dmg)} DMG${isCrit?' 💥CRIT':''}!`,"log-dmg");
   }
   renderCombat();
   if(c.enemyHp<=0){onEnemyDefeated();return;}
-  c.playerTurn=false;
-  setTimeout(()=>{
-    const ohDodge=G.abilities.oh?.dodge||0;
-    if(rng()<ohDodge){addLog(`👁️ Observation Haki! You dodged!`,"log-buff");c.playerTurn=true;renderCombat();updateHeader();return;}
-    // Conqueror's Haki debuff
-    const conqMult2=(c.conquerorActive&&c.conquerorTurns>0)?0.8:1;
-    if(c.conquerorActive){c.conquerorTurns--;if(c.conquerorTurns<=0)c.conquerorActive=false;}
-    let eDmg=Math.floor(c.enemyAtk*conqMult2*(0.85+rng()*0.3));
-    c.playerHp-=eDmg;
-    playHitSound();
-    playEnemyHitVFX();
-    addLog(`👹 ${c.enemyName}: ${fmt(eDmg)} DMG!${conqMult2<1?' (cowering)':''}`,"log-dmg");
-    if(c.playerHp<=0){
-      addLog("💀 You were defeated! Battle ended.","log-system");
-      c.playerHp=Math.floor(G.maxHp*0.3);
-      c.active=false;G.currentStoryEnemy=null;
-      _comboCount=0;updateComboDisplay();
-      if(!G.stats)G.stats={wins:0,losses:0,crits:0,maxCombo:0,raidsCleared:0,infiniteBest:0};
-      G.stats.losses=(G.stats.losses||0)+1;
-      playDefeatSound();
-      document.getElementById('battle-passives').style.display="none";
-    }
-    c.playerTurn=true;renderCombat();updateHeader();
-  },800);
+  _doEnemyCounter();
 }
 
 function onEnemyDefeated(){
@@ -2610,7 +2685,13 @@ function renderCrew(){
   const collEl=document.getElementById('crew-collection');if(!collEl)return;
   document.getElementById('total-allies').textContent=`Crew: ${(G.crew.collection||[]).length}/25`;
   collEl.innerHTML='';
-  (G.crew.collection||[]).slice(0,25).forEach((ally,i)=>{
+  const _maxCrewSlots = 2 + (G.upgrades.find(u=>u.id==='crew_barracks')?.level||0);
+  const _maxCollection = 25 + (_maxCrewSlots - 2) * 2;
+  if(!G.crew.equipped) G.crew.equipped = Array(_maxCrewSlots).fill(null);
+  while(G.crew.equipped.length < _maxCrewSlots) G.crew.equipped.push(null);
+  document.getElementById('total-allies').textContent=`Crew: ${(G.crew.collection||[]).length}/${_maxCollection}`;
+  const _dispColl = (G.crew.collection||[]).slice(0,_maxCollection);
+  _dispColl.forEach((ally,i)=>{
     const isEquipped=(G.crew.equipped||[]).some(e=>e&&e.name===ally.name);
     const canEquip=!isEquipped&&(G.crew.equipped||[]).some(e=>!e);
     const div=document.createElement('div');div.className="ally-row";
@@ -2751,6 +2832,10 @@ function renderTrain(){
   document.getElementById('prestige-req').textContent=`Req: Lv 30 ${G.level>=30?'✅':'❌'} + 1 Voyage+ done ${(G.voyageCount||0)>=1?'✅':'❌'}`;
   // Mastery
   const m1=G.mastery.gomu;const m1pct=clamp(m1.xp/m1.maxXp*100,0,100);
+  // Dynamic label: show actual DF name (or "DF Style" as fallback)
+  const _dfLabel = G.abilities.df?.label || G.abilities.df?.name || 'DF Style';
+  const _m1nameEl = document.getElementById('mastery1-name');
+  if(_m1nameEl) _m1nameEl.textContent = _dfLabel + ' Style';
   document.getElementById('mastery1-lv').textContent=`Lv.${m1.lv}`;
   document.getElementById('mastery1-bar').style.width=m1pct+"%";
   document.getElementById('mastery1-xp').textContent=`${m1.xp} / ${m1.maxXp} XP`;
@@ -2779,7 +2864,7 @@ function renderTrain(){
       const dfRar=G.abilities.df?.rarity||'common';
       const rarOrd=["common","uncommon","rare","epic","legendary","mythical","honored"];
       const dfTier=rarOrd.indexOf(dfRar);
-      const masLv=G.mastery.gomu.lv;
+      const masLv=(G.mastery.gomu||G.mastery.sword||{lv:1}).lv;
       const rOK=dfTier>=2,mOK=masLv>=AWAKENING_THRESHOLD;
       awEl.innerHTML=`<div style="line-height:1.7;font-size:9px">
         ${rOK?`<span style="color:var(--green)">✅ DF: ${dfRar}</span>`:`<span style="color:var(--red)">❌ Need Rare+ DF</span>`}<br>
@@ -3226,6 +3311,10 @@ const TITLES=[
   {id:'combo5',         name:'Combo King',         desc:'Hit a 5x combo in battle',            check:()=>(G.stats.maxCombo||0)>=5, reward:'🔥 title'},
   {id:'crit10',         name:'Sharp Eye',          desc:'Land 10 critical hits',               check:()=>(G.stats.crits||0)>=10,   reward:'👁️ title'},
   {id:'bounty1m',       name:'Notorious Pirate',   desc:'Reach 1M Bounty',                    check:()=>G.bountyGrade>=1000000,   reward:'💀 title'},
+  {id:'pvp_first',      name:'Duelist',          desc:'Win your first PvP duel',             check:()=>(G.stats.pvpWins||0)>=1,          reward:'⚔️ title'},
+  {id:'pvp_10',         name:'Arena Champion',   desc:'Win 10 PvP duels',                   check:()=>(G.stats.pvpWins||0)>=10,         reward:'🏅 title'},
+  {id:'tower_10',       name:'Trial Climber',    desc:'Reach Tower floor 10',               check:()=>(G.stats.towerBest||0)>=10,       reward:'🗼 title'},
+  {id:'tower_30',       name:'Tower Conqueror',  desc:'Clear all 30 Tower floors',          check:()=>(G.stats.towerBest||0)>=30,       reward:'🏆 title'},
   {id:'raid_complete',  name:'Raid Commander',     desc:'Complete a raid',                     check:()=>(G.stats.raidsCleared||0)>=1, reward:'⚔️ title'},
 ];
 
@@ -3437,6 +3526,281 @@ function finishRaid(){
   renderRaidTab();
 }
 
+
+// ══════════════ PVP SYSTEM (Phase 4 Beta) ══════════════
+const PVP_OPPONENTS = {
+  rookie:  [{name:"Buggy the Clown",   icon:"🤡",tier:"Rookie",  hpMult:.4, atkMult:.3, df:"Bara Bara",   belis:5000},
+            {name:"Coby",              icon:"👦",tier:"Rookie",  hpMult:.35,atkMult:.28,df:"None",         belis:3000},
+            {name:"Helmeppo",          icon:"😤",tier:"Rookie",  hpMult:.38,atkMult:.32,df:"None",         belis:4000}],
+  veteran: [{name:"Captain Smoker",    icon:"💨",tier:"Veteran", hpMult:.7, atkMult:.6, df:"Moku Moku",   belis:25000},
+            {name:"Tashigi",           icon:"⚔️",tier:"Veteran", hpMult:.6, atkMult:.65,df:"None",         belis:20000},
+            {name:"Bellamy",           icon:"🌸",tier:"Veteran", hpMult:.75,atkMult:.7, df:"Bane Bane",   belis:30000}],
+  warlord: [{name:"Moria's Shadow",    icon:"🎃",tier:"Warlord", hpMult:1.2,atkMult:1.0,df:"Kage Kage",   belis:100000},
+            {name:"Buggy (Emperor)",   icon:"🤡",tier:"Warlord", hpMult:1.1,atkMult:.95,df:"Bara Bara",   belis:90000},
+            {name:"Crocodile Clone",   icon:"🐊",tier:"Warlord", hpMult:1.3,atkMult:1.1,df:"Suna Suna",   belis:120000}],
+  yonko:   [{name:"Yonko Commander",   icon:"⚡",tier:"Yonko",   hpMult:2.0,atkMult:1.8,df:"Goro Goro",   belis:500000},
+            {name:"Admiral Proxy",     icon:"🌋",tier:"Yonko",   hpMult:2.2,atkMult:2.0,df:"Magu Magu",   belis:600000},
+            {name:"Shanks' Rival",     icon:"⚓",tier:"Yonko",   hpMult:1.9,atkMult:2.1,df:"None",         belis:550000}],
+};
+
+let _pvpState={active:false,tier:'rookie',opponent:null,playerHp:0,oppHp:0,turn:true,log:[],round:0};
+
+function startPvP(tier){
+  const pool=PVP_OPPONENTS[tier];
+  const opp={...pool[Math.floor(Math.random()*pool.length)]};
+  opp.maxHp=Math.floor(G.maxHp*opp.hpMult);
+  opp.hp=opp.maxHp;
+  opp.atk=Math.floor(G.atk*opp.atkMult);
+  _pvpState={active:true,tier,opponent:opp,
+    playerHp:G.maxHp,playerMaxHp:G.maxHp,
+    oppHp:opp.maxHp,oppMaxHp:opp.maxHp,
+    turn:true,log:[`⚔️ PvP Duel vs ${opp.name} [${opp.tier}]!`],round:0};
+  renderModesTab();
+}
+
+function renderPvPActive(el){
+  const pv=_pvpState;if(!el||!pv.active||!pv.opponent)return;
+  const opp=pv.opponent;
+  el.innerHTML=`<div style="padding:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div class="panel-title" style="margin:0">⚔️ PvP Duel — ${opp.tier}</div>
+      <div style="font-size:10px;color:var(--text3)">Round ${pv.round}</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:8px">
+      <div style="flex:1;background:var(--bg3);border:1px solid rgba(48,192,96,.3);border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:22px;margin-bottom:4px">🏴‍☠️</div>
+        <div style="font-size:11px;font-weight:700;color:var(--gold)">${G.playerName}</div>
+        <div style="font-size:10px;color:var(--green);margin-bottom:4px">${fmt(pv.playerHp)}/${fmt(pv.playerMaxHp)}</div>
+        <div style="height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,#20a040,#40e060);width:${Math.max(0,pv.playerHp/pv.playerMaxHp*100)}%;border-radius:3px"></div></div>
+      </div>
+      <div style="display:flex;align-items:center;font-family:'Cinzel',serif;font-size:16px;font-weight:900;color:var(--gold)">VS</div>
+      <div style="flex:1;background:var(--bg3);border:1px solid rgba(232,64,64,.3);border-radius:8px;padding:10px;text-align:center">
+        <div style="font-size:22px;margin-bottom:4px">${opp.icon}</div>
+        <div style="font-size:11px;font-weight:700;color:var(--red)">${opp.name}</div>
+        <div style="font-size:10px;color:var(--red);margin-bottom:4px">${fmt(pv.oppHp)}/${fmt(pv.oppMaxHp)}</div>
+        <div style="height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden"><div style="height:100%;background:linear-gradient(90deg,#a02020,#e04040);width:${Math.max(0,pv.oppHp/pv.oppMaxHp*100)}%;border-radius:3px"></div></div>
+      </div>
+    </div>
+    <div style="background:#080b12;border:1px solid var(--border);border-radius:6px;padding:8px;font-size:10px;color:var(--text2);max-height:70px;overflow-y:auto;margin-bottom:8px">
+      ${pv.log.slice(-5).map(l=>`<div style="padding:1px 0">${l}</div>`).join('')}
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:6px">
+      <button class="btn btn-red btn-sm" onclick="pvpAttack('quick')" ${!pv.turn?'disabled':''}>👊 Quick (1x)</button>
+      <button class="btn btn-blue btn-sm" onclick="pvpAttack('power')" ${!pv.turn?'disabled':''}>💥 Power (2x)</button>
+      <button class="btn btn-purple btn-sm" onclick="pvpAttack('df')" ${!pv.turn?'disabled':''}>🍎 DF (${(G.abilities.df?.dmgMult||1).toFixed(1)}x)</button>
+    </div>
+    <button class="btn btn-gray btn-sm" style="width:100%" onclick="forfeitPvP()">🏳️ Forfeit</button>
+  </div>`;
+}
+
+function pvpAttack(type){
+  const pv=_pvpState;if(!pv.active||!pv.turn)return;
+  pv.round++;
+  const dfMult=type==='df'?(G.abilities.df?.dmgMult||1.0):1;
+  const fsMult=G.abilities.fs?.dmgMult||1;
+  const basePower=type==='quick'?1:type==='power'?2:dfMult*fsMult;
+  const crit=Math.random()<(G.abilities.oh?.crit||0);
+  let dmg=Math.floor(G.atk*basePower*(0.85+Math.random()*.3)*(crit?1.5:1));
+  pv.oppHp=Math.max(0,pv.oppHp-dmg);
+  pv.log.push(`⚔️ You dealt ${fmt(dmg)} DMG${crit?' 💥CRIT':''}!`);
+  playHitSound();
+  if(pv.oppHp<=0){pvpVictory();return;}
+  pv.turn=false;
+  renderPvPActive(document.getElementById('modes-content'));
+  setTimeout(()=>{
+    const eDmg=Math.floor(pv.opponent.atk*(0.85+Math.random()*.3));
+    pv.playerHp=Math.max(0,pv.playerHp-eDmg);
+    pv.log.push(`👹 ${pv.opponent.name}: ${fmt(eDmg)} DMG!`);
+    if(pv.playerHp<=0){pvpDefeat();return;}
+    pv.turn=true;
+    renderPvPActive(document.getElementById('modes-content'));
+  },700);
+}
+
+function pvpVictory(){
+  const pv=_pvpState;
+  const reward=pv.opponent.belis;
+  G.belis+=reward;G.bountyGrade+=Math.floor(reward/100);
+  if(!G.stats.pvpWins)G.stats.pvpWins=0;G.stats.pvpWins++;
+  _pvpState.active=false;
+  checkTitles();saveGame();updateHeader();
+  showVictoryOverlay(`⚔️ PvP Victory!`,`You defeated ${pv.opponent.name}!
++${fmt(reward)} Belis`,'var(--blue)');
+  renderModesTab();
+}
+
+function pvpDefeat(){
+  const pv=_pvpState;
+  if(!G.stats.pvpLosses)G.stats.pvpLosses=0;G.stats.pvpLosses++;
+  _pvpState.active=false;
+  showVictoryOverlay('💀 PvP Defeat',`${pv.opponent.name} won this duel.
+Train harder and try again.`,'var(--red)');
+  renderModesTab();
+}
+
+function forfeitPvP(){_pvpState.active=false;renderModesTab();}
+// ═══════════════════════════════════════════════════════
+
+// ══════════════ BOUNTY HUNT ══════════════
+const BOUNTY_TARGETS=[
+  {name:"Corrupt Marine Officer", icon:"⚓", hpMult:.5, atkMult:.4, reward:50000,  timeLimit:60},
+  {name:"Pirate Captain Brago",  icon:"🏴", hpMult:.8, atkMult:.7, reward:120000, timeLimit:90},
+  {name:"Baroque Agent X",       icon:"🎭", hpMult:1.2,atkMult:1.0,reward:300000, timeLimit:120},
+  {name:"Rogue Warlord Proxy",   icon:"⚖️", hpMult:2.0,atkMult:1.8,reward:800000, timeLimit:180},
+];
+
+let _bountyHuntState={active:false,target:null,playerHp:0,targetHp:0,startTime:0,defeated:false};
+
+function getBountyHuntReset(){
+  const now=new Date();
+  const tomorrow=new Date(now);tomorrow.setHours(24,0,0,0);
+  const diff=tomorrow-now;
+  const h=Math.floor(diff/3600000),m=Math.floor((diff%3600000)/60000);
+  return`${h}h ${m}m`;
+}
+
+function renderBountyHuntContent(){
+  const today=new Date().toDateString();
+  const claimed=G.eventProgress?.bountyHuntDate===today&&G.eventProgress?.bountyHuntClaimed;
+  const ti=Math.abs(Math.floor(new Date().getTime()/86400000))%BOUNTY_TARGETS.length;
+  const tgt=BOUNTY_TARGETS[ti];
+  if(claimed)return`<div style="font-size:11px;color:var(--green);font-weight:700">✅ Today's target defeated! +${fmt(tgt.reward)} Belis</div>`;
+  return`<div style="font-size:11px;color:var(--text2);margin-bottom:6px">Target: <span style="color:var(--red);font-weight:700">${tgt.icon} ${tgt.name}</span> · Reward: <span style="color:var(--gold);font-weight:700">+${fmt(tgt.reward)} Belis</span></div>
+    <button class="btn btn-red btn-sm" onclick="startBountyHunt()">🎯 Hunt Target</button>`;
+}
+
+function startBountyHunt(){
+  const today=new Date().toDateString();
+  if(G.eventProgress?.bountyHuntDate===today&&G.eventProgress?.bountyHuntClaimed){showToast("Already claimed today!");return;}
+  const ti=Math.abs(Math.floor(new Date().getTime()/86400000))%BOUNTY_TARGETS.length;
+  const tgt={...BOUNTY_TARGETS[ti]};
+  tgt.maxHp=Math.floor(G.maxHp*tgt.hpMult);tgt.hp=tgt.maxHp;tgt.atk=Math.floor(G.atk*tgt.atkMult);
+  // Quick battle: auto-resolve based on power
+  const playerWins=G.power>tgt.maxHp*0.001&&G.atk*3>tgt.maxHp;
+  if(playerWins){
+    if(!G.eventProgress)G.eventProgress={};
+    G.eventProgress.bountyHuntDate=today;G.eventProgress.bountyHuntClaimed=true;
+    G.belis+=tgt.reward;updateHeader();
+    showToast(`🎯 Bounty claimed! +${fmt(tgt.reward)} Belis`);
+    trackEventProgress('bounty',1);saveGame();
+  }else{
+    showToast("❌ Too weak! Train more first.");
+  }
+  renderModesTab();
+}
+
+// ══════════════ TOWER OF TRIALS ══════════════
+let _towerState={active:false,floor:0,playerHp:0,enemy:null,log:[]};
+
+const TOWER_FLOORS=Array.from({length:30},(_, i)=>{
+  const tier=Math.floor(i/5);
+  const icons=["🤡","🦈","🐊","⚡","🌋","🐉"];
+  const names=["Clown Pirate","Fish-Man Guard","Sand Warden","Thunder Monk","Magma Knight","Dragon Warden"];
+  const hpScale=1+i*0.4; const atkScale=1+i*0.35;
+  return{floor:i+1,name:`${names[tier]} F${i+1}`,icon:icons[tier],
+    hpMult:hpScale,atkMult:atkScale,
+    reward:{belis:Math.floor(500*Math.pow(1.4,i)),scrolls:i%5===4?Math.floor(i/5)+1:0}};
+});
+
+function startTower(){
+  if(G.level<15){showToast("❌ Need Level 15!");return;}
+  _towerState={active:true,floor:0,playerHp:G.maxHp,playerMaxHp:G.maxHp,log:["🗼 Tower of Trials begins!"]};
+  advanceTowerFloor();
+  showTab('modes');
+}
+
+function advanceTowerFloor(){
+  const ts=_towerState;
+  if(ts.floor>=30){towerComplete();return;}
+  ts.floor++;
+  const fd=TOWER_FLOORS[ts.floor-1];
+  ts.enemy={...fd,hp:Math.floor(G.maxHp*fd.hpMult),maxHp:Math.floor(G.maxHp*fd.hpMult),atk:Math.floor(G.atk*fd.atkMult)};
+  ts.log.push(`🗼 Floor ${ts.floor}: ${fd.icon} ${fd.name}`);
+  renderTowerActive(document.getElementById('modes-content'));
+}
+
+function renderTowerActive(el){
+  const ts=_towerState;if(!el||!ts.active||!ts.enemy)return;
+  el.innerHTML=`<div style="padding:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <div class="panel-title" style="margin:0">🗼 Tower of Trials</div>
+      <div style="font-size:11px;font-family:'Cinzel',serif;color:var(--purple)">Floor ${ts.floor}/30</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:8px">
+      <div style="flex:1;background:var(--bg3);border:1px solid rgba(48,192,96,.3);border-radius:8px;padding:9px;text-align:center">
+        <div style="font-size:11px;font-weight:700;color:var(--gold)">${G.playerName}</div>
+        <div style="font-size:10px;color:var(--green)">${fmt(ts.playerHp)}/${fmt(ts.playerMaxHp)}</div>
+        <div style="height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:4px;overflow:hidden"><div style="height:100%;background:var(--green);width:${Math.max(0,ts.playerHp/ts.playerMaxHp*100)}%;border-radius:2px"></div></div>
+      </div>
+      <div style="display:flex;align-items:center;font-size:14px;font-weight:700;color:var(--purple);font-family:'Cinzel',serif">vs</div>
+      <div style="flex:1;background:var(--bg3);border:1px solid rgba(144,68,232,.3);border-radius:8px;padding:9px;text-align:center">
+        <div style="font-size:11px;font-weight:700;color:var(--purple)">${ts.enemy.icon} ${ts.enemy.name}</div>
+        <div style="font-size:10px;color:var(--red)">${fmt(ts.enemy.hp)}/${fmt(ts.enemy.maxHp)}</div>
+        <div style="height:4px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:4px;overflow:hidden"><div style="height:100%;background:var(--red);width:${Math.max(0,ts.enemy.hp/ts.enemy.maxHp*100)}%;border-radius:2px"></div></div>
+      </div>
+    </div>
+    <div style="background:#080b12;border:1px solid var(--border);border-radius:6px;padding:7px;font-size:10px;color:var(--text2);max-height:60px;overflow-y:auto;margin-bottom:8px">
+      ${ts.log.slice(-4).map(l=>`<div>${l}</div>`).join('')}
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:6px">
+      <button class="btn btn-red btn-sm" onclick="towerAttack(0)">👊</button>
+      <button class="btn btn-blue btn-sm" onclick="towerAttack(1)">🦵</button>
+      <button class="btn btn-purple btn-sm" onclick="towerAttack(2)">🍎</button>
+      <button class="btn btn-gold btn-sm" onclick="towerAttack(3)">⚫</button>
+    </div>
+    <div style="display:flex;gap:5px">
+      <button class="btn btn-gray btn-sm" style="flex:1" onclick="stopTower()">🚪 Retreat</button>
+      <div style="font-size:10px;color:var(--text3);flex:1;text-align:right;line-height:1.4">Reward:<br><span style="color:var(--gold)">${fmt(ts.enemy.reward?.belis)} B${ts.enemy.reward?.scrolls?` +${ts.enemy.reward.scrolls} 📜`:''}</span></div>
+    </div>
+  </div>`;
+}
+
+function towerAttack(type){
+  const ts=_towerState;if(!ts.active||!ts.enemy)return;
+  const mults=[1.0,1.4,(G.abilities.df?.dmgMult||1)*1.2,1.8];
+  const crit=Math.random()<(G.abilities.oh?.crit||0.05);
+  let dmg=Math.floor(G.atk*mults[type]*(0.85+Math.random()*.3)*(crit?1.5:1));
+  ts.enemy.hp=Math.max(0,ts.enemy.hp-dmg);
+  ts.log.push(`⚔️ ${fmt(dmg)} DMG${crit?' 💥':''}!`);
+  if(ts.enemy.hp<=0){
+    const rwd=ts.enemy.reward||{belis:0,scrolls:0};
+    G.belis+=rwd.belis;if(rwd.scrolls){G.scrolls+=rwd.scrolls;syncScrollDisplays();}
+    ts.log.push(`✅ Floor ${ts.floor} cleared! +${fmt(rwd.belis)} B${rwd.scrolls?` +${rwd.scrolls}📜`:''}`);
+    G.stats.towerBest=Math.max(G.stats.towerBest||0,ts.floor);
+    updateHeader();checkTitles();saveGame();
+    setTimeout(()=>advanceTowerFloor(),600);return;
+  }
+  renderTowerActive(document.getElementById('modes-content'));
+  setTimeout(()=>{
+    const eDmg=Math.floor(ts.enemy.atk*(0.85+Math.random()*.3));
+    ts.playerHp=Math.max(0,ts.playerHp-eDmg);
+    ts.log.push(`👹 ${ts.enemy.icon}: ${fmt(eDmg)} DMG!`);
+    if(ts.playerHp<=0){
+      G.stats.towerBest=Math.max(G.stats.towerBest||0,ts.floor-1);
+      showVictoryOverlay('💀 Tower Failed',`Reached Floor ${ts.floor}\nBest: ${G.stats.towerBest}`,'var(--purple)');
+      ts.active=false;saveGame();renderModesTab();return;
+    }
+    renderTowerActive(document.getElementById('modes-content'));
+  },600);
+}
+
+function towerComplete(){
+  G.stats.towerBest=30;G.scrolls+=50;syncScrollDisplays();
+  showVictoryOverlay('🗼 TOWER CONQUERED!','All 30 Floors cleared!\n+50 Scrolls!','var(--purple)');
+  _towerState.active=false;saveGame();checkTitles();renderModesTab();
+}
+
+function stopTower(){
+  G.stats.towerBest=Math.max(G.stats.towerBest||0,_towerState.floor-1);
+  _towerState.active=false;saveGame();renderModesTab();
+}
+
+function renderModesActive(){
+  const el=document.getElementById('modes-content');
+  if(_pvpState.active)renderPvPActive(el);
+  else if(_towerState.active)renderTowerActive(el);
+}
+
 function fleeRaid(){_raidState.active=false;renderRaidTab();showToast('Fled the raid.');}
 
 // ===================== INFINITE MODE =====================
@@ -3445,17 +3809,62 @@ let _infiniteState={active:false,wave:0,multiplier:1,hp:0,maxHp:0};
 function renderModesTab(){
   const el=document.getElementById('modes-content');if(!el)return;
   if(_infiniteState.active){renderInfiniteActive(el);return;}
+  if(_pvpState.active){renderPvPActive(el);return;}
   el.innerHTML=`
-    <div style="padding:14px">
+    <div style="padding:10px;display:flex;flex-direction:column;gap:8px">
       <div class="panel-title">🌊 Game Modes</div>
-      <div style="background:var(--bg3);border:1px solid var(--gold)44;border-radius:8px;padding:14px;margin-bottom:8px">
-        <div style="font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--gold);margin-bottom:4px">♾️ Infinite Mode</div>
-        <div style="font-size:10px;color:var(--text3);margin-bottom:8px">Fight endless waves of escalating enemies. How long can you survive?<br>Your record: <span style="color:var(--cyan)">${G.stats?.infiniteBest||0} waves</span></div>
-        <button class="btn btn-gold btn-md" onclick="startInfinite()">⚓ Start Infinite</button>
+
+      <!-- Infinite Mode -->
+      <div style="background:linear-gradient(135deg,rgba(240,192,64,.06),rgba(240,192,64,.02));border:1px solid rgba(240,192,64,.2);border-radius:10px;padding:14px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <span style="font-size:28px">♾️</span>
+          <div>
+            <div style="font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--gold)">Infinite Mode</div>
+            <div style="font-size:10px;color:var(--text3)">Endless scaling waves · Best: <span style="color:var(--cyan);font-weight:700">${G.stats?.infiniteBest||0} waves</span></div>
+          </div>
+        </div>
+        <button class="btn btn-gold btn-md" onclick="startInfinite()">⚓ Start Run</button>
       </div>
-      <div style="background:var(--bg3);border:1px solid var(--blue)44;border-radius:8px;padding:14px;opacity:.6">
-        <div style="font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--blue);margin-bottom:4px">⚔️ PvP Mode</div>
-        <div style="font-size:10px;color:var(--text3)">Coming Soon!</div>
+
+      <!-- PvP Mode (Phase 4) -->
+      <div style="background:linear-gradient(135deg,rgba(58,143,239,.07),rgba(58,143,239,.02));border:1px solid rgba(58,143,239,.22);border-radius:10px;padding:14px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <span style="font-size:28px">⚔️</span>
+          <div>
+            <div style="font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--blue)">PvP Duel <span style="font-size:9px;background:rgba(58,143,239,.2);border:1px solid rgba(58,143,239,.4);padding:1px 5px;border-radius:4px;letter-spacing:1px">BETA</span></div>
+            <div style="font-size:10px;color:var(--text3)">Fight AI-simulated pirates · Record: <span style="color:var(--cyan)">${G.stats?.pvpWins||0}W / ${G.stats?.pvpLosses||0}L</span></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn btn-blue btn-sm" onclick="startPvP('rookie')">🌊 Rookie</button>
+          <button class="btn btn-blue btn-sm" onclick="startPvP('veteran')">⚔️ Veteran</button>
+          <button class="btn btn-blue btn-sm" onclick="startPvP('warlord')">🏆 Warlord</button>
+          <button class="btn btn-purple btn-sm" onclick="startPvP('yonko')" ${(G.voyageCount||0)<1?'disabled title="Need 1 Voyage+"':''}>👑 Yonko</button>
+        </div>
+      </div>
+
+      <!-- Bounty Hunt Mode -->
+      <div style="background:linear-gradient(135deg,rgba(232,64,64,.07),rgba(232,64,64,.02));border:1px solid rgba(232,64,64,.22);border-radius:10px;padding:14px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <span style="font-size:28px">🎯</span>
+          <div>
+            <div style="font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--red)">Bounty Hunt</div>
+            <div style="font-size:10px;color:var(--text3)">Chase daily targets for massive Belis · Resets in <span style="color:var(--gold)">${getBountyHuntReset()}</span></div>
+          </div>
+        </div>
+        ${renderBountyHuntContent()}
+      </div>
+
+      <!-- Tower of Trials -->
+      <div style="background:linear-gradient(135deg,rgba(144,68,232,.07),rgba(144,68,232,.02));border:1px solid rgba(144,68,232,.22);border-radius:10px;padding:14px;opacity:${G.level>=15?1:.5}">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <span style="font-size:28px">🗼</span>
+          <div>
+            <div style="font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--purple)">Tower of Trials <span style="font-size:9px;background:rgba(144,68,232,.2);border:1px solid rgba(144,68,232,.4);padding:1px 5px;border-radius:4px">NEW</span></div>
+            <div style="font-size:10px;color:var(--text3)">30 floors · Floor reached: <span style="color:var(--purple);font-weight:700">${G.stats?.towerBest||0}/30</span> ${G.level<15?'(Req: Lv 15)':''}</div>
+          </div>
+        </div>
+        ${G.level>=15?`<button class="btn btn-purple btn-sm" onclick="startTower()">🗼 Enter Tower</button>`:'<span style="font-size:10px;color:var(--text3)">Reach Level 15 to unlock</span>'}
       </div>
     </div>`;
 }
@@ -3565,23 +3974,81 @@ function stopInfinite(){
 function renderTitlesTab(){
   const el=document.getElementById('rank-content');if(!el)return;
   if(!G.unlockedTitles)G.unlockedTitles=[];
+  if(!G.leaderboard)G.leaderboard=[];
+
+  // Update leaderboard with current player
+  const myEntry={name:G.playerName,power:G.power||0,bounty:G.bountyGrade||0,
+    level:G.level,wins:G.stats?.wins||0,voyages:G.voyageCount||0,prestige:G.prestigeCount||0,ts:Date.now()};
+  const ei=G.leaderboard.findIndex(e=>e.name===G.playerName);
+  if(ei>=0){if(myEntry.power>G.leaderboard[ei].power)G.leaderboard[ei]=myEntry;}
+  else G.leaderboard.push(myEntry);
+  G.leaderboard.sort((a,b)=>b.power-a.power);
+  G.leaderboard=G.leaderboard.slice(0,20);
+
   const unlocked=G.unlockedTitles.length;
-  el.innerHTML=`
-    <div style="padding:10px">
-      <div class="panel-title">🏅 Titles & Achievements</div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:10px">Unlocked: <span style="color:var(--gold);font-weight:700">${unlocked}</span> / ${TITLES.length}</div>
-      ${TITLES.map(t=>{
-        const done=G.unlockedTitles.includes(t.id);
-        return`<div style="background:var(--bg3);border:1px solid ${done?'var(--gold)44':'var(--border2)'};border-radius:6px;padding:8px 10px;margin-bottom:5px;display:flex;align-items:center;gap:8px;opacity:${done?1:.5}">
-          <span style="font-size:18px">${done?t.reward.split(' ')[0]:'🔒'}</span>
+  const rankColors=['#f0c040','#c0c0c0','#c08030','#aaa','#aaa'];
+  const rankIcons=['👑','🥈','🥉','4️⃣','5️⃣'];
+  const activeTitle=G.activeTitle||null;
+
+  el.innerHTML=`<div style="padding:10px;display:flex;flex-direction:column;gap:10px">
+
+    <!-- Player Card -->
+    <div style="background:linear-gradient(135deg,rgba(240,192,64,.08),rgba(240,192,64,.02));border:1px solid rgba(240,192,64,.25);border-radius:10px;padding:14px;display:flex;align-items:center;gap:12px">
+      <div style="font-size:36px">🏴‍☠️</div>
+      <div style="flex:1">
+        <div style="font-family:'Cinzel',serif;font-size:16px;font-weight:900;color:var(--gold)">${G.playerName}</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:2px">${getPirateRank(G.level)} · Lv.${G.level}</div>
+        ${activeTitle?`<div style="font-size:10px;color:var(--cyan);margin-top:3px">🏅 ${activeTitle}</div>`:''}
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--cyan)">${fmt(G.power||0)} PWR</div>
+        <div style="font-size:10px;color:var(--red)">₿ ${fmt(G.bountyGrade)}</div>
+        <div style="font-size:10px;color:var(--gold);margin-top:2px">${G.voyageCount||0}V · ${G.prestigeCount||0}P</div>
+      </div>
+    </div>
+
+    <!-- Local Leaderboard -->
+    <div class="panel">
+      <div class="panel-title" style="margin-bottom:10px">🏆 Bounty Board</div>
+      ${G.leaderboard.length===0?'<div style="color:var(--text3);font-size:11px;text-align:center;padding:14px">No entries yet. Keep fighting!</div>':
+        G.leaderboard.map((e,i)=>`
+        <div style="display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--border);${i===0?'border-bottom-color:rgba(240,192,64,.2)':''}">
+          <span style="font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:${rankColors[i]||'var(--text3)'};width:24px;flex-shrink:0;text-align:center">${rankIcons[i]||i+1}</span>
           <div style="flex:1">
-            <div style="font-weight:700;font-size:12px;color:${done?'var(--gold)':'var(--text2)'}">${t.name}</div>
-            <div style="font-size:10px;color:var(--text3)">${t.desc}</div>
+            <div style="font-weight:700;font-size:12px;color:${e.name===G.playerName?'var(--gold)':'var(--text)'}">${e.name}${e.name===G.playerName?' <span style="font-size:9px;color:var(--cyan)">(YOU)</span>':''}</div>
+            <div style="font-size:9px;color:var(--text3)">Lv.${e.level||1} · ${e.voyages||0}V · ${e.prestige||0}P · ${e.wins||0} wins</div>
           </div>
-          ${done?`<span style="font-size:10px;color:var(--green);font-weight:700">✅</span>`:''}
-        </div>`;
-      }).join('')}
-    </div>`;
+          <div style="text-align:right">
+            <div style="font-size:12px;font-weight:700;color:var(--cyan)">${fmt(e.power||0)}</div>
+            <div style="font-size:9px;color:var(--red)">₿${fmt(e.bounty||0)}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+
+    <!-- Titles Grid -->
+    <div class="panel">
+      <div class="panel-title" style="margin-bottom:4px">🏅 Titles <span style="font-size:11px;color:var(--text3);font-family:'Rajdhani',sans-serif">${unlocked}/${TITLES.length} unlocked</span></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px;margin-top:8px">
+        ${TITLES.map(t=>{
+          const done=G.unlockedTitles.includes(t.id);
+          const isActive=G.activeTitle===t.name;
+          return`<div onclick="${done?`equipTitle('${t.name.replace(/'/g,"\'")}')`:''}" style="background:${done?'rgba(240,192,64,.06)':'rgba(255,255,255,.02)'};border:1px solid ${done?(isActive?'var(--gold)':'rgba(240,192,64,.2)'):'var(--border2)'};border-radius:6px;padding:8px;opacity:${done?1:.45};cursor:${done?'pointer':'default'};transition:.2s;${isActive?'box-shadow:0 0 12px rgba(240,192,64,.2)':''}">
+            <div style="font-size:18px;margin-bottom:4px">${done?t.reward.split(' ')[0]:'🔒'}</div>
+            <div style="font-size:11px;font-weight:700;color:${done?(isActive?'var(--gold)':'var(--cream)'):'var(--text3)'}">${t.name}</div>
+            <div style="font-size:9px;color:var(--text3);margin-top:2px">${t.desc}</div>
+            ${done&&isActive?'<div style="font-size:9px;color:var(--gold);margin-top:3px;font-weight:700">✦ EQUIPPED</div>':''}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function equipTitle(name){
+  G.activeTitle = (G.activeTitle===name) ? null : name;
+  renderTitlesTab();
+  showToast(G.activeTitle ? `🏅 Title equipped: ${name}` : '🏅 Title removed');
+  saveGame();
 }
 
 // ===================== MODAL SYSTEM =====================
@@ -3931,6 +4398,8 @@ function claimEventReward(){
 
 function trackEventProgress(type,amount=1){
   if(!G.eventProgress)G.eventProgress={};
+  // Bounty hunt tracking
+  if(type==='bounty'){G.eventProgress._bountyCount=(G.eventProgress._bountyCount||0)+amount;}
   const ev=getTodayEvent();
   if(ev.goalStat===type&&!G.eventProgress[ev.goalKey+'_claimed']){
     G.eventProgress[ev.goalKey]=(G.eventProgress[ev.goalKey]||0)+amount;
@@ -4136,8 +4605,7 @@ document.addEventListener('DOMContentLoaded',init);
 }
 .lp-discord{background:rgba(88,101,242,.12);border:1px solid rgba(88,101,242,.35);color:#7289da}
 .lp-discord:hover{background:rgba(88,101,242,.25);color:#fff}
-.lp-roblox{background:rgba(240,192,64,.08);border:1px solid rgba(240,192,64,.3);color:#f0c040}
-.lp-roblox:hover{background:rgba(240,192,64,.18)}
+
 .lp-play{
   background:linear-gradient(135deg,#7a5010,#c08820);
   border:1px solid #f0c040;color:#fff;
@@ -4507,17 +4975,17 @@ document.addEventListener('DOMContentLoaded',init);
     <div class="lp-nav-links" id="lp-nav-links">
       <span class="lp-nav-link" data-lp-section="lp-features" onclick="landingScrollTo('#lp-features')">Features</span>
       <span class="lp-nav-link" data-lp-section="lp-fruits" onclick="landingScrollTo('#lp-fruits')">Devil Fruits</span>
-      <span class="lp-nav-link" data-lp-section="lp-passes" onclick="landingScrollTo('#lp-passes')">Gamepasses</span>
+      
       <span class="lp-nav-link" data-lp-section="lp-roadmap" onclick="landingScrollTo('#lp-roadmap')">Roadmap</span>
       <span class="lp-nav-link" data-lp-section="lp-crews" onclick="landingScrollTo('#lp-crews')">Crews</span>
       <span class="lp-nav-link" data-lp-section="lp-faq" onclick="landingScrollTo('#lp-faq')">FAQ</span>
     </div>
     <div class="lp-nav-actions" id="lp-nav-actions">
-      <a href="#" class="lp-nav-btn lp-discord">
+      <a href="https://discord.gg/JQNfMnBh22" target="_blank" rel="noopener" class="lp-nav-btn lp-discord">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
         Discord
       </a>
-      <a href="#" class="lp-nav-btn lp-roblox">🎮 Roblox</a>
+      
       <button class="lp-nav-btn lp-play" onclick="openAuthModal('login')">⚓ Play Now</button>
     </div>
     <div class="lp-hamburger" id="lp-hamburger" onclick="lpToggleMenu()">
@@ -4632,38 +5100,38 @@ document.addEventListener('DOMContentLoaded',init);
   <section id="lp-passes" class="lp-section">
     <div class="lp-inner">
       <div style="text-align:center">
-        <div class="lp-stag lp-reveal">💎 Support the Dev</div>
-        <h2 class="lp-sh lp-reveal">Gamepasses</h2>
-        <p class="lp-sp lp-reveal" style="margin:0 auto">Free forever. Gamepasses offer quality-of-life and exclusives — never pay-to-win advantages.</p>
+        <div class="lp-stag lp-reveal">💎 Support the Crew</div>
+        <h2 class="lp-sh lp-reveal">Supporter Roles</h2>
+        <p class="lp-sp lp-reveal" style="margin:0 auto">One Piece Incremental is 100% free forever. Join the Discord to unlock supporter perks and exclusive in-game titles.</p>
       </div>
       <div class="lp-passes-grid">
         <div class="lp-pass p-free lp-reveal d1">
           <div class="lp-pass-badge">⚓</div>
           <div class="lp-pass-name">Cabin Boy</div>
           <div class="lp-pass-price">Free <span>— Always</span></div>
-          <ul class="lp-pass-perks"><li>Full game access</li><li>All story arcs & bosses</li><li>Crew rolling system</li><li>Raids, events, infinite mode</li><li>Permanent account saves</li></ul>
-          <button class="lp-pass-btn lpb-free" onclick="openAuthModal('register')">Create Account</button>
+          <ul class="lp-pass-perks"><li>Full game access</li><li>All story arcs &amp; bosses</li><li>Crew rolling system</li><li>Raids, events, infinite mode</li><li>Permanent account saves</li></ul>
+          <button class="lp-pass-btn lpb-free" onclick="openAuthModal('register')">Start Playing</button>
         </div>
         <div class="lp-pass p-vip lp-reveal d2">
           <div class="lp-pass-badge">🗡️</div>
-          <div class="lp-pass-name">Pirate Crew VIP</div>
-          <div class="lp-pass-price">199 <span>Robux</span></div>
-          <ul class="lp-pass-perks"><li>+25% Belis from all sources</li><li>+15% XP gain rate</li><li>Exclusive VIP title badge</li><li>3 bonus Scrolls daily</li><li>Gold name colour in chat</li></ul>
-          <button class="lp-pass-btn lpb-vip">⚓ Purchase</button>
+          <div class="lp-pass-name">Discord Member</div>
+          <div class="lp-pass-price">Free <span>— Join Discord</span></div>
+          <ul class="lp-pass-perks"><li>Early update announcements</li><li>Vote on new features &amp; fruits</li><li>Bug report priority</li><li>Exclusive Discord-only events</li><li>Community crew channels</li></ul>
+          <a href="https://discord.gg/JQNfMnBh22" target="_blank" rel="noopener" class="lp-pass-btn lpb-vip">💬 Join Discord</a>
         </div>
         <div class="lp-pass p-legend lp-reveal d3">
           <div class="lp-pass-badge">🌋</div>
-          <div class="lp-pass-name">Yonko Legend</div>
-          <div class="lp-pass-price">399 <span>Robux</span></div>
-          <ul class="lp-pass-perks"><li>All VIP perks included</li><li>Start with Legendary DF</li><li>+40% all stat gains</li><li>Exclusive Yonko title frame</li><li>10 bonus Scrolls daily</li></ul>
-          <button class="lp-pass-btn lpb-legend">🌋 Purchase</button>
+          <div class="lp-pass-name">Active Crew</div>
+          <div class="lp-pass-price">Free <span>— Earn in-game</span></div>
+          <ul class="lp-pass-perks"><li>Clear all 10 story arcs</li><li>Defeat all 13 bosses</li><li>Unlock Legendary+ Devil Fruit</li><li>Complete a Vow run</li><li>Earn the Conqueror title</li></ul>
+          <button class="lp-pass-btn lpb-legend" onclick="openAuthModal('login')">⚔️ Earn It</button>
         </div>
         <div class="lp-pass p-king lp-reveal d4">
           <div class="lp-pass-badge">👑</div>
           <div class="lp-pass-name">Pirate King</div>
-          <div class="lp-pass-price">799 <span>Robux</span></div>
-          <ul class="lp-pass-perks"><li>All Yonko Legend perks</li><li>Honored DF of your choice</li><li>Conqueror's aura VFX</li><li>Pirate King title — forever exclusive</li><li>Direct Discord line to Captain</li></ul>
-          <button class="lp-pass-btn lpb-king">☀️ Claim the Throne</button>
+          <div class="lp-pass-price">Endgame <span>— Phase 6</span></div>
+          <ul class="lp-pass-perks"><li>First to reach Laugh Tale</li><li>Server-wide announcement</li><li>Permanent "Pirate King" title</li><li>Honored DF of your choice (gifted)</li><li>Name in the game credits forever</li></ul>
+          <button class="lp-pass-btn lpb-king" onclick="openAuthModal('login')">☀️ Chase the Dream</button>
         </div>
       </div>
     </div>
@@ -4752,7 +5220,7 @@ document.addEventListener('DOMContentLoaded',init);
       <p class="lp-cta-sub lp-reveal">The Grand Line is vast, the One Piece waits at Laugh Tale, and only the strongest will survive. Will it be you?</p>
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap" class="lp-reveal">
         <button class="lp-hero-btn lp-btn-primary" style="font-size:15px;padding:15px 36px" onclick="openAuthModal('login')">🏴‍☠️ Play For Free</button>
-        <a href="#" class="lp-hero-btn lp-btn-secondary">💬 Join Discord</a>
+        <a href="https://discord.gg/JQNfMnBh22" target="_blank" rel="noopener" class="lp-hero-btn lp-btn-secondary">💬 Join Discord</a>
       </div>
     </div>
   </section>
@@ -4764,7 +5232,7 @@ document.addEventListener('DOMContentLoaded',init);
       <span class="lp-foot-link" onclick="landingScrollTo('#lp-features')" style="cursor:pointer">Features</span>
       <span class="lp-foot-link" onclick="landingScrollTo('#lp-passes')" style="cursor:pointer">Gamepasses</span>
       <span class="lp-foot-link" onclick="landingScrollTo('#lp-roadmap')" style="cursor:pointer">Roadmap</span>
-      <a href="#" class="lp-foot-link">Discord</a>
+      <a href="https://discord.gg/JQNfMnBh22" target="_blank" rel="noopener" class="lp-foot-link">Discord</a>
     </div>
     <div class="lp-foot-copy">© 2025 One Piece Incremental · Fan Game · Not affiliated with Eiichiro Oda or Toei Animation</div>
   </footer>
@@ -5061,7 +5529,7 @@ function lpToggleFaq(btn){
 //   op_save_{username}  → full game save for that user
 //   op_current_user     → currently logged-in username (session)
 
-const OWNER_NAMES = ['sendai', 'captain'];
+const OWNER_NAMES = ['sendai', 'naelllv' ];
 
 function hashPassword(pw) {
   // Simple deterministic hash (not crypto-secure, but fine for a browser game)
@@ -5216,7 +5684,7 @@ function finishLogin(username) {
   // Check for any pending admin gifts
   applyPendingGifts(username);
   // Hide login screen
-  document.getElementById('login-screen').style.display = 'none';
+  const _ls=document.getElementById('login-screen');if(_ls)_ls.style.display='none';
   // Hide landing page with animation, then init game
   const isNewPlayer = !existingSave;
   if(typeof hideLandingPage === 'function'){
@@ -5260,7 +5728,8 @@ function applyPendingGifts(username) {
 
 // ===================== ADMIN SYSTEM =====================
 function isOwner() {
-  return OWNER_NAMES.includes(G.playerName.toLowerCase());
+  const name = (G.playerName||localStorage.getItem('op_current_user')||'').toLowerCase();
+  return OWNER_NAMES.includes(name);
 }
 
 function adminLookupUser() {
@@ -5374,6 +5843,7 @@ function buildSaveObject() {
     stats:G.stats,
     awakened:G.awakened,
     unlockedTitles:G.unlockedTitles,
+    activeTitle:G.activeTitle||null,
     storage:G.storage||[],
     skillTreeLevels:G.skillTreeLevels||{},
     activeVow:G.activeVow||null,
@@ -5393,6 +5863,7 @@ function loadGameFromData(s) {
   if(s.storage) G.storage=s.storage;
   if(s.skillTreeLevels){G.skillTreeLevels=s.skillTreeLevels;applySkillTreeBonuses();}
   if(s.activeVow!==undefined) G.activeVow=s.activeVow;
+  if(s.activeTitle!==undefined) G.activeTitle=s.activeTitle||null;
   if(s.eventProgress) G.eventProgress=s.eventProgress;
   if(s.leaderboard) G.leaderboard=s.leaderboard;
   if(s.skills) s.skills.forEach((u,i)=>{if(G.skills[i])G.skills[i].unlocked=u;});
